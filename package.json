@@ -1,7 +1,7 @@
 {
   "name": "cordova-plugin-freerasp",
   "version": "1.0.0",
-  "description": "Cordova freeRASP plugin.",
+  "description": "Cordova plugin for improving app security and threat monitoring on Android and iOS mobile devices.",
   "cordova": {
     "id": "cordova-plugin-freerasp",
     "platforms": [
@@ -11,19 +11,29 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/talsec-app/Free-RASP-Cordova.git"
+    "url": "git+https://github.com/talsec/Free-RASP-Cordova.git"
   },
   "keywords": [
     "cordova",
-    "plugin",
-    "talsec",
+    "cordova-plugin",
+    "cordova-libraries",
     "freerasp",
-    "rasp"
+    "security",
+    "tampering-detection",
+    "root-detection",
+    "app-shielding",
+    "rasp",
+    "tampering",
+    "reverse-engineering",
+    "application-security",
+    "frida",
+    "jailbreak",
+    "root"
   ],
-  "author": "Talsec Team",
-  "license": "Apache-2.0",
+  "author": "Talsec",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/talsec-app/Free-RASP-Cordova/issues"
+    "url": "https://github.com/talsec/Free-RASP-Cordova/issues"
   },
-  "homepage": "https://github.com/talsec-app/Free-RASP-Cordova#readme"
+  "homepage": "https://github.com/talsec/Free-RASP-Cordova"
 }
