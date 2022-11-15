@@ -1,0 +1,17 @@
+repositories {
+    maven { url "https://nexus3-public.monetplus.cz/repository/ahead-talsec-free-rasp" }
+    maven { url "https://developer.huawei.com/repo/" }
+}
+
+dependencies {
+    debugImplementation 'com.aheaditec.talsec.security:TalsecSecurity-Community:4.2.1-dev'
+    releaseImplementation 'com.aheaditec.talsec.security:TalsecSecurity-Community:4.2.1-release'
+}
+
+android {
+    sourceSets {
+        main.java {
+            srcDirs += 'src/main/kotlin'
+        }
+    }
+}
