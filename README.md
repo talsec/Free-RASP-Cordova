@@ -181,11 +181,11 @@ The Dev version is used to not complicate the development process of the applica
 
 Which version of freeRASP is used is tied to the application's development stage - more precisely, how the application is compiled.
 
-* `cordova run android` (debug) -> uses dev version of Talsec
-* `cordova run android --release` (release) -> uses release version of Talsec
-
 ### Android
 Android implementation of the Cordova plugin detects selected development stage and automatically applies the suitable version of the library.
+
+* `cordova run android` (debug) -> uses dev version of Talsec
+* `cordova run android --release` (release) -> uses release version of Talsec
 
 ### iOS
 For the iOS implemtation, it's neccesary to add script into the Xcode environment, that automatically switches between the library dev/release versions according to selected development stage. Then, it is necessary to embedd a symlink to correct TalsecRuntime.xcframework.
