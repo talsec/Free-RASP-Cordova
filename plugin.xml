@@ -5,6 +5,13 @@
         version="1.0.0">
 
   <name>freerasp</name>
+  <author>Talsec (info@talsec.app)</author>
+  <description>Cordova plugin for improving app security and threat monitoring on Android and iOS mobile devices.</description>
+  <keywords>cordova,cordova-plugin,cordova-libraries,freerasp,security,tampering-detection,root-detection,app-shielding,rasp,tampering,reverse-engineering,application-security,frida</keywords>
+  <license>MIT</license>
+  <repo>https://github.com/talsec/Free-RASP-Cordova</repo>
+  <issue>https://github.com/talsec/Free-RASP-Cordova/issues</issue>
+
 
   <engines>
     <engine name="cordova" version=">=9.0.0"/>
