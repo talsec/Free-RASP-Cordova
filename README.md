@@ -18,6 +18,7 @@ freeRASP for Cordova is a mobile in-app protection and security monitoring plugi
     * [Step 5: Start the Talsec](#step-5-start-the-talsec)
     * [Step 6: Dev vs Release version](#step-6-dev-vs-release-version)
     * [Step 7: User Data Policies](#step-7-user-data-policies)
+- [Sample Demo](#sample-demo)
 - [Security Report](#security-report)
 - [Enterprise Services](#enterprise-services)
     * [Plans comparison](#plans-comparison)
