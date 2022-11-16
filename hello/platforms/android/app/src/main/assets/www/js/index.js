@@ -34,14 +34,14 @@ function onDeviceReady() {
         'hooks': 'Hooks',
         'device binding': 'Device binding'
     }
-
+    
     if (cordova.platformId == 'ios') {
         checks['deviceID'] = 'Device ID';
         checks['missingSecureEnclave'] = 'Missing Secure Enclave';
         checks['passcodeChange'] = 'Passcode Change';
         checks['passcode'] = 'Passcode';
     }
-
+    
     Object.entries(checks).forEach(([check, msg]) => {
         const newElem = Object.assign(
             document.createElement('div'),
@@ -50,7 +50,7 @@ function onDeviceReady() {
         document.getElementById('parent').appendChild(newElem)
         setDefaultThreatStyle(check);
     })
-
+    
     var config = {
             androidConfig : {
                 packageName : "com.example.helloapp",
@@ -62,7 +62,7 @@ function onDeviceReady() {
             },
             watcherMail : "your_email_address@example.com"
         };
-
+    
     var threatListener = function(threatType) {
             switch(threatType) {
                 case "privilegedAccess": // Android & iOS
@@ -109,7 +109,7 @@ function onDeviceReady() {
                     console.log('Unknown threat type detected: ' + threatType);
             }
         };
-
+    
     talsec.start(config, threatListener).then(() => {
         console.log('Talsec initialized.');
     }).catch((error) => {

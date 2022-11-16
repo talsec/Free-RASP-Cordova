@@ -25,6 +25,9 @@
         <param name="ios-package" value="CDVGestureHandler" />
         <param name="onload" value="true" />
     </feature>
+    <feature name="TalsecPlugin">
+        <param name="ios-package" value="TalsecPlugin" />
+    </feature>
     <name>Hello</name>
     <description>Sample Apache Cordova App</description>
     <author email="dev@cordova.apache.org" href="https://cordova.apache.org">
@@ -46,7 +49,7 @@
     <preference name="PageLength" value="0" />
     <preference name="PaginationBreakingMode" value="page" />
     <preference name="PaginationMode" value="unpaginated" />
-    <feature name="TalsecPlugin">
-        <param name="ios-package" value="TalsecPlugin" />
-    </feature>
+    <preference name="GradlePluginKotlinEnabled" value="true" />
+    <preference name="GradlePluginKotlinCodeStyle" value="official" />
+    <preference name="GradlePluginKotlinVersion" value="1.5.20" />
 </widget>

@@ -10,15 +10,15 @@
 		0207DA581B56EA530066E2B4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0207DA571B56EA530066E2B4 /* Images.xcassets */; };
 		1D3623260D0F684500981E51 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* AppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
-		201E36AF55504B95B1CC2BBF /* TalsecPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E5D0E6A0DC44ED896AC053 /* TalsecPlugin.swift */; };
 		301BF552109A68D80062928A /* libCordova.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 301BF535109A57CC0062928A /* libCordova.a */; settings = {ATTRIBUTES = (Required, ); }; };
 		302D95F114D2391D003F00A1 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 302D95EF14D2391D003F00A1 /* MainViewController.m */; };
 		302D95F214D2391D003F00A1 /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 302D95F014D2391D003F00A1 /* MainViewController.xib */; };
 		6AFF5BF91D6E424B00AB3073 /* CDVLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AFF5BF81D6E424B00AB3073 /* CDVLaunchScreen.storyboard */; };
-		9684D765F0044BB187E1EF70 /* Debug in Sources */ = {isa = PBXBuildFile; fileRef = 3FC838CC0E6343B4BDCF803F /* Debug */; };
-		A4C78D302923CF6100A4C48C /* TalsecRuntime.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4C78D2F2923CF6100A4C48C /* TalsecRuntime.xcframework */; };
-		A4C78D312923CF6100A4C48C /* TalsecRuntime.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A4C78D2F2923CF6100A4C48C /* TalsecRuntime.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		F8D0378D245C44D99585BCB2 /* Release in Sources */ = {isa = PBXBuildFile; fileRef = 69477B069AAA481AA162B9DF /* Release */; };
+		7DE29551B55243429D018C05 /* TalsecPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 136403C54DEF41469F075D05 /* TalsecPlugin.swift */; };
+		99630989E3824BEAA8E05198 /* Debug in Sources */ = {isa = PBXBuildFile; fileRef = 41F19C06F0414FBDA6204C25 /* Debug */; };
+		A4F2FE162924E93200B21DAE /* TalsecRuntime.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4F2FE142924E93200B21DAE /* TalsecRuntime.xcframework */; };
+		A4F2FE172924E93200B21DAE /* TalsecRuntime.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A4F2FE142924E93200B21DAE /* TalsecRuntime.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F58CB87AD5604189A28539A4 /* Release in Sources */ = {isa = PBXBuildFile; fileRef = 0C6D0412E37B4CF39A08AA5B /* Release */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,13 +46,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		A4C78D322923CF6100A4C48C /* Embed Frameworks */ = {
+		A4F2FE182924E93200B21DAE /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				A4C78D312923CF6100A4C48C /* TalsecRuntime.xcframework in Embed Frameworks */,
+				A4F2FE172924E93200B21DAE /* TalsecRuntime.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -61,6 +61,8 @@
 
 /* Begin PBXFileReference section */
 		0207DA571B56EA530066E2B4 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Hello/Images.xcassets; sourceTree = SOURCE_ROOT; };
+		0C6D0412E37B4CF39A08AA5B /* Release */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Release; path = com.talsec.cordova.freerasp/Release; sourceTree = "<group>"; };
+		136403C54DEF41469F075D05 /* TalsecPlugin.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = TalsecPlugin.swift; path = com.talsec.cordova.freerasp/TalsecPlugin.swift; sourceTree = "<group>"; };
 		1D3623240D0F684500981E51 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		1D6058910D05DD3D006BFB54 /* Hello.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hello.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -74,14 +76,11 @@
 		3047A5101AB8059700498E2A /* build-release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "build-release.xcconfig"; path = "cordova/build-release.xcconfig"; sourceTree = SOURCE_ROOT; };
 		3047A5111AB8059700498E2A /* build.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = build.xcconfig; path = cordova/build.xcconfig; sourceTree = SOURCE_ROOT; };
 		32CA4F630368D1EE00C91783 /* Hello-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Hello-Prefix.pch"; sourceTree = "<group>"; };
-		3FC838CC0E6343B4BDCF803F /* Debug */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Debug; path = com.talsec.cordova.freerasp/Debug; sourceTree = "<group>"; };
-		550ADB104B36411B958E19ED /* TalsecBridging-Header.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "TalsecBridging-Header.h"; path = "com.talsec.cordova.freerasp/TalsecBridging-Header.h"; sourceTree = "<group>"; };
-		69477B069AAA481AA162B9DF /* Release */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Release; path = com.talsec.cordova.freerasp/Release; sourceTree = "<group>"; };
+		41F19C06F0414FBDA6204C25 /* Debug */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Debug; path = com.talsec.cordova.freerasp/Debug; sourceTree = "<group>"; };
+		5048CBA18DF8404CA96A1F15 /* TalsecBridging-Header.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "TalsecBridging-Header.h"; path = "com.talsec.cordova.freerasp/TalsecBridging-Header.h"; sourceTree = "<group>"; };
 		6AFF5BF81D6E424B00AB3073 /* CDVLaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = CDVLaunchScreen.storyboard; path = Hello/CDVLaunchScreen.storyboard; sourceTree = SOURCE_ROOT; };
 		8D1107310486CEB800E47090 /* Hello-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Hello-Info.plist"; path = "Hello/Hello-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = SOURCE_ROOT; };
-		A4C78D2B2923CEDB00A4C48C /* TalsecRuntime.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = TalsecRuntime.xcframework; path = Hello/Plugins/com.talsec.cordova.freerasp/TalsecRuntime.xcframework; sourceTree = "<group>"; };
-		A4C78D2F2923CF6100A4C48C /* TalsecRuntime.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = TalsecRuntime.xcframework; path = ../../plugins/com.talsec.cordova.freerasp/src/ios/TalsecRuntime.xcframework; sourceTree = "<group>"; };
-		C3E5D0E6A0DC44ED896AC053 /* TalsecPlugin.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = TalsecPlugin.swift; path = com.talsec.cordova.freerasp/TalsecPlugin.swift; sourceTree = "<group>"; };
+		A4F2FE142924E93200B21DAE /* TalsecRuntime.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = TalsecRuntime.xcframework; path = ../../plugins/com.talsec.cordova.freerasp/src/ios/TalsecRuntime.xcframework; sourceTree = "<group>"; };
 		EB87FDF31871DA8E0020F90C /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; name = www; path = ../../www; sourceTree = "<group>"; };
 		EB87FDF41871DAF40020F90C /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = ../../config.xml; sourceTree = "<group>"; };
 		ED33DF2A687741AEAF9F8254 /* Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
@@ -93,7 +92,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A4C78D302923CF6100A4C48C /* TalsecRuntime.xcframework in Frameworks */,
+				A4F2FE162924E93200B21DAE /* TalsecRuntime.xcframework in Frameworks */,
 				301BF552109A68D80062928A /* libCordova.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -165,8 +164,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A4C78D2F2923CF6100A4C48C /* TalsecRuntime.xcframework */,
-				A4C78D2B2923CEDB00A4C48C /* TalsecRuntime.xcframework */,
+				A4F2FE142924E93200B21DAE /* TalsecRuntime.xcframework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -193,10 +191,10 @@
 		307C750510C5A3420062BCA9 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
-				C3E5D0E6A0DC44ED896AC053 /* TalsecPlugin.swift */,
-				3FC838CC0E6343B4BDCF803F /* Debug */,
-				69477B069AAA481AA162B9DF /* Release */,
-				550ADB104B36411B958E19ED /* TalsecBridging-Header.h */,
+				136403C54DEF41469F075D05 /* TalsecPlugin.swift */,
+				41F19C06F0414FBDA6204C25 /* Debug */,
+				0C6D0412E37B4CF39A08AA5B /* Release */,
+				5048CBA18DF8404CA96A1F15 /* TalsecBridging-Header.h */,
 			);
 			name = Plugins;
 			path = Hello/Plugins;
@@ -218,12 +216,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Hello" */;
 			buildPhases = (
-				A4C78D292923CEA600A4C48C /* ShellScript */,
+				A4F2FE192924E96000B21DAE /* ShellScript */,
 				304B58A110DAC018002A0835 /* Copy www directory */,
 				1D60588D0D05DD3D006BFB54 /* Resources */,
 				1D60588E0D05DD3D006BFB54 /* Sources */,
 				1D60588F0D05DD3D006BFB54 /* Frameworks */,
-				A4C78D322923CF6100A4C48C /* Embed Frameworks */,
+				A4F2FE182924E93200B21DAE /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -317,7 +315,7 @@
 			shellScript = "\"$SRCROOT/Hello/Scripts/copy-www-build-step.sh\"";
 			showEnvVarsInLog = 0;
 		};
-		A4C78D292923CEA600A4C48C /* ShellScript */ = {
+		A4F2FE192924E96000B21DAE /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -332,7 +330,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd \"${SRCROOT}/../../plugins/com.talsec.cordova.freerasp/src/ios\"\nif [ \"${CONFIGURATION}\" = \"Release\" ]; then\n    rm -rf ./TalsecRuntime.xcframework\n    ln -s ./Release/TalsecRuntime.xcframework/ TalsecRuntime.xcframework\nelse\n    rm -rf ./TalsecRuntime.xcframework\n    ln -s ./Debug/TalsecRuntime.xcframework/ TalsecRuntime.xcframework\nfi \n";
+			shellScript = "cd \"${SRCROOT}/../../plugins/com.talsec.cordova.freerasp/src/ios\"\nif [ \"${CONFIGURATION}\" = \"Debug\" ]; then\n    rm -rf ./TalsecRuntime.xcframework\n    ln -s ./Release/TalsecRuntime.xcframework/ TalsecRuntime.xcframework\nelse\n    rm -rf ./TalsecRuntime.xcframework\n    ln -s ./Debug/TalsecRuntime.xcframework/ TalsecRuntime.xcframework\nfi \n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -344,9 +342,9 @@
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* AppDelegate.m in Sources */,
 				302D95F114D2391D003F00A1 /* MainViewController.m in Sources */,
-				201E36AF55504B95B1CC2BBF /* TalsecPlugin.swift in Sources */,
-				9684D765F0044BB187E1EF70 /* Debug in Sources */,
-				F8D0378D245C44D99585BCB2 /* Release in Sources */,
+				7DE29551B55243429D018C05 /* TalsecPlugin.swift in Sources */,
+				99630989E3824BEAA8E05198 /* Debug in Sources */,
+				F58CB87AD5604189A28539A4 /* Release in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -365,12 +363,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3047A50F1AB8059700498E2A /* build-debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = ASQC376HCN;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -394,6 +392,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3047A5101AB8059700498E2A /* build-release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
