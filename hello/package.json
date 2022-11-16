@@ -24,7 +24,7 @@
     ],
     "plugins": {
       "cordova-plugin-add-swift-support": {},
-      "com.talsec.cordova.freerasp": {}
+      "cordova-plugin-freerasp": {}
     }
   },
   "dependencies": {

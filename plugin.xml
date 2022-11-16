@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
-        id="com.talsec.cordova.freerasp"
+        id="cordova-plugin-freerasp"
         version="1.0.0">
 
   <name>freerasp</name>
