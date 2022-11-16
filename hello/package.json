@@ -15,7 +15,7 @@
   "devDependencies": {
     "cordova-android": "^10.1.2",
     "cordova-ios": "^6.2.0",
-    "cordova-plugin-freerasp": "github:talsec/Free-RASP-Cordova"
+    "cordova-talsec-plugin-freerasp": "github:talsec/Free-RASP-Cordova"
   },
   "cordova": {
     "platforms": [
@@ -24,7 +24,7 @@
     ],
     "plugins": {
       "cordova-plugin-add-swift-support": {},
-      "cordova-plugin-freerasp": {}
+      "cordova-talsec-plugin-freerasp": {}
     }
   },
   "dependencies": {

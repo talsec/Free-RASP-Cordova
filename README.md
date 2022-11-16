@@ -194,7 +194,7 @@ For the iOS implemtation, it's neccesary to add script into the Xcode environmen
    * Go to your **Target** -> **Build Phases** -> **New Run Script Phase**
    * Copy-paste following script:
         ```shell
-        cd "${SRCROOT}/../../plugins/cordova-plugin-freerasp/src/ios"
+        cd "${SRCROOT}/../../plugins/cordova-talsec-plugin-freerasp/src/ios"
         if [ "${CONFIGURATION}" = "Release" ]; then
             rm -rf ./TalsecRuntime.xcframework
             ln -s ./Release/TalsecRuntime.xcframework/ TalsecRuntime.xcframework
@@ -208,7 +208,7 @@ For the iOS implemtation, it's neccesary to add script into the Xcode environmen
 3. Add dependency on the symlink
    * Go to your **Target** -> **General** -> **Frameworks, Libraries and Embedded Content**
    * Add dependency (drag & drop) on the symlink on the following location:
-     *MyApp/plugins/cordova-plugin-freerasp/src/ios/TalsecRuntime.xcframework*
+     *MyApp/plugins/cordova-talsec-plugin-freerasp/src/ios/TalsecRuntime.xcframework*
    * If there is no symlink, try to create it manually by the following command:
    *     $ ln -s ./Debug/TalsecRuntime.xcframework/ TalsecRuntime.xcframework
 
