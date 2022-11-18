@@ -157,6 +157,8 @@ var threatListener = function(threatType) {
 }
 ```
 
+Visit our [wiki](https://github.com/talsec/Free-RASP-Community/wiki/Threat-detection) to learn more details about the performed checks and their importance for app security.
+
 ## Step 5: Start the Talsec
 
 Talsec can be started after the Cordova initialization is completed. 
