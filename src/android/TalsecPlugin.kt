@@ -105,6 +105,6 @@ class TalsecPlugin : CordovaPlugin(), ThreatListener.ThreatDetected {
                 alternativeStores.add(stores.getString(i))
             }
         }
-        return TalsecConfig(packageName, certificateHash, watcherMail, null)
+        return TalsecConfig(packageName, certificateHash, watcherMail, alternativeStores.toTypedArray())
     }
 }
