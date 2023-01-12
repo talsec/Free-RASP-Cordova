@@ -96,15 +96,19 @@ class TalsecPlugin : CordovaPlugin(), ThreatListener.ThreatDetected {
         val json = JSONObject(configJson)
         val androidConfig = json.getJSONObject("androidConfig")
         val packageName = androidConfig.getString("packageName")
-        val certificateHash = androidConfig.getString("certificateHash")
+        val certificateHashes = mutableListOf<String>()
+        val hashes = androidConfig.getJSONArray("certificateHashes")
+        for (i in 0 until hashes.length()) {
+            certificateHashes.add(hashes.getString(i))
+        }
         val watcherMail = json.getString("watcherMail")
         val alternativeStores = mutableListOf<String>()
         if (androidConfig.has("supportedAlternativeStores")) {
             val stores = androidConfig.getJSONArray("supportedAlternativeStores")
-            for (i in 0 .. stores.length()) {
+            for (i in 0 until stores.length()) {
                 alternativeStores.add(stores.getString(i))
             }
         }
-        return TalsecConfig(packageName, certificateHash, watcherMail, alternativeStores.toTypedArray())
+        return TalsecConfig(packageName, certificateHashes.toTypedArray(), watcherMail, alternativeStores.toTypedArray())
     }
 }
