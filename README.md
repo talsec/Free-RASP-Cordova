@@ -79,7 +79,7 @@ Talsec Cordova plugin uses Kotlin, add following lines into the `config.xml` fil
 ```xml
 <preference name="GradlePluginKotlinEnabled" value="true" />
 <preference name="GradlePluginKotlinCodeStyle" value="official" />
-<preference name="GradlePluginKotlinVersion" value="1.5.20" />
+<preference name="GradlePluginKotlinVersion" value="1.7.10" />
 ```
 
 ### iOS
@@ -97,7 +97,8 @@ You need to provide configuration for Talsec to work properly. Use following for
 var config = {
     androidConfig : {
         packageName : "com.example.helloapp", 
-        certificateHash : "your_signing_certificate_hash_base64"
+        certificateHashes : ["your_signing_certificate_hash_base64"],
+	// supportedAlternativeStores: ['storeOne', 'storeTwo'],
     },
     iosConfig : {
         appBundleIds: "com.example.helloapp",
