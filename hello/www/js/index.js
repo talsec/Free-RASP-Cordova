@@ -54,7 +54,8 @@ function onDeviceReady() {
     var config = {
             androidConfig : {
                 packageName : "com.example.helloapp",
-                certificateHash : "your_signing_certificate_hash_base64"
+                certificateHashes : ["your_signing_certificate_hash_base64"],
+	            // supportedAlternativeStores: ['storeOne', 'storeTwo'],
             },
             iosConfig : {
                 appBundleIds: "com.example.helloapp",
