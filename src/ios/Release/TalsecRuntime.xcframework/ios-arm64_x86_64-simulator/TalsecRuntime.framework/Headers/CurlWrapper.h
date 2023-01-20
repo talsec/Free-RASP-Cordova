@@ -16,7 +16,7 @@
 #include <unistd.h>
 #include <string.h>
 
-struct hDwoFHuSRdsK {
+struct FSlegoCPSymw {
     char *memory;
     size_t size;
     CURLcode ret;
