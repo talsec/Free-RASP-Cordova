@@ -5,8 +5,8 @@ repositories {
 }
 
 dependencies {
-    debugImplementation "com.aheaditec.talsec.security:TalsecSecurity-Community-Cordova:6.0.0-alpha1-dev"
-    releaseImplementation "com.aheaditec.talsec.security:TalsecSecurity-Community-Cordova:6.0.0-alpha1-release"
+    debugImplementation "com.aheaditec.talsec.security:TalsecSecurity-Community-Cordova:6.0.0-dev"
+    releaseImplementation "com.aheaditec.talsec.security:TalsecSecurity-Community-Cordova:6.0.0-release"
 }
 
 android {
