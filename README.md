@@ -19,7 +19,7 @@ freeRASP for Cordova is a mobile in-app protection and security monitoring plugi
     * [Step 6: Dev vs Release version](#step-6-dev-vs-release-version)
     * [Step 7: User Data Policies](#step-7-user-data-policies)
 - [Security Report](#security-report)
-- [Enterprise Services](#enterprise-services)
+- [Enterprise Services](#bar_chart-enterprise-services)
     * [Plans comparison](#plans-comparison)
 
 # Overview
