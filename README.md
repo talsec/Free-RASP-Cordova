@@ -90,6 +90,8 @@ Talsec Cordova plugin uses Swift, add following plugin to support Swift.
 ## Step 2: Install the plugin
 
     $ cordova plugin add https://github.com/talsec/Free-RASP-Cordova.git
+    
+    $ npm i https://github.com/talsec/Free-RASP-Cordova.git
 
 ## Step 3: Setup the Configuration for your App
 You need to provide configuration for Talsec to work properly. Use following format to provide configuration to the Talsec plugin.
@@ -165,6 +167,10 @@ Visit our [wiki](https://github.com/talsec/Free-RASP-Community/wiki/Threat-detec
 Talsec can be started after the Cordova initialization is completed. 
 
 The initialization should be done inside the `onDeviceReady` function in the `index.js`. 
+
+```js
+import talsec from "cordova-talsec-plugin-freerasp/www/talsec";
+```
 
 ```js
 talsec.start(config, threatListener).then(() => {
