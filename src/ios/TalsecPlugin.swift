@@ -47,7 +47,9 @@ import TalsecRuntime
         guard let watcherMailAddress = talsecConfig["watcherMail"] as? String else {
             throw NSError(domain: "Missing watcherMail parameter in Talsec Native Plugin", code: 4)
         }
-        let config = TalsecConfig(appBundleIds: [appBundleIds], appTeamId: appTeamId, watcherMailAddress: watcherMailAddress)
+        let isProd = talsecConfig["isProd"] as? Bool ?? true
+        
+        let config = TalsecConfig(appBundleIds: [appBundleIds], appTeamId: appTeamId, watcherMailAddress: watcherMailAddress, isProd: isProd)
         commandDelegate.run(inBackground: {
             Talsec.start(config: config)
         })
