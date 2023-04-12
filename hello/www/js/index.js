@@ -110,6 +110,7 @@ function onDeviceReady() {
                 case "passcode": // iOS only
                     console.log('passcode');
                     changeThreatStyle('passcode');
+                    break;
                 default:
                     console.log('Unknown threat type detected: ' + threatType);
             }
