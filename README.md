@@ -81,7 +81,11 @@ Talsec Cordova plugin uses Kotlin, add following lines into the `config.xml` fil
 <preference name="GradlePluginKotlinEnabled" value="true" />
 <preference name="GradlePluginKotlinCodeStyle" value="official" />
 <preference name="GradlePluginKotlinVersion" value="1.7.10" />
+<preference name="android-targetSdkVersion" value="31" />
 ```
+Then run following command to apply the preferences:
+
+    $ cordova prepare android
 
 ### iOS
 Talsec Cordova plugin uses Swift, add following plugin to support Swift.
