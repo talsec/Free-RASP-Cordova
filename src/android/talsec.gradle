@@ -1,12 +1,10 @@
 repositories {
     maven { url "https://nexus3-public.monetplus.cz/repository/ahead-talsec-free-rasp" }
-    maven { url "https://developer.huawei.com/repo/" }
     maven { url 'https://jitpack.io' }
 }
 
 dependencies {
-    debugImplementation "com.aheaditec.talsec.security:TalsecSecurity-Community-Cordova:6.0.0-dev"
-    releaseImplementation "com.aheaditec.talsec.security:TalsecSecurity-Community-Cordova:6.0.0-release"
+    implementation "com.aheaditec.talsec.security:TalsecSecurity-Community-Cordova:7.0.0"
 }
 
 android {

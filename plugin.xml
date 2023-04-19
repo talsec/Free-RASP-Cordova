@@ -25,6 +25,9 @@
 
   <platform name="android">
     <config-file target="res/xml/config.xml" parent="/*">
+      <preference name="GradlePluginKotlinEnabled" value="true" />
+      <preference name="GradlePluginKotlinCodeStyle" value="official" />
+      <preference name="GradlePluginKotlinVersion" value="1.7.10" />
       <feature name="TalsecPlugin">
         <param name="android-package" value="com.aheaditec.talsec.cordova.TalsecPlugin"/>
       </feature>
@@ -42,9 +45,6 @@
     </config-file>
     <header-file src="src/ios/TalsecBridging-Header.h" />
     <source-file src="src/ios/TalsecPlugin.swift" />
-    <source-file src="src/ios/Debug" />
-    <source-file src="src/ios/Release" />
-    <hook type="after_plugin_add" src="src/ios/create_symlink.sh" />
-    <!-- <framework src="src/ios/TalsecRuntime.xcframework" custom="true" embed="true" /> -->
+    <framework src="src/ios/TalsecRuntime.xcframework" custom="true" embed="true" />
   </platform>
 </plugin>

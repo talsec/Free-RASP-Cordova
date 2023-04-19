@@ -16,9 +16,8 @@ freeRASP for Cordova is a mobile in-app protection and security monitoring plugi
     * [Step 3: Setup the Configuration for your App](#step-3-setup-the-configuration-for-your-app)
     * [Step 4: Handle detected threats](#step-4-handle-detected-threats)
     * [Step 5: Start the Talsec](#step-5-start-the-talsec)
-    * [Step 6: Dev vs Release version](#step-6-dev-vs-release-version)
-    * [Step 7: Additional note about obfuscation](#step-7-additional-note-about-obfuscation)
-    * [Step 8: User Data Policies](#step-8-user-data-policies)
+    * [Step 6: Additional note about obfuscation](#step-6-additional-note-about-obfuscation)
+    * [Step 7: User Data Policies](#step-7-user-data-policies)
 - [Security Report](#security-report)
 - [Enterprise Services](#bar_chart-enterprise-services)
     * [Commercial version](#commercial-version)
@@ -82,7 +81,11 @@ Talsec Cordova plugin uses Kotlin, add following lines into the `config.xml` fil
 <preference name="GradlePluginKotlinEnabled" value="true" />
 <preference name="GradlePluginKotlinCodeStyle" value="official" />
 <preference name="GradlePluginKotlinVersion" value="1.7.10" />
+<preference name="android-targetSdkVersion" value="31" />
 ```
+Then run following command to apply the preferences:
+
+    $ cordova prepare android
 
 ### iOS
 Talsec Cordova plugin uses Swift, add following plugin to support Swift.
@@ -94,7 +97,7 @@ Talsec Cordova plugin uses Swift, add following plugin to support Swift.
     $ cordova plugin add https://github.com/talsec/Free-RASP-Cordova.git
 
 ## Step 3: Setup the Configuration for your App
-You need to provide configuration for Talsec to work properly. Use following format to provide configuration to the Talsec plugin.
+You need to provide configuration for freeRASP to work properly and initialize it. The freeRASP configuration is an JavaScript object that contains configs for both Android and iOS, as well as common configuration. You must fill all the required values for the plugin to work. Use the following template to provide configuration to the Talsec plugin. You can find detailed description of the configuration below.
 ```js
 var config = {
     androidConfig : {
@@ -106,14 +109,34 @@ var config = {
         appBundleIds: "com.example.helloapp",
         appTeamId: "your_team_ID",
     },
-    watcherMail : "your_email_address@example.com"
+    watcherMail : "your_email_address@example.com",
+    isProd: true
 };
 ```
 
-Talsec configuration contains configs for both Android and iOS. You must fill all the values for the plugin to work. If you are not sure how to get your certificate hash, you can check out the guide on our [Github wiki](https://github.com/talsec/Free-RASP-Community/wiki/Getting-your-signing-certificate-hash-of-app).
+#### The configuration object should consist of:
 
+1. `androidConfig` _: object | undefined_ - required for Android devices, has following keys:
 
-If you are developing only for one of the platforms, you can leave the configuration part for the other one, i.e., delete the other configuration.
+    - `packageName` _: string_ - package name of your app you chose when you created it
+    - `certificateHashes` _: string[]_ - hash of the certificate of the key which was used to sign the application. **Hash which is passed here must be encoded in Base64 form.** If you are not sure how to get your certificate hash, you can check out the guide on our [Github wiki](https://github.com/talsec/Free-RASP-Community/wiki/Getting-your-signing-certificate-hash-of-app). Multiple hashes are supported, e.g. if you are using a different one for the Huawei App Gallery.
+    - `supportedAlternativeStores` _: string[] | undefined_ - If you publish on the Google Play Store and/or Huawei AppGallery, you **don't have to assign anything** there as those are supported out of the box.
+1. `iosConfig` _: object | undefined_ - required for iOS devices, has following keys:
+    - `appBundleId` _: string_ - Bundle ID of your app
+    - `appTeamId` _: string_ - the Apple Team ID
+1. `watcherMail` _: string_ - your mail address where you wish to receive reports. Mail has a strict form `name@domain.com` which is passed as String.
+1. `isProd` _: boolean | undefined_ - defaults to `true` when undefined. If you want to use the Dev version to disable checks described [in the chapter below](#dev-vs-release-version), set the parameter to `false`. Make sure that you have the Release version in the production (i.e. isProd set to true)!
+
+If you are developing only for one of the platforms, you can skip the configuration part for the other one, i.e., delete the unused configuration.
+
+### Dev vs Release version
+
+The Dev version is used to not complicate the development process of the application, e.g. if you would implement killing of the application on the debugger callback. It disables some checks which won't be triggered during the development process:
+
+- Emulator-usage (simulator)
+- Debugging (debug)
+- Signing (appIntegrity)
+- Unofficial store (unofficialStore)
 
 ## Step 4: Handle detected threats
 Talsec executes periodical checks when the application is running. To be able to receive detected threats, you need to provide listener to the plugin. The threat types are defined in the example bellow:
@@ -176,48 +199,7 @@ talsec.start(config, threatListener).then(() => {
 });
 ```
 
-## Step 6: Dev vs Release version
-The Dev version is used to not complicate the development process of the application, e.g. if you would implement killing of the application on the debugger callback. It disables some checks which won't be triggered during the development process:
-
-* Emulator-usage (simulator)
-* Debugging (debug)
-* Signing (appIntegrity)
-* Unofficial store (unofficialStore)
-
-Which version of freeRASP is used is tied to the application's development stage - more precisely, how the application is compiled.
-
-### Android
-Android implementation of the Cordova plugin detects selected development stage and automatically applies the suitable version of the library.
-
-* `cordova run android` (debug) -> uses dev version of Talsec
-* `cordova run android --release` (release) -> uses release version of Talsec
-
-### iOS
-For the iOS implemtation, it's neccesary to add script into the Xcode environment, that automatically switches between the library dev/release versions according to selected development stage. Then, it is necessary to embedd a symlink to correct TalsecRuntime.xcframework.
-
-1. Add pre-built script for changing the Debug and Release versions of the framework:
-   * Go to your **Target** -> **Build Phases** -> **New Run Script Phase**
-   * Copy-paste following script:
-        ```shell
-        cd "${SRCROOT}/../../plugins/cordova-talsec-plugin-freerasp/src/ios"
-        if [ "${CONFIGURATION}" = "Release" ]; then
-            rm -rf ./TalsecRuntime.xcframework
-            ln -s ./Release/TalsecRuntime.xcframework/ TalsecRuntime.xcframework
-        else
-            rm -rf ./TalsecRuntime.xcframework
-            ln -s ./Debug/TalsecRuntime.xcframework/ TalsecRuntime.xcframework
-        fi 
-        ```
-2. Place the new run script phase at the **top of the build phases**
-   * Do clean build before change Debug <-> Release version
-3. Add dependency on the symlink
-   * Go to your **Target** -> **General** -> **Frameworks, Libraries and Embedded Content**
-   * Add dependency (drag & drop) on the symlink on the following location:
-     *MyApp/plugins/cordova-talsec-plugin-freerasp/src/ios/TalsecRuntime.xcframework*
-   * If there is no symlink, try to create it manually by the following command:
-   *     $ ln -s ./Debug/TalsecRuntime.xcframework/ TalsecRuntime.xcframework
-
-## Step 7: Additional note about obfuscation
+## Step 6: Additional note about obfuscation
 The freeRASP contains public API, so the integration process is as simple as possible. Unfortunately, this public API also creates opportunities for the attacker to use publicly available information to interrupt freeRASP operations or modify your custom reaction implementation in threat callbacks. In order for freeRASP to be as effective as possible, it is highly recommended to apply obfuscation to the final package/application, making the public API more difficult to find and also partially randomized for each application so it cannot be automatically abused by generic hooking scripts.
 
 ### Android
@@ -240,7 +222,7 @@ android {
 }
 ```
 
-## Step 8: User Data Policies
+## Step 7: User Data Policies
 
 Google Play [requires](https://support.google.com/googleplay/android-developer/answer/10787469?hl=en) all app publishers to declare how they collect and handle user data for the apps they publish on Google Play. They should inform users properly of the data collected by the apps and how the data is shared and processed. Therefore, Google will reject the apps which do not comply with the policy.
 
@@ -393,7 +375,7 @@ Learn more about commercial features at  [https://talsec.app](https://talsec.app
          <td colspan=5><strong>Fair usage policy</strong></td>
         </tr>
         <tr>
-            <td>Mentioning of the app name in Talsec marketing communication (e.g. "Trusted by Talsec section" on social media)</td>
+            <td>Mentioning of the App name and logo in the marketing communications of Talsec (e.g. "Trusted by" section of the Talsec web or in the social media).</td>
             <td>over 100k downloads</td>
             <td>no</td>
         </tr>

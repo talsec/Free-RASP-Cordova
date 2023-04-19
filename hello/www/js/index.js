@@ -61,50 +61,55 @@ function onDeviceReady() {
                 appBundleIds: "com.example.helloapp",
                 appTeamId: "your_team_ID",
             },
-            watcherMail : "your_email_address@example.com"
+            watcherMail : "your_email_address@example.com",
+            isProd: true
         };
     
     var threatListener = function(threatType) {
             switch(threatType) {
                 case "privilegedAccess": // Android & iOS
                     console.log('privilegedAccess');
-                    changeThreatStyle('privilegedAccess')
+                    changeThreatStyle('privilegedAccess');
                     break;
                 case "debug": // Android & iOS
                     console.log('debug');
-                    changeThreatStyle('debug')
+                    changeThreatStyle('debug');
                     break;
                 case "simulator": // Android & iOS
                     console.log('simulator');
-                    changeThreatStyle('simulator')
+                    changeThreatStyle('simulator');
                     break;
                 case "appIntegrity": // Android & iOS
                     console.log('appIntegrity');
-                    changeThreatStyle('appIntegrity')
+                    changeThreatStyle('appIntegrity');
                     break;
                 case "unofficialStore": // Android & iOS
                     console.log('unofficialStore');
-                    changeThreatStyle('unofficialStore')
+                    changeThreatStyle('unofficialStore');
                     break;
                 case "hooks": // Android & iOS
                     console.log('hooks');
-                    changeThreatStyle('hooks')
+                    changeThreatStyle('hooks');
                     break;
                 case "device binding": // Android & iOS
                     console.log('device binding');
-                    changeThreatStyle('device binding')
+                    changeThreatStyle('device binding');
                     break;
                 case "deviceID": // iOS only
                     console.log('deviceID');
+                    changeThreatStyle('deviceID');
                     break;
                 case "missingSecureEnclave": // iOS only
                     console.log('missingSecureEnclave');
+                    changeThreatStyle('missingSecureEnclave');
                     break;
                 case "passcodeChange": // iOS only
                     console.log('passcodeChange');
+                    changeThreatStyle('passcodeChange');
                     break;
                 case "passcode": // iOS only
                     console.log('passcode');
+                    changeThreatStyle('passcode');
                     break;
                 default:
                     console.log('Unknown threat type detected: ' + threatType);
