@@ -15,6 +15,7 @@ freeRASP for Cordova is a mobile in-app protection and security monitoring plugi
     * [Step 1: Talsec Cordova plugin prerequisites](#step-1-talsec-cordova-plugin-prerequisites)
     * [Step 2: Install the plugin](#step-2-install-the-plugin)
     * [Step 3: Setup the Configuration for your App](#step-3-setup-the-configuration-for-your-app)
+    	- [Dev vs Release version](#dev-vs-release-version)
     * [Step 4: Handle detected threats](#step-4-handle-detected-threats)
     * [Step 5: Start the Talsec](#step-5-start-the-talsec)
     * [Step 6: Additional note about obfuscation](#step-6-additional-note-about-obfuscation)
@@ -23,6 +24,8 @@ freeRASP for Cordova is a mobile in-app protection and security monitoring plugi
 - [Enterprise Services](#bar_chart-enterprise-services)
     * [Commercial version](#commercial-version)
     * [Plans comparison](#plans-comparison)
+- [About Us](#about-us)
+- [License](#license)
 
 # Overview
 
@@ -224,7 +227,7 @@ android {
 ```
 
 ## Step 7: User Data Policies
-See the generic info about freeRASP data collection [here](https://github.com/talsec/Free-RASP-Community/tree/master#data-collection-processing-and-gdpr-compliance)
+See the generic info about freeRASP data collection [here](https://github.com/talsec/Free-RASP-Community/tree/master#data-collection-processing-and-gdpr-compliance).
 
 Google Play [requires](https://support.google.com/googleplay/android-developer/answer/10787469?hl=en) all app publishers to declare how they collect and handle user data for the apps they publish on Google Play. They should inform users properly of the data collected by the apps and how the data is shared and processed. Therefore, Google will reject the apps which do not comply with the policy.
 
