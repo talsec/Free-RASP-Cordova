@@ -15,7 +15,7 @@
   "devDependencies": {
     "cordova-android": "^10.1.2",
     "cordova-ios": "^6.2.0",
-    "cordova-talsec-plugin-freerasp": "github:talsec/Free-RASP-Cordova"
+    "cordova-talsec-plugin-freerasp": "github:talsec/Free-RASP-Cordova#add_device_state"
   },
   "cordova": {
     "platforms": [
