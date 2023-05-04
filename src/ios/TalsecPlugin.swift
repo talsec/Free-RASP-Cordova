@@ -68,6 +68,10 @@ extension SecurityThreatCenter: SecurityThreatHandler {
     ]
 
     static func sendMessage(msg: String) {
+        if (msg == "passcodeChange") {
+            return
+        }
+
         let pluginResult = CDVPluginResult(
             status: CDVCommandStatus_OK,
             messageAs: threatEventMap[msg] ?? msg
