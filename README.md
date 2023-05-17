@@ -102,7 +102,7 @@ Talsec Cordova plugin uses Swift, add following plugin to support Swift.
 
 ## Step 2: Install the plugin
 
-    $ cordova plugin add https://github.com/talsec/Free-RASP-Cordova.git
+    $ cordova plugin add cordova-talsec-plugin-freerasp
 
 ## Step 3: Setup the Configuration for your App
 
