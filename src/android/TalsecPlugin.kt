@@ -13,7 +13,7 @@ import org.json.JSONObject
 class TalsecPlugin : CordovaPlugin(), ThreatListener.ThreatDetected, ThreatListener.DeviceState {
 
     private var callback: CallbackContext? = null
-    private val listener = ThreatListener(this)
+    private val listener = ThreatListener(this, this)
     private var registered = true
 
     override fun execute(
