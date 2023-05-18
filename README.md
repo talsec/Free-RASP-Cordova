@@ -174,19 +174,16 @@ var threatListener = function (threatType) {
         case 'hooks': // Android & iOS
             // TODO place your reaction here
             break;
-        case 'device binding': // Android & iOS
+        case 'deviceBinding': // Android & iOS
+            // TODO place your reaction here
+            break;
+        case 'secureHardwareNotAvailable': // Android & iOS
+            // TODO place your reaction here
+            break;
+        case 'passcode': // Android & iOS
             // TODO place your reaction here
             break;
         case 'deviceID': // iOS only
-            // TODO place your reaction here
-            break;
-        case 'missingSecureEnclave': // iOS only
-            // TODO place your reaction here
-            break;
-        case 'passcodeChange': // iOS only
-            // TODO place your reaction here
-            break;
-        case 'passcode': // iOS only
             // TODO place your reaction here
             break;
         default:

@@ -1,33 +1,33 @@
 {
-  "name": "com.example.helloapp",
-  "displayName": "Hello",
-  "version": "1.0.0",
-  "description": "A sample Apache Cordova application that responds to the deviceready event.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [
-    "ecosystem:cordova"
-  ],
-  "author": "Apache Cordova Team",
-  "license": "Apache-2.0",
-  "devDependencies": {
-    "cordova-android": "^10.1.2",
-    "cordova-ios": "^6.2.0",
-    "cordova-talsec-plugin-freerasp": "github:talsec/Free-RASP-Cordova#add_device_state"
-  },
-  "cordova": {
-    "platforms": [
-      "android",
-      "ios"
+    "name": "com.example.helloapp",
+    "displayName": "Hello",
+    "version": "1.0.0",
+    "description": "A sample Apache Cordova application that responds to the deviceready event.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "ecosystem:cordova"
     ],
-    "plugins": {
-      "cordova-plugin-add-swift-support": {},
-      "cordova-talsec-plugin-freerasp": {}
+    "author": "Apache Cordova Team",
+    "license": "Apache-2.0",
+    "devDependencies": {
+        "cordova-android": "^10.1.2",
+        "cordova-ios": "^6.2.0",
+        "cordova-talsec-plugin-freerasp": "github:talsec/Free-RASP-Cordova"
+    },
+    "cordova": {
+        "platforms": [
+            "android",
+            "ios"
+        ],
+        "plugins": {
+            "cordova-plugin-add-swift-support": {},
+            "cordova-talsec-plugin-freerasp": {}
+        }
+    },
+    "dependencies": {
+        "cordova-plugin-add-swift-support": "2.0.2"
     }
-  },
-  "dependencies": {
-    "cordova-plugin-add-swift-support": "2.0.2"
-  }
 }
