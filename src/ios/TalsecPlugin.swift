@@ -8,17 +8,17 @@ import TalsecRuntime
         SecurityThreatContainer.shared.commandDelegate = self.commandDelegate
         
         guard let talsecConfig = command.arguments[0] as? NSDictionary else {
-            sendError(msg: "Missing config parameter in Talsec Native Plugin")
+            SecurityThreatCenter.sendError(msg: "Missing config parameter in Talsec Native Plugin")
             return
         }
         do {
             try initializeTalsec(talsecConfig: talsecConfig)
         }
         catch let error as NSError {
-            sendError(msg: error.localizedDescription)
+            SecurityThreatCenter.sendError(msg: error.localizedDescription)
             return
         }
-        
+
         DispatchQueue.main.async {
             let pluginResult = CDVPluginResult(
                 status: CDVCommandStatus_OK,
@@ -33,7 +33,7 @@ import TalsecRuntime
             )
         }
     }
-    
+
     func initializeTalsec(talsecConfig: NSDictionary) throws {
         guard let iosConfig = talsecConfig["iosConfig"] as? NSDictionary else {
             throw NSError(domain: "Missing iosConfig parameter in Talsec Native Plugin", code: 1)
@@ -54,37 +54,47 @@ import TalsecRuntime
             Talsec.start(config: config)
         })
     }
-    
-    func sendError(msg: String) {
-        let pluginResult = CDVPluginResult(
-            status: CDVCommandStatus_ERROR,
-            messageAs: msg
-        )
-        
-        SecurityThreatContainer.shared.commandDelegate!.send(
-            pluginResult,
-            callbackId: SecurityThreatContainer.shared.callbackId
-        )
-    }
 }
 
 extension SecurityThreatCenter: SecurityThreatHandler {
     public func threatDetected(_ securityThreat: TalsecRuntime.SecurityThreat) {
         // It is better to implement security reactions (e.g. killing the app) here.
-        
-        DispatchQueue.main.async {
-            let pluginResult = CDVPluginResult(
-                status: CDVCommandStatus_OK,
-                messageAs: securityThreat.rawValue
-            )
+        SecurityThreatCenter.sendMessage(msg: securityThreat.rawValue)
+    }
 
-            pluginResult?.setKeepCallbackAs(true)
+    static let threatEventMap: [String: String] = [
+        "missingSecureEnclave": "secureHardwareNotAvailable",
+        "device binding": "deviceBinding",
+    ]
 
-            SecurityThreatContainer.shared.commandDelegate!.send(
-                pluginResult,
-                callbackId: SecurityThreatContainer.shared.callbackId
-            )
+    static func sendMessage(msg: String) {
+        if (msg == "passcodeChange") {
+            return
         }
+
+        let pluginResult = CDVPluginResult(
+            status: CDVCommandStatus_OK,
+            messageAs: threatEventMap[msg] ?? msg
+        )
+
+        pluginResult?.setKeepCallbackAs(true)
+
+        SecurityThreatContainer.shared.commandDelegate!.send(
+            pluginResult,
+            callbackId: SecurityThreatContainer.shared.callbackId
+        )
+    }
+
+    static func sendError(msg: String) {
+        let pluginResult = CDVPluginResult(
+            status: CDVCommandStatus_ERROR,
+            messageAs: msg
+        )
+
+        SecurityThreatContainer.shared.commandDelegate!.send(
+            pluginResult,
+            callbackId: SecurityThreatContainer.shared.callbackId
+        )
     }
 }
 

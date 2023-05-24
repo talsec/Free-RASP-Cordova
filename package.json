@@ -1,39 +1,49 @@
 {
-  "name": "cordova-talsec-plugin-freerasp",
-  "version": "3.0.1",
-  "description": "Cordova plugin for improving app security and threat monitoring on Android and iOS mobile devices.",
-  "cordova": {
-    "id": "cordova-talsec-plugin-freerasp",
-    "platforms": [
-      "android",
-      "ios"
-    ]
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/talsec/Free-RASP-Cordova.git"
-  },
-  "keywords": [
-    "cordova",
-    "cordova-plugin",
-    "cordova-libraries",
-    "freerasp",
-    "security",
-    "tampering-detection",
-    "root-detection",
-    "app-shielding",
-    "rasp",
-    "tampering",
-    "reverse-engineering",
-    "application-security",
-    "frida",
-    "jailbreak",
-    "root"
-  ],
-  "author": "Talsec",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/talsec/Free-RASP-Cordova/issues"
-  },
-  "homepage": "https://github.com/talsec/Free-RASP-Cordova"
+    "name": "cordova-talsec-plugin-freerasp",
+    "version": "4.0.0",
+    "description": "Cordova plugin for improving app security and threat monitoring on Android and iOS mobile devices.",
+    "cordova": {
+        "id": "cordova-talsec-plugin-freerasp",
+        "platforms": [
+            "android",
+            "ios"
+        ]
+    },
+    "scripts": {
+        "lint": "eslint ."
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/talsec/Free-RASP-Cordova.git"
+    },
+    "keywords": [
+        "cordova",
+        "cordova-plugin",
+        "cordova-libraries",
+        "freerasp",
+        "security",
+        "tampering-detection",
+        "root-detection",
+        "app-shielding",
+        "rasp",
+        "tampering",
+        "reverse-engineering",
+        "application-security",
+        "frida",
+        "jailbreak",
+        "root"
+    ],
+    "author": "Talsec",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/talsec/Free-RASP-Cordova/issues"
+    },
+    "homepage": "https://github.com/talsec/Free-RASP-Cordova",
+    "devDependencies": {
+        "@cordova/eslint-config": "^5.0.0",
+        "eslint": "^8.40.0",
+        "eslint-plugin-import": "^2.27.5",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-prettier": "^4.0.0"
+    }
 }

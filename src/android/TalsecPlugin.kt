@@ -10,10 +10,10 @@ import org.apache.cordova.PluginResult
 import org.json.JSONArray
 import org.json.JSONObject
 
-class TalsecPlugin : CordovaPlugin(), ThreatListener.ThreatDetected {
+class TalsecPlugin : CordovaPlugin(), ThreatListener.ThreatDetected, ThreatListener.DeviceState {
 
     private var callback: CallbackContext? = null
-    private val listener = ThreatListener(this)
+    private val listener = ThreatListener(this, this)
     private var registered = true
 
     override fun execute(
@@ -83,7 +83,15 @@ class TalsecPlugin : CordovaPlugin(), ThreatListener.ThreatDetected {
     }
 
     override fun onDeviceBindingDetected() {
-        sendOngoingPluginResult("device binding")
+        sendOngoingPluginResult("deviceBinding")
+    }
+
+    override fun onUnlockedDeviceDetected() {
+        sendOngoingPluginResult("passcode")
+    }
+
+    override fun onHardwareBackedKeystoreNotAvailableDetected() {
+        sendOngoingPluginResult("secureHardwareNotAvailable")
     }
 
     private fun sendOngoingPluginResult(msg: String) {
