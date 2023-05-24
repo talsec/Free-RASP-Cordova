@@ -99,6 +99,16 @@ Talsec Cordova plugin uses Swift, add following plugin to support Swift.
 
     $ cordova plugin add cordova-plugin-add-swift-support --save
 
+**IMPORTANT:** If you are upgrading from freeRASP 2.x.x or 1.x.x, please remove the old TalsecRuntime.xcframework and integration script from your project:
+
+1. Open up the **.xcworkspace** file
+1. Go to **Target -> Build Phases -> Link Binary With Libraries**
+1. Remove **TalsecRuntime.xcframework**
+1. On top bar select **Product -> Scheme -> Edit Scheme...**
+1. On the left side select **Build -> Pre-actions**
+1. Find integration script and click trash icon on the right side to remove it
+1. Update freeRASP
+
 ## Step 2: Install the plugin
 
     $ cordova plugin add cordova-talsec-plugin-freerasp
