@@ -1,3 +1,9 @@
+# freeRASP 4.0.1
+
+### iOS
+
+- ✔️ Fixed issue with metadata in iOS framework
+
 # freeRASP 4.0.0
 
 ## What's new?
