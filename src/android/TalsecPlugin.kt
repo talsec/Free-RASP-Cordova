@@ -94,6 +94,10 @@ class TalsecPlugin : CordovaPlugin(), ThreatListener.ThreatDetected, ThreatListe
         sendOngoingPluginResult("secureHardwareNotAvailable")
     }
 
+    override fun onObfuscationIssuesDetected() {
+        sendOngoingPluginResult("obfuscationIssues")
+    }
+
     private fun sendOngoingPluginResult(msg: String) {
         val result = PluginResult(PluginResult.Status.OK, msg)
         result.keepCallback = true
