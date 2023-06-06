@@ -195,6 +195,9 @@ var threatListener = function (threatType) {
         case 'deviceID': // iOS only
             // TODO place your reaction here
             break;
+        case 'obfuscationIssues': // Android only
+            // TODO place your reaction here
+            break;
         default:
             console.log('Unknown threat type detected: ' + threatType);
     }
@@ -222,7 +225,33 @@ talsec
 
 ## Step 6: Additional note about obfuscation
 
-The freeRASP contains public API, so the integration process is as simple as possible. Unfortunately, this public API also creates opportunities for the attacker to use publicly available information to interrupt freeRASP operations or modify your custom reaction implementation in threat callbacks. In order for freeRASP to be as effective as possible, it is highly recommended to apply obfuscation to the final package/application, making the public API more difficult to find and also partially randomized for each application so it cannot be automatically abused by generic hooking scripts.
+The freeRASP contains public API, so the integration process is as simple as possible. Unfortunately, this public API also creates opportunities for the attacker to use publicly available information to interrupt freeRASP operations or modify your custom reaction implementation in threat callbacks. In order for freeRASP to be as effective as possible, it is highly recommended to apply obfuscation to the final package/application, making the public API more difficult to find and also partially randomized for each application so it cannot be automatically abused by generic hooking scripts. Obfuscation can be configured for Android devices in **android/app/build.gradle** like so:
+
+```groovy
+android {
+    buildTypes {
+        release {
+            ...
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+        }
+    }
+}
+
+```
+
+Additionally, create or extend `proguard-rules.pro` in **android/app** folder and exclude Cordova’s specific classes that rely on package names from being obfuscated:
+
+```groovy
+-keep class org.apache.cordova.** {*;}
+-keep public class * extends org.apache.cordova.CordovaPlugin
+-flattenpackagehierarchy
+```
+
+Please note that some other modules in your app may rely on reflection, therefore it may be necessary to add corresponding keep rules into `proguard-rules.pro` file.
+
+Finally, freeRASP will notify you about missing obfuscation via obfuscationIssues callback.
 
 ### Android
 
