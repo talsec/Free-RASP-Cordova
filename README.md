@@ -80,12 +80,13 @@ Add platforms to your Cordova project:
 
 ### Android
 
-Talsec Cordova plugin uses Kotlin, add following lines into the `config.xml` file in your project root directory.
+freeRASP for Android requires a **minimum SDK** level of **23** and a **target SDK** level of **31**. Cordova projects, by default, support even lower levels of minimum and target SDKs. This creates an inconsistency we must solve by updating the SDK levels of the application. Additionally, the freeRASP Cordova plugin uses Kotlin; add the following lines into the `config.xml` file in your project root directory to enable Kotlin and set the required SDK versions.
 
 ```xml
 <preference name="GradlePluginKotlinEnabled" value="true" />
 <preference name="GradlePluginKotlinCodeStyle" value="official" />
 <preference name="GradlePluginKotlinVersion" value="1.7.10" />
+<preference name="android-minSdkVersion" value="23" />
 <preference name="android-targetSdkVersion" value="31" />
 ```
 
@@ -238,7 +239,38 @@ android {
         }
     }
 }
+```
 
+Additionally, create or extend `proguard-rules.pro` in **android/app** folder and exclude Cordova’s specific classes that rely on package names from being obfuscated:
+
+```groovy
+-keep class org.apache.cordova.** {*;}
+-keep public class * extends org.apache.cordova.CordovaPlugin
+-flattenpackagehierarchy
+```
+
+Please note that some other modules in your app may rely on reflection, therefore it may be necessary to add corresponding keep rules into `proguard-rules.pro` file.
+
+### Android
+
+Some versions of Cordova do not support code shrinking and obfuscation by default. However, the owner of the project can define the set of rules that are usually automatically used when the application is built in the release mode. For more information, please visit the official documentation
+
+-   https://developer.android.com/studio/build/shrink-code
+-   https://www.guardsquare.com/manual/configuration/usage
+
+You can make sure that the obfuscation is enabled by checking the value of **minifyEnabled** property in `android/app/build.gradle` file.
+
+```groovy
+android {
+    buildTypes {
+        release {
+            ...
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+        }
+    }
+}
 ```
 
 Additionally, create or extend `proguard-rules.pro` in **android/app** folder and exclude Cordova’s specific classes that rely on package names from being obfuscated:
@@ -252,29 +284,6 @@ Additionally, create or extend `proguard-rules.pro` in **android/app** folder an
 Please note that some other modules in your app may rely on reflection, therefore it may be necessary to add corresponding keep rules into `proguard-rules.pro` file.
 
 Finally, freeRASP will notify you about missing obfuscation via obfuscationIssues callback.
-
-### Android
-
-The majority of Android projects support code shrinking and obfuscation without any additional need for setup. The owner of the project can define the set of rules that are usually automatically used when the application is built in the release mode. For more information, please visit the official documentation
-
--   https://developer.android.com/studio/build/shrink-code
--   https://www.guardsquare.com/manual/configuration/usage
-
-You can make sure, that the obfuscation is enabled by checking the value of **minifyEnabled** property in your **module's build.gradle** file.
-
-```gradle
-android {
-    ...
-
-    buildTypes {
-        release {
-            minifyEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-}
-```
 
 ## Step 7: User Data Policies
 
