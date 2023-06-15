@@ -4,7 +4,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.aheaditec.talsec.security:TalsecSecurity-Community-Cordova:7.0.0"
+    implementation "com.aheaditec.talsec.security:TalsecSecurity-Community-Cordova:8.0.1"
 }
 
 android {

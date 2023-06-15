@@ -41,6 +41,8 @@ function onDeviceReady () {
 
     if (cordova.platformId === 'ios') {
         checks.deviceID = 'Device ID';
+    } else {
+        checks.obfuscationIssues = 'Obfuscation Issues';
     }
 
     Object.entries(checks).forEach(([check, msg]) => {
@@ -107,6 +109,10 @@ function onDeviceReady () {
         case 'deviceID': // iOS only
             console.log('deviceID');
             changeThreatStyle('deviceID');
+            break;
+        case 'obfuscationIssues': // Android only
+            console.log('obfuscationIssues');
+            changeThreatStyle('obfuscationIssues');
             break;
         default:
             console.log(`Unknown threat type detected: ${threatType}`);

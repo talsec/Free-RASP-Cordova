@@ -1,8 +1,17 @@
+# freeRASP 5.0.0
+
+### Android
+
+-   ❗ BREAKING CHANGE: Raised minimum supported Android version to 6.0 (API level 23)
+-   ✔️ Removed deprecated BouncyCastle dependency that could cause errors in the build phase
+-   ✔️ Fixed issue that could cause NullPointerException
+-   🆕 Added new `obfuscationIssues` check, which is triggered when freeRASP doesn't detect any obfuscation of the source code
+
 # freeRASP 4.0.1
 
 ### iOS
 
-- ✔️ Fixed issue with metadata in iOS framework
+-   ✔️ Fixed issue with metadata in iOS framework
 
 # freeRASP 4.0.0
 
