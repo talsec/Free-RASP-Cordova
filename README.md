@@ -331,8 +331,8 @@ freeRASP is freemium software i.e. there is a Fair Usage Policy (FUP) that impos
             <td>Runtime reverse engineering controls 
                 <ul>
                     <li>Debugger</li>
-                    <li>Emulator / Simultors  </li>
-                    <li>Hooking and reversing frameworks   (e.g. Frida, Magisk, XPosed, Cydia Substrat and more)</li>
+                    <li>Emulator / Simulator</li>
+                    <li>Hooking and reversing frameworks (e.g. Frida, Magisk, XPosed, Cydia Substrate and more)</li>
                 </ul>
             </td>
             <td>basic</td>
@@ -356,7 +356,7 @@ freeRASP is freemium software i.e. there is a Fair Usage Policy (FUP) that impos
                     <li>HW security module control</li>
                     <li>Screen lock control</li>
                     <li>Google Play Services enabled/disabled</li>
-                    <li>Last OS update</li>
+                    <li>Last security patch update</li>
                 </ul>
             </td>
             <td>yes</td>
@@ -408,12 +408,12 @@ freeRASP is freemium software i.e. there is a Fair Usage Policy (FUP) that impos
             <td>yes</td>
         </tr>
         <tr>
-            <td>UI portal for Logging, Data analytics and auditing </td>
+            <td>UI portal for Logging, Data analytics and auditing</td>
             <td>no</td>
             <td>yes</td>
         </tr>
         <tr>     
-          <td colspan=5><strong>Support and Maintennace</strong></td>
+          <td colspan=5><strong>Support and Maintenance</strong></td>
         </tr>
         <tr>
             <td>SLA</td>
@@ -429,7 +429,7 @@ freeRASP is freemium software i.e. there is a Fair Usage Policy (FUP) that impos
             <td colspan=5><strong>Fair usage policy</strong></td>
         </tr>
         <tr>
-            <td>Mentioning of the App name and logo in the marketing communications of Talsec (e.g. "Trusted by" section on th web).</td>
+            <td>Mentioning of the App name and logo in the marketing communications of Talsec (e.g. "Trusted by" section on the web).</td>
             <td>over 100k downloads</td>
             <td>no</td>
         </tr>
