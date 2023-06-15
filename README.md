@@ -226,7 +226,7 @@ talsec
 
 ## Step 6: Additional note about obfuscation
 
-The freeRASP contains public API, so the integration process is as simple as possible. Unfortunately, this public API also creates opportunities for the attacker to use publicly available information to interrupt freeRASP operations or modify your custom reaction implementation in threat callbacks. In order to provide as much protection as possible, freeRASP obfuscates its source code. However, if all other code is not obfuscated, one can easily deduct that the obfuscated code belongs to a security library. We, therefore, encourage you to apply code obfuscation to your app, making the public API more difficult to find and also partially randomized for each application so it cannot be automatically abused by generic hooking scripts. 
+The freeRASP contains public API, so the integration process is as simple as possible. Unfortunately, this public API also creates opportunities for the attacker to use publicly available information to interrupt freeRASP operations or modify your custom reaction implementation in threat callbacks. In order to provide as much protection as possible, freeRASP obfuscates its source code. However, if all other code is not obfuscated, one can easily deduct that the obfuscated code belongs to a security library. We, therefore, encourage you to apply code obfuscation to your app, making the public API more difficult to find and also partially randomized for each application so it cannot be automatically abused by generic hooking scripts.
 
 Probably the easiest way to obfuscate your app is via code minification, a technique that reduces the size of the compiled code by removing unnecessary characters, whitespace, and renaming variables and functions to shorter names. It can be configured for Android devices in **android/app/build.gradle** like so:
 
@@ -253,9 +253,10 @@ Additionally, create or extend `proguard-rules.pro` in **android/app** folder an
 
 Please note that some other modules in your app may rely on reflection, therefore it may be necessary to add corresponding keep rules into `proguard-rules.pro` file.
 
-Finally, if there is a problem with the obfuscation freeRASP will notify you about it via **obfuscationIssues** callback.
+If there is a problem with the obfuscation, freeRASP will notify you about it via **obfuscationIssues** callback.
 
 You can read more about Android obfuscation in the official documentation:
+
 -   https://developer.android.com/studio/build/shrink-code
 -   https://www.guardsquare.com/manual/configuration/usage
 
