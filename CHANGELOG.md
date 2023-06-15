@@ -3,8 +3,8 @@
 ### Android
 
 -   ❗ BREAKING CHANGE: Raised minimum supported Android version to 6.0 (API level 23)
-
--   🆕 Added new `obfuscationIssues` check, which is triggered when Talsec doesn't detect any obfuscation of the source code. By applying obfuscation to the final package/application, it is more difficult to find the public API of Talsec and the API is also partially randomized for each application, therefore it cannot be automatically abused by generic hooking scripts.
+-   ✔️ Removed deprecated BouncyCastle dependency that could cause errors in the build phase
+-   🆕 Added new `obfuscationIssues` check, which is triggered when freeRASP doesn't detect any obfuscation of the source code
 
 # freeRASP 4.0.1
 
