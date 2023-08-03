@@ -13,4 +13,7 @@ android {
             srcDirs += 'src/main/kotlin'
         }
     }
+    if (project.android.hasProperty("namespace")) {
+        namespace("com.aheaditec.talsec.cordova")
+    }
 }
