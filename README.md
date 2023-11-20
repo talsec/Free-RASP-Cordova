@@ -165,44 +165,52 @@ The Dev version is used to not complicate the development process of the applica
 Talsec executes periodical checks when the application is running. To be able to receive detected threats, you need to provide listener to the plugin. The threat types are defined in the example bellow:
 
 ```js
-var threatListener = function (threatType) {
-    switch (threatType) {
-        case 'privilegedAccess': // Android & iOS
-            // TODO place your reaction here
-            break;
-        case 'debug': // Android & iOS
-            // TODO place your reaction here
-            break;
-        case 'simulator': // Android & iOS
-            // TODO place your reaction here
-            break;
-        case 'appIntegrity': // Android & iOS
-            // TODO place your reaction here
-            break;
-        case 'unofficialStore': // Android & iOS
-            // TODO place your reaction here
-            break;
-        case 'hooks': // Android & iOS
-            // TODO place your reaction here
-            break;
-        case 'deviceBinding': // Android & iOS
-            // TODO place your reaction here
-            break;
-        case 'secureHardwareNotAvailable': // Android & iOS
-            // TODO place your reaction here
-            break;
-        case 'passcode': // Android & iOS
-            // TODO place your reaction here
-            break;
-        case 'deviceID': // iOS only
-            // TODO place your reaction here
-            break;
-        case 'obfuscationIssues': // Android only
-            // TODO place your reaction here
-            break;
-        default:
-            console.log('Unknown threat type detected: ' + threatType);
-    }
+// reactions to detected threats
+const actions = {
+  // Android & iOS
+  privilegedAccess: () => {
+    console.log('privilegedAccess');
+  },
+  // Android & iOS
+  debug: () => {
+    console.log('debug');
+  },
+  // Android & iOS
+  simulator: () => {
+    console.log('simulator');
+  },
+  // Android & iOS
+  appIntegrity: () => {
+    console.log('appIntegrity');
+  },
+  // Android & iOS
+  unofficialStore: () => {
+    console.log('unofficialStore');
+  },
+  // Android & iOS
+  hooks: () => {
+    console.log('hooks');
+  },
+  // Android & iOS
+  deviceBinding: () => {
+    console.log('deviceBinding');
+  },
+  // Android & iOS
+  secureHardwareNotAvailable: () => {
+    console.log('secureHardwareNotAvailable');
+  },
+  // Android & iOS
+  passcode: () => {
+    console.log('passcode');
+  },
+  // iOS only
+  deviceID: () => {
+    console.log('deviceID');
+  },
+  // Android only
+  obfuscationIssues: () => {
+    console.log('obfuscationIssues');
+  },
 };
 ```
 
@@ -216,7 +224,7 @@ The initialization should be done inside the `onDeviceReady` function in the `in
 
 ```js
 talsec
-    .start(config, threatListener)
+    .start(config, actions)
     .then(() => {
         console.log('Talsec initialized.');
     })
