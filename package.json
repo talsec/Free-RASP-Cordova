@@ -41,9 +41,36 @@
     "homepage": "https://github.com/talsec/Free-RASP-Cordova",
     "devDependencies": {
         "@cordova/eslint-config": "^5.0.0",
+        "@types/cordova": "^11.0.2",
+        "@types/node": "^20.8.10",
+        "@typescript-eslint/parser": "^6.9.1",
         "eslint": "^8.40.0",
         "eslint-plugin-import": "^2.27.5",
         "eslint-config-prettier": "^8.5.0",
-        "eslint-plugin-prettier": "^4.0.0"
-    }
+        "eslint-plugin-prettier": "^4.0.0",
+        "prettier": "^3.0.3",
+        "prettier-eslint": "^16.1.2",
+        "typescript": "^5.2.2"
+    },
+    "eslintConfig": {
+        "root": true,
+        "extends": [
+            "@cordova/eslint-config"
+        ],
+        "rules": {
+            "prettier/prettier": [
+                "off",
+                {
+                    "quoteProps": "consistent",
+                    "singleQuote": true,
+                    "tabWidth": 2,
+                    "trailingComma": "es5",
+                    "useTabs": false
+                }
+            ]
+        }
+    },
+    "eslintIgnore": [
+        "node_modules/"
+    ]
 }
