@@ -1,7 +1,36 @@
-'use strict';
 /* global cordova */
+
+type NativeEventEmitterActions = {
+    privilegedAccess?: () => any;
+    debug?: () => any;
+    simulator?: () => any;
+    appIntegrity?: () => any;
+    unofficialStore?: () => any;
+    hooks?: () => any;
+    deviceBinding?: () => any;
+    deviceID?: () => any;
+    passcode?: () => any;
+    overlay?: () => any;
+    secureHardwareNotAvailable?: () => any;
+    obfuscationIssues?: () => any;
+};
+
+type TalsecConfig = {
+    androidConfig?: {
+        packageName: string;
+        certificateHashes: string[];
+        supportedAlternativeStores?: string[];
+    };
+    iosConfig?: {
+        appBundleId: string;
+        appTeamId: string;
+    };
+    watcherMail: string;
+    isProd?: boolean;
+};
+
 class Threat {
-    value;
+    value: number;
     static AppIntegrity = new Threat(0);
     static PrivilegedAccess = new Threat(0);
     static Debug = new Threat(0);
@@ -14,11 +43,12 @@ class Threat {
     static UnofficialStore = new Threat(0);
     static Overlay = new Threat(0);
     static ObfuscationIssues = new Threat(0);
-    constructor (value) {
+    
+    constructor (value: number) {
         this.value = value;
     }
 
-    static getValues = () => {
+    static getValues = (): Threat[] => {
         return cordova.platformId === 'android'
             ? [
                 this.AppIntegrity,
@@ -45,17 +75,18 @@ class Threat {
                 this.UnofficialStore
             ];
     };
-}
+};
 
-const getThreatCount = () => {
+const getThreatCount = (): number => {
     return Threat.getValues().length;
 };
-const itemsHaveType = (data, desidedType) => {
+
+const itemsHaveType = (data: any[], desidedType: string) => {
     // eslint-disable-next-line valid-typeof
     return data.every((item) => typeof item === desidedType);
 };
-const getThreatIdentifiers = async () => {
-    const identifiers = await new Promise((resolve, reject) => {
+const getThreatIdentifiers = async (): Promise<number[]> => {
+    const identifiers: number[] = await new Promise((resolve, reject) => {
         cordova.exec((data) => {
             resolve(data);
         }, (error) => {
@@ -68,20 +99,22 @@ const getThreatIdentifiers = async () => {
     }
     return identifiers;
 };
-const prepareMapping = async () => {
+const prepareMapping = async (): Promise<void>  => {
     const newValues = await getThreatIdentifiers();
     const threats = Threat.getValues();
     // eslint-disable-next-line array-callback-return
     threats.map((threat, index) => {
-        threat.value = newValues[index];
+        threat.value = newValues[index]!;
     });
 };
 const onInvalidCallback = () => {
     cordova.exec(() => { }, () => { }, 'TalsecPlugin', 'onInvalidCallback');
 };
-const start = async (config, eventListenerConfig) => {
+
+const start = async (config: TalsecConfig, eventListenerConfig: NativeEventEmitterActions) => {
     await prepareMapping();
-    const eventListener = (event) => {
+
+    const eventListener = (event: number) => {
         switch (event) {
         case Threat.PrivilegedAccess.value:
             eventListenerConfig.privilegedAccess?.();
@@ -121,18 +154,25 @@ const start = async (config, eventListenerConfig) => {
             break;
         }
     };
-    return new Promise((resolve, reject) => {
-        cordova.exec((message) => {
-            if (message != null && message === 'started') {
-                resolve();
-            } else {
-                eventListener(message);
-            }
-        }, (error) => {
-            reject(error);
-        }, 'TalsecPlugin', 'start', [config]);
+
+    return new Promise<void>((resolve, reject) => {
+        cordova.exec(
+            (message) => {
+                if (message != null && message === 'started') {
+                    resolve();
+                } else {
+                    eventListener(message);
+                }
+            },
+            (error) => {
+                reject(error);
+            },
+            'TalsecPlugin',
+            'start',
+            [config]
+        );
     });
-};
+}
 
 module.exports = {
     start
