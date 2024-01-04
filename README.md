@@ -80,7 +80,7 @@ Add platforms to your Cordova project:
 
 ### Android
 
-freeRASP for Android requires a **minimum SDK** level of **>=23** and a **target SDK** level of **>=31**. Cordova projects, by default, support even lower levels of minimum and target SDKs. This creates an inconsistency we must solve by updating the SDK levels of the application. Additionally, the freeRASP Cordova plugin uses Kotlin; add the following lines into the `config.xml` file in your project root directory to enable Kotlin and set the required SDK versions.
+freeRASP for Android requires a **minSdkVersion** level of **>=23** and a **targetSdkVersion** level of **>=31**. Cordova projects, by default, support even lower levels of minimum and target SDKs. This creates an inconsistency we must solve by updating the SDK levels of the application. Additionally, the freeRASP Cordova plugin uses Kotlin; add the following lines into the `config.xml` file in your project root directory to enable Kotlin and set the required SDK versions.
 
 ```xml
 <preference name="GradlePluginKotlinEnabled" value="true" />
