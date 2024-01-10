@@ -80,7 +80,7 @@ Add platforms to your Cordova project:
 
 ### Android
 
-freeRASP for Android requires a **minimum SDK** level of **23** and a **target SDK** level of **31**. Cordova projects, by default, support even lower levels of minimum and target SDKs. This creates an inconsistency we must solve by updating the SDK levels of the application. Additionally, the freeRASP Cordova plugin uses Kotlin; add the following lines into the `config.xml` file in your project root directory to enable Kotlin and set the required SDK versions.
+freeRASP for Android requires a **minSdkVersion** level of **>=23** and a **targetSdkVersion** level of **>=31**. Cordova projects, by default, support even lower levels of minimum and target SDKs. This creates an inconsistency we must solve by updating the SDK levels of the application. Additionally, the freeRASP Cordova plugin uses Kotlin; add the following lines into the `config.xml` file in your project root directory to enable Kotlin and set the required SDK versions.
 
 ```xml
 <preference name="GradlePluginKotlinEnabled" value="true" />
@@ -88,6 +88,7 @@ freeRASP for Android requires a **minimum SDK** level of **23** and a **target S
 <preference name="GradlePluginKotlinVersion" value="1.7.10" />
 <preference name="android-minSdkVersion" value="23" />
 <preference name="android-targetSdkVersion" value="31" />
+<preference name="android-compileSdkVersion" value="31" />
 ```
 
 Then run following command to apply the preferences:
@@ -165,44 +166,52 @@ The Dev version is used to not complicate the development process of the applica
 Talsec executes periodical checks when the application is running. To be able to receive detected threats, you need to provide listener to the plugin. The threat types are defined in the example bellow:
 
 ```js
-var threatListener = function (threatType) {
-    switch (threatType) {
-        case 'privilegedAccess': // Android & iOS
-            // TODO place your reaction here
-            break;
-        case 'debug': // Android & iOS
-            // TODO place your reaction here
-            break;
-        case 'simulator': // Android & iOS
-            // TODO place your reaction here
-            break;
-        case 'appIntegrity': // Android & iOS
-            // TODO place your reaction here
-            break;
-        case 'unofficialStore': // Android & iOS
-            // TODO place your reaction here
-            break;
-        case 'hooks': // Android & iOS
-            // TODO place your reaction here
-            break;
-        case 'deviceBinding': // Android & iOS
-            // TODO place your reaction here
-            break;
-        case 'secureHardwareNotAvailable': // Android & iOS
-            // TODO place your reaction here
-            break;
-        case 'passcode': // Android & iOS
-            // TODO place your reaction here
-            break;
-        case 'deviceID': // iOS only
-            // TODO place your reaction here
-            break;
-        case 'obfuscationIssues': // Android only
-            // TODO place your reaction here
-            break;
-        default:
-            console.log('Unknown threat type detected: ' + threatType);
-    }
+// reactions to detected threats
+const actions = {
+  // Android & iOS
+  privilegedAccess: () => {
+    console.log('privilegedAccess');
+  },
+  // Android & iOS
+  debug: () => {
+    console.log('debug');
+  },
+  // Android & iOS
+  simulator: () => {
+    console.log('simulator');
+  },
+  // Android & iOS
+  appIntegrity: () => {
+    console.log('appIntegrity');
+  },
+  // Android & iOS
+  unofficialStore: () => {
+    console.log('unofficialStore');
+  },
+  // Android & iOS
+  hooks: () => {
+    console.log('hooks');
+  },
+  // Android & iOS
+  deviceBinding: () => {
+    console.log('deviceBinding');
+  },
+  // Android & iOS
+  secureHardwareNotAvailable: () => {
+    console.log('secureHardwareNotAvailable');
+  },
+  // Android & iOS
+  passcode: () => {
+    console.log('passcode');
+  },
+  // iOS only
+  deviceID: () => {
+    console.log('deviceID');
+  },
+  // Android only
+  obfuscationIssues: () => {
+    console.log('obfuscationIssues');
+  },
 };
 ```
 
@@ -216,7 +225,7 @@ The initialization should be done inside the `onDeviceReady` function in the `in
 
 ```js
 talsec
-    .start(config, threatListener)
+    .start(config, actions)
     .then(() => {
         console.log('Talsec initialized.');
     })

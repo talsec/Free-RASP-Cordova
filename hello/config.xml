@@ -12,5 +12,6 @@
     <preference name="GradlePluginKotlinCodeStyle" value="official" />
     <preference name="GradlePluginKotlinVersion" value="1.7.10" />
     <preference name="android-minSdkVersion" value="23" />
-    <preference name="android-targetSdkVersion" value="31" />
+    <preference name="android-targetSdkVersion" value="33" />
+    <preference name="android-compileSdkVersion" value="33" />
 </widget>

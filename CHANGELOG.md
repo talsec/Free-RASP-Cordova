@@ -1,3 +1,20 @@
+# freeRASP 6.0.0
+
+-   ❗ **BREAKING API CHANGE**: changed the way how threats are received. Now, it is necessary to pass object with reactions to `talsec.start()` method instead of a function.
+-   ⚡ Improved message passing between native iOS/Android and Cordova
+-   ✔️ Restricted message passing to valid callbacks only. If an invalid callback is received, the SDK will kill the app
+-   ⚡ Improved reaction obfuscation
+-   📄 Documentation updates and improvements
+
+### Android
+
+-   ⚡ Fixed ProviderException which could be occassionally triggered
+
+### iOS
+
+-   ❗ Raised supported Xcode version to 14.3.1
+-   ⚡ Improved SDK obfuscation
+
 # freeRASP 5.4.0
 
 -   📄 Documentation updates and improvements

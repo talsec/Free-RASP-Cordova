@@ -68,59 +68,71 @@ function onDeviceReady () {
         isProd: true
     };
 
-    const threatListener = function (threatType) {
-        switch (threatType) {
-        case 'privilegedAccess': // Android & iOS
+    const actions = {
+    // Android & iOS
+        privilegedAccess: () => {
             console.log('privilegedAccess');
             changeThreatStyle('privilegedAccess');
-            break;
-        case 'debug': // Android & iOS
+        },
+        // Android & iOS
+        debug: () => {
             console.log('debug');
             changeThreatStyle('debug');
-            break;
-        case 'simulator': // Android & iOS
+        },
+        // Android & iOS
+        simulator: () => {
             console.log('simulator');
             changeThreatStyle('simulator');
-            break;
-        case 'appIntegrity': // Android & iOS
+        },
+        // Android & iOS
+        appIntegrity: () => {
             console.log('appIntegrity');
             changeThreatStyle('appIntegrity');
-            break;
-        case 'unofficialStore': // Android & iOS
+        },
+        // Android & iOS
+        unofficialStore: () => {
             console.log('unofficialStore');
             changeThreatStyle('unofficialStore');
-            break;
-        case 'hooks': // Android & iOS
+        },
+        // Android & iOS
+        hooks: () => {
             console.log('hooks');
             changeThreatStyle('hooks');
-            break;
-        case 'deviceBinding': // Android & iOS
+        },
+        // Android & iOS
+        deviceBinding: () => {
             console.log('deviceBinding');
             changeThreatStyle('deviceBinding');
-            break;
-        case 'secureHardwareNotAvailable': // Android & iOS
+        },
+        // Android & iOS
+        secureHardwareNotAvailable: () => {
             console.log('secureHardwareNotAvailable');
             changeThreatStyle('secureHardwareNotAvailable');
-            break;
-        case 'passcode': // Android & iOS
+        },
+        // Android & iOS
+        passcode: () => {
             console.log('passcode');
             changeThreatStyle('passcode');
-            break;
-        case 'deviceID': // iOS only
+        },
+        // iOS only
+        deviceID: () => {
             console.log('deviceID');
             changeThreatStyle('deviceID');
-            break;
-        case 'obfuscationIssues': // Android only
+        },
+        // Android only
+        overlay: () => {
+            console.log('overlay');
+            changeThreatStyle('overlay');
+        },
+        // Android only
+        obfuscationIssues: () => {
             console.log('obfuscationIssues');
             changeThreatStyle('obfuscationIssues');
-            break;
-        default:
-            console.log(`Unknown threat type detected: ${threatType}`);
         }
     };
 
     talsec
-        .start(config, threatListener)
+        .start(config, actions)
         .then(() => {
             console.log('Talsec initialized.');
         })
