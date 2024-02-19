@@ -1,3 +1,11 @@
+# freeRASP 6.0.1
+
+### Android
+-   ⚡ Fixed bug that prevented firing callbacks in specific situations
+
+### iOS
+-   ⚡ Fixed bug that caused app being killed in specific situations ([#42](https://github.com/talsec/Free-RASP-ReactNative/issues/42))
+
 # freeRASP 6.0.0
 
 -   ❗ **BREAKING API CHANGE**: changed the way how threats are received. Now, it is necessary to pass object with reactions to `talsec.start()` method instead of a function.
