@@ -10,7 +10,6 @@ type NativeEventEmitterActions = {
     deviceBinding?: () => any;
     deviceID?: () => any;
     passcode?: () => any;
-    overlay?: () => any;
     secureHardwareNotAvailable?: () => any;
     obfuscationIssues?: () => any;
 };
@@ -41,9 +40,8 @@ class Threat {
     static DeviceBinding = new Threat(0);
     static DeviceID = new Threat(0);
     static UnofficialStore = new Threat(0);
-    static Overlay = new Threat(0);
     static ObfuscationIssues = new Threat(0);
-    
+
     constructor (value: number) {
         this.value = value;
     }
@@ -75,7 +73,7 @@ class Threat {
                 this.UnofficialStore
             ];
     };
-};
+}
 
 const getThreatCount = (): number => {
     return Threat.getValues().length;
@@ -87,19 +85,26 @@ const itemsHaveType = (data: any[], desidedType: string) => {
 };
 const getThreatIdentifiers = async (): Promise<number[]> => {
     const identifiers: number[] = await new Promise((resolve, reject) => {
-        cordova.exec((data) => {
-            resolve(data);
-        }, (error) => {
-            reject(error);
-        }, 'TalsecPlugin', 'getThreatIdentifiers');
+        cordova.exec(
+            (data) => {
+                resolve(data);
+            },
+            (error) => {
+                reject(error);
+            },
+            'TalsecPlugin',
+            'getThreatIdentifiers'
+        );
     });
-    if (identifiers.length !== getThreatCount() ||
-        !itemsHaveType(identifiers, 'number')) {
+    if (
+        identifiers.length !== getThreatCount() ||
+        !itemsHaveType(identifiers, 'number')
+    ) {
         onInvalidCallback();
     }
     return identifiers;
 };
-const prepareMapping = async (): Promise<void>  => {
+const prepareMapping = async (): Promise<void> => {
     const newValues = await getThreatIdentifiers();
     const threats = Threat.getValues();
     // eslint-disable-next-line array-callback-return
@@ -108,10 +113,18 @@ const prepareMapping = async (): Promise<void>  => {
     });
 };
 const onInvalidCallback = () => {
-    cordova.exec(() => { }, () => { }, 'TalsecPlugin', 'onInvalidCallback');
+    cordova.exec(
+        () => {},
+        () => {},
+        'TalsecPlugin',
+        'onInvalidCallback'
+    );
 };
 
-const start = async (config: TalsecConfig, eventListenerConfig: NativeEventEmitterActions) => {
+const start = async (
+    config: TalsecConfig,
+    eventListenerConfig: NativeEventEmitterActions
+) => {
     await prepareMapping();
 
     const eventListener = (event: number) => {
@@ -140,14 +153,14 @@ const start = async (config: TalsecConfig, eventListenerConfig: NativeEventEmitt
         case Threat.Passcode.value:
             eventListenerConfig.passcode?.();
             break;
-        case Threat.Overlay.value:
-            eventListenerConfig.overlay?.();
-            break;
         case Threat.SecureHardwareNotAvailable.value:
             eventListenerConfig.secureHardwareNotAvailable?.();
             break;
         case Threat.ObfuscationIssues.value:
             eventListenerConfig.obfuscationIssues?.();
+            break;
+        case Threat.DeviceID.value:
+            eventListenerConfig.deviceID?.();
             break;
         default:
             onInvalidCallback();
@@ -172,7 +185,7 @@ const start = async (config: TalsecConfig, eventListenerConfig: NativeEventEmitt
             [config]
         );
     });
-}
+};
 
 module.exports = {
     start

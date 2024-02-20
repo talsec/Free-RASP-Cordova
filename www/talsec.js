@@ -12,7 +12,6 @@ class Threat {
     static DeviceBinding = new Threat(0);
     static DeviceID = new Threat(0);
     static UnofficialStore = new Threat(0);
-    static Overlay = new Threat(0);
     static ObfuscationIssues = new Threat(0);
     constructor (value) {
         this.value = value;
@@ -46,7 +45,6 @@ class Threat {
             ];
     };
 }
-
 const getThreatCount = () => {
     return Threat.getValues().length;
 };
@@ -56,14 +54,21 @@ const itemsHaveType = (data, desidedType) => {
 };
 const getThreatIdentifiers = async () => {
     const identifiers = await new Promise((resolve, reject) => {
-        cordova.exec((data) => {
-            resolve(data);
-        }, (error) => {
-            reject(error);
-        }, 'TalsecPlugin', 'getThreatIdentifiers');
+        cordova.exec(
+            (data) => {
+                resolve(data);
+            },
+            (error) => {
+                reject(error);
+            },
+            'TalsecPlugin',
+            'getThreatIdentifiers'
+        );
     });
-    if (identifiers.length !== getThreatCount() ||
-        !itemsHaveType(identifiers, 'number')) {
+    if (
+        identifiers.length !== getThreatCount() ||
+        !itemsHaveType(identifiers, 'number')
+    ) {
         onInvalidCallback();
     }
     return identifiers;
@@ -77,7 +82,12 @@ const prepareMapping = async () => {
     });
 };
 const onInvalidCallback = () => {
-    cordova.exec(() => { }, () => { }, 'TalsecPlugin', 'onInvalidCallback');
+    cordova.exec(
+        () => {},
+        () => {},
+        'TalsecPlugin',
+        'onInvalidCallback'
+    );
 };
 const start = async (config, eventListenerConfig) => {
     await prepareMapping();
@@ -107,14 +117,14 @@ const start = async (config, eventListenerConfig) => {
         case Threat.Passcode.value:
             eventListenerConfig.passcode?.();
             break;
-        case Threat.Overlay.value:
-            eventListenerConfig.overlay?.();
-            break;
         case Threat.SecureHardwareNotAvailable.value:
             eventListenerConfig.secureHardwareNotAvailable?.();
             break;
         case Threat.ObfuscationIssues.value:
             eventListenerConfig.obfuscationIssues?.();
+            break;
+        case Threat.DeviceID.value:
+            eventListenerConfig.deviceID?.();
             break;
         default:
             onInvalidCallback();
@@ -122,18 +132,23 @@ const start = async (config, eventListenerConfig) => {
         }
     };
     return new Promise((resolve, reject) => {
-        cordova.exec((message) => {
-            if (message != null && message === 'started') {
-                resolve();
-            } else {
-                eventListener(message);
-            }
-        }, (error) => {
-            reject(error);
-        }, 'TalsecPlugin', 'start', [config]);
+        cordova.exec(
+            (message) => {
+                if (message != null && message === 'started') {
+                    resolve();
+                } else {
+                    eventListener(message);
+                }
+            },
+            (error) => {
+                reject(error);
+            },
+            'TalsecPlugin',
+            'start',
+            [config]
+        );
     });
 };
-
 module.exports = {
     start
 };

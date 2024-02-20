@@ -54,8 +54,10 @@ class TalsecPlugin : CordovaPlugin() {
 
     override fun onPause(multitasking: Boolean) {
         super.onPause(multitasking)
-        listener.unregisterListener(this.cordova.context)
-        registered = false
+        if (this.cordova.activity.isFinishing) {
+            listener.unregisterListener(this.cordova.context)
+            registered = false
+        }
     }
 
     override fun onResume(multitasking: Boolean) {
