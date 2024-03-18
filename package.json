@@ -18,6 +18,9 @@
     },
     "keywords": [
         "cordova",
+        "ecosystem:cordova",
+        "cordova-android",
+        "cordova-ios",
         "cordova-plugin",
         "cordova-libraries",
         "freerasp",
