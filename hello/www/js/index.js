@@ -69,7 +69,7 @@ function onDeviceReady () {
     };
 
     const actions = {
-    // Android & iOS
+        // Android & iOS
         privilegedAccess: () => {
             console.log('privilegedAccess');
             changeThreatStyle('privilegedAccess');
