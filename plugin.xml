@@ -2,7 +2,7 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         id="cordova-talsec-plugin-freerasp"
-        version="6.1.0">
+        version="6.1.1">
 
   <name>freerasp</name>
   <author>Talsec (info@talsec.app)</author>

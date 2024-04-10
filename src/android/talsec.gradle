@@ -1,10 +1,10 @@
 repositories {
-    maven { url "https://nexus3-public.monetplus.cz/repository/ahead-talsec-free-rasp" }
+    maven { url "https://europe-west3-maven.pkg.dev/talsec-artifact-repository/freerasp" }
     maven { url 'https://jitpack.io' }
 }
 
 dependencies {
-    implementation "com.aheaditec.talsec.security:TalsecSecurity-Community-Cordova:9.0.2"
+    implementation "com.aheaditec.talsec.security:TalsecSecurity-Community-Cordova:9.1.0"
 }
 
 android {
