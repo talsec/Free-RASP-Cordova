@@ -1,3 +1,9 @@
+config.json
+config.example.json
+*.zip
+*.tgz
+scripts/
+
 # OSX
 #
 .DS_Store
@@ -40,6 +46,7 @@ android.iml
 # node.js
 #
 node_modules/
+package-lock.json
 npm-debug.log
 yarn-debug.log
 yarn-error.log
@@ -52,3 +59,12 @@ android/keystores/debug.keystore
 
 # Turborepo
 .turbo/
+
+# Ignore development files
+
+**/.*
+ci-template.ejs
+deploy.sh
+ejs-config*
+www/talsec.ts
+tsconfig.json
