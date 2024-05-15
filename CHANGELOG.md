@@ -1,3 +1,13 @@
+# freeRASP 6.1.2
+
+### Android
+
+-   ❗ Removed the talsec namespace that caused change of namespaces for whole app
+
+### iOS
+
+-   ⚡ Fixed issue causing app crash with lower versions of `cordova-ios` plugin
+
 # freeRASP 6.1.1
 
 ### Android
