@@ -3,11 +3,14 @@ import TalsecRuntime
 
 @objc(TalsecPlugin) class TalsecPlugin : CDVPlugin {
     public static var shared:TalsecPlugin?
-    let threatIdentifierList = (1...12).map { _ in Int.random(in: 100_000..<999_999_999) }
+    var threatIdentifierList: [Int] = (1...12).map { _ in Int.random(in: 100_000..<999_999_999) }
     
     override func pluginInitialize() {
         TalsecContext.context.commandDelegate = self.commandDelegate
         TalsecPlugin.shared = self
+        if (threatIdentifierList == nil) {
+            threatIdentifierList = (1...12).map { _ in Int.random(in: 100_000..<999_999_999) }
+        }
     }
     
     /**
