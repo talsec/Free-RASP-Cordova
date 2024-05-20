@@ -3,14 +3,10 @@ import TalsecRuntime
 
 @objc(TalsecPlugin) class TalsecPlugin : CDVPlugin {
     public static var shared:TalsecPlugin?
-    var threatIdentifierList: [Int] = (1...12).map { _ in Int.random(in: 100_000..<999_999_999) }
     
     override func pluginInitialize() {
         TalsecContext.context.commandDelegate = self.commandDelegate
         TalsecPlugin.shared = self
-        if (threatIdentifierList == nil) {
-            threatIdentifierList = (1...12).map { _ in Int.random(in: 100_000..<999_999_999) }
-        }
     }
     
     /**
@@ -135,32 +131,36 @@ class TalsecContext : CDVPlugin {
     }
 }
 
+struct ThreatIdentifiers {
+    static let threatIdentifierList: [Int] = (1...12).map { _ in Int.random(in: 100_000..<999_999_999) }
+}
+
 /// An extension to unify callback names with Cordova ones.
 extension SecurityThreat {
     var callbackIdentifier: Int {
         switch self {
             case .signature:
-            return TalsecPlugin.shared!.threatIdentifierList[0]
+            return ThreatIdentifiers.threatIdentifierList[0]
             case .jailbreak:
-                return TalsecPlugin.shared!.threatIdentifierList[1]
+                return ThreatIdentifiers.threatIdentifierList[1]
             case .debugger:
-                return TalsecPlugin.shared!.threatIdentifierList[2]
+                return ThreatIdentifiers.threatIdentifierList[2]
             case .runtimeManipulation:
-                return TalsecPlugin.shared!.threatIdentifierList[3]
+                return ThreatIdentifiers.threatIdentifierList[3]
             case .passcode:
-                return TalsecPlugin.shared!.threatIdentifierList[4]
+                return ThreatIdentifiers.threatIdentifierList[4]
             case .passcodeChange:
-                return TalsecPlugin.shared!.threatIdentifierList[5]
+                return ThreatIdentifiers.threatIdentifierList[5]
             case .simulator:
-                return TalsecPlugin.shared!.threatIdentifierList[6]
+                return ThreatIdentifiers.threatIdentifierList[6]
             case .missingSecureEnclave:
-                return TalsecPlugin.shared!.threatIdentifierList[7]
+                return ThreatIdentifiers.threatIdentifierList[7]
             case .deviceChange:
-                return TalsecPlugin.shared!.threatIdentifierList[8]
+                return ThreatIdentifiers.threatIdentifierList[8]
             case .deviceID:
-                return TalsecPlugin.shared!.threatIdentifierList[9]
+                return ThreatIdentifiers.threatIdentifierList[9]
             case .unofficialStore:
-                return TalsecPlugin.shared!.threatIdentifierList[10]
+                return ThreatIdentifiers.threatIdentifierList[10]
             @unknown default:
                 abort()
         }
