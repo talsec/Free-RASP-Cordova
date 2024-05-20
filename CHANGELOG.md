@@ -1,3 +1,9 @@
+# freeRASP 6.1.3
+
+### iOS
+
+-   ⚡ Fixed BAD_ACCESS error occurring in specific versions of `cordova-ios` plugin ([#28](https://github.com/talsec/Free-RASP-Cordova/issues/28))
+
 # freeRASP 6.1.2
 
 ### Android
