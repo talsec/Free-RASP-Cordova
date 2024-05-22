@@ -21,6 +21,7 @@ freeRASP for Cordova is a mobile in-app protection and security monitoring plugi
     -   [Step 5: Start the Talsec](#step-5-start-the-talsec)
     -   [Step 6: Additional note about obfuscation](#step-6-additional-note-about-obfuscation)
     -   [Step 7: User Data Policies](#step-7-user-data-policies)
+-   [Troubleshooting](#troubleshooting)
 -   [Security Report](#security-report)
 -   [Talsec Commercial Subscriptions](#money_with_wings-talsec-commercial-subscriptions)
     -   [Plans comparison](#plans-comparison)
@@ -126,7 +127,7 @@ var config = {
     androidConfig: {
         packageName: 'com.example.helloapp',
         certificateHashes: ['your_signing_certificate_hash_base64'],
-        supportedAlternativeStores: ['com.sec.android.app.samsungapps'],
+        supportedAlternativeStores: ['com.sec.android.app.samsungapps']
     },
     iosConfig: {
         appBundleIds: 'com.example.helloapp',
@@ -143,8 +144,7 @@ var config = {
 
     - `packageName` _: string_ - package name of your app you chose when you created it
     - `certificateHashes` _: string[]_ - hash of the certificate of the key which was used to sign the application. **Hash which is passed here must be encoded in Base64 form.** If you are not sure how to get your certificate hash, you can check out the guide on our [Github wiki](https://github.com/talsec/Free-RASP-Community/wiki/Getting-your-signing-certificate-hash-of-app). Multiple hashes are supported, e.g. if you are using a different one for the Huawei App Gallery.
-    - `supportedAlternativeStores` _: string[] | undefined_ - Google Play Store and Huawei AppGallery are supported out of the box, you **don't have to assign anything**. You can add other stores like the Samsung Galaxy Store in the example code (```com.sec.android.app.samsungapps```). For more information, visit the  [Detecting Unofficial Installation](https://github.com/talsec/Free-RASP-Community/wiki/Threat-detection#detecting-unofficial-installation) wiki page.
-
+    - `supportedAlternativeStores` _: string[] | undefined_ - Google Play Store and Huawei AppGallery are supported out of the box, you **don't have to assign anything**. You can add other stores like the Samsung Galaxy Store in the example code (`com.sec.android.app.samsungapps`). For more information, visit the [Detecting Unofficial Installation](https://github.com/talsec/Free-RASP-Community/wiki/Threat-detection#detecting-unofficial-installation) wiki page.
 
 1. `iosConfig` _: object | undefined_ - required for iOS devices, has following keys:
     - `appBundleId` _: string_ - Bundle ID of your app
@@ -170,50 +170,50 @@ Talsec executes periodical checks when the application is running. To be able to
 ```js
 // reactions to detected threats
 const actions = {
-  // Android & iOS
-  privilegedAccess: () => {
-    console.log('privilegedAccess');
-  },
-  // Android & iOS
-  debug: () => {
-    console.log('debug');
-  },
-  // Android & iOS
-  simulator: () => {
-    console.log('simulator');
-  },
-  // Android & iOS
-  appIntegrity: () => {
-    console.log('appIntegrity');
-  },
-  // Android & iOS
-  unofficialStore: () => {
-    console.log('unofficialStore');
-  },
-  // Android & iOS
-  hooks: () => {
-    console.log('hooks');
-  },
-  // Android & iOS
-  deviceBinding: () => {
-    console.log('deviceBinding');
-  },
-  // Android & iOS
-  secureHardwareNotAvailable: () => {
-    console.log('secureHardwareNotAvailable');
-  },
-  // Android & iOS
-  passcode: () => {
-    console.log('passcode');
-  },
-  // iOS only
-  deviceID: () => {
-    console.log('deviceID');
-  },
-  // Android only
-  obfuscationIssues: () => {
-    console.log('obfuscationIssues');
-  },
+    // Android & iOS
+    privilegedAccess: () => {
+        console.log('privilegedAccess');
+    },
+    // Android & iOS
+    debug: () => {
+        console.log('debug');
+    },
+    // Android & iOS
+    simulator: () => {
+        console.log('simulator');
+    },
+    // Android & iOS
+    appIntegrity: () => {
+        console.log('appIntegrity');
+    },
+    // Android & iOS
+    unofficialStore: () => {
+        console.log('unofficialStore');
+    },
+    // Android & iOS
+    hooks: () => {
+        console.log('hooks');
+    },
+    // Android & iOS
+    deviceBinding: () => {
+        console.log('deviceBinding');
+    },
+    // Android & iOS
+    secureHardwareNotAvailable: () => {
+        console.log('secureHardwareNotAvailable');
+    },
+    // Android & iOS
+    passcode: () => {
+        console.log('passcode');
+    },
+    // iOS only
+    deviceID: () => {
+        console.log('deviceID');
+    },
+    // Android only
+    obfuscationIssues: () => {
+        console.log('obfuscationIssues');
+    }
 };
 ```
 
@@ -286,6 +286,19 @@ And you're done 🎉!
 
 If you encounter any other issues, you can see the list of solved issues [here](https://github.com/talsec/Free-RASP-Cordova/issues?q=is%3Aissue+is%3Aclosed), or open up a [new one](https://github.com/talsec/Free-RASP-Cordova/issues?q=is%3Aissue+is%3Aopen).
 
+# Troubleshooting
+
+### ReferenceError: TalsecPlugin is not defined
+
+**Reason:**
+
+-   Cordova Angular cannot find the talsec object.
+
+**Solution:**
+
+-   Add the following line below imports:
+    `declare var talsec: any;`
+
 # Security Report
 
 The Security Report is a weekly summary describing the application's security state and characteristics of the devices it runs on in a practical and easy-to-understand way.
@@ -296,12 +309,14 @@ To receive Security Reports, fill out the _watcherMail_ field in [config](#step-
 
 ![dashboard](https://raw.githubusercontent.com/talsec/Free-RASP-Community/master/visuals/dashboard.png)
 
-# :money_with_wings: Talsec Commercial Subscriptions 
+# :money_with_wings: Talsec Commercial Subscriptions
+
 Talsec offers commercial plans on top of freeRASP (Business RASP+):
-* No limits of Fair Usage Policy (100K App Downloads) 
-* No Data Collection from your app
-* FinTech grade security, features and SLA (see more in [this post](https://github.com/orgs/talsec/discussions/5))
-* Protect APIs and risk scoring by AppiCrypt®
+
+-   No limits of Fair Usage Policy (100K App Downloads)
+-   No Data Collection from your app
+-   FinTech grade security, features and SLA (see more in [this post](https://github.com/orgs/talsec/discussions/5))
+-   Protect APIs and risk scoring by AppiCrypt®
 
 Learn more at [talsec.app](https://talsec.app).
 
