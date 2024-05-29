@@ -12,6 +12,8 @@ type NativeEventEmitterActions = {
     passcode?: () => any;
     secureHardwareNotAvailable?: () => any;
     obfuscationIssues?: () => any;
+    devMode?: () => any;
+    systemVPN?: () => any;
 };
 
 type TalsecConfig = {
@@ -37,10 +39,12 @@ class Threat {
     static Passcode = new Threat(0);
     static Simulator = new Threat(0);
     static SecureHardwareNotAvailable = new Threat(0);
+    static SystemVPN = new Threat(0);
     static DeviceBinding = new Threat(0);
     static DeviceID = new Threat(0);
     static UnofficialStore = new Threat(0);
     static ObfuscationIssues = new Threat(0);
+    static DevMode = new Threat(0);
 
     constructor (value: number) {
         this.value = value;
@@ -56,9 +60,11 @@ class Threat {
                 this.Passcode,
                 this.Simulator,
                 this.SecureHardwareNotAvailable,
+                this.SystemVPN,
                 this.DeviceBinding,
                 this.UnofficialStore,
-                this.ObfuscationIssues
+                this.ObfuscationIssues,
+                this.DevMode
             ]
             : [
                 this.AppIntegrity,
@@ -68,6 +74,7 @@ class Threat {
                 this.Passcode,
                 this.Simulator,
                 this.SecureHardwareNotAvailable,
+                this.SystemVPN,
                 this.DeviceBinding,
                 this.DeviceID,
                 this.UnofficialStore
@@ -161,6 +168,12 @@ const start = async (
             break;
         case Threat.DeviceID.value:
             eventListenerConfig.deviceID?.();
+            break;
+        case Threat.DevMode.value:
+            eventListenerConfig.devMode?.();
+            break;
+        case Threat.SystemVPN.value:
+            eventListenerConfig.systemVPN?.();
             break;
         default:
             onInvalidCallback();
