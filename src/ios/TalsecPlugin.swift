@@ -140,7 +140,7 @@ extension SecurityThreat {
     var callbackIdentifier: Int {
         switch self {
             case .signature:
-            return ThreatIdentifiers.threatIdentifierList[0]
+                return ThreatIdentifiers.threatIdentifierList[0]
             case .jailbreak:
                 return ThreatIdentifiers.threatIdentifierList[1]
             case .debugger:
@@ -155,12 +155,14 @@ extension SecurityThreat {
                 return ThreatIdentifiers.threatIdentifierList[6]
             case .missingSecureEnclave:
                 return ThreatIdentifiers.threatIdentifierList[7]
-            case .deviceChange:
+            case .systemVPN:
                 return ThreatIdentifiers.threatIdentifierList[8]
-            case .deviceID:
+            case .deviceChange:
                 return ThreatIdentifiers.threatIdentifierList[9]
-            case .unofficialStore:
+            case .deviceID:
                 return ThreatIdentifiers.threatIdentifierList[10]
+            case .unofficialStore:
+                return ThreatIdentifiers.threatIdentifierList[11]
             @unknown default:
                 abort()
         }
