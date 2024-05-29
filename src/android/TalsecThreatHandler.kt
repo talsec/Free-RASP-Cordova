@@ -45,6 +45,14 @@ internal object TalsecThreatHandler : ThreatListener.ThreatDetected, ThreatListe
         listener?.threatDetected(Threat.ObfuscationIssues)
     }
 
+    override fun onDeveloperModeDetected() {
+       listener?.threatDetected(Threat.DevMode)
+    }
+
+    override fun onSystemVPNDetected() {
+       listener?.threatDetected(Threat.SystemVPN)
+    }
+
     internal interface TalsecCordova {
         fun threatDetected(threatType: Threat)
     }
