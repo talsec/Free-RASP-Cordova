@@ -203,6 +203,10 @@ const actions = {
         console.log('secureHardwareNotAvailable');
     },
     // Android & iOS
+    systemVPN: () => {
+        console.log('systemVPN');
+    },
+    // Android & iOS
     passcode: () => {
         console.log('passcode');
     },
@@ -213,6 +217,10 @@ const actions = {
     // Android only
     obfuscationIssues: () => {
         console.log('obfuscationIssues');
+    },
+    // Android only
+    devMode: () => {
+        console.log('devMode');
     }
 };
 ```
