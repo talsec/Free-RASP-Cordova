@@ -28,21 +28,23 @@ function onDeviceReady () {
     console.log(`Running cordova-${cordova.platformId}@${cordova.version}`);
 
     const checks = {
+        appIntegrity: 'App Integrity',
         privilegedAccess: 'Privileged Access',
         debug: 'Debug',
-        simulator: 'Simulator',
-        appIntegrity: 'App Integrity',
-        unofficialStore: 'Unofficial Store',
         hooks: 'Hooks',
-        deviceBinding: 'Device binding',
         passcode: 'Passcode',
-        secureHardwareNotAvailable: 'Secure Hardware Not Available'
+        simulator: 'Simulator',
+        secureHardwareNotAvailable: 'Secure Hardware Not Available',
+        systemVPN: 'System VPN',
+        deviceBinding: 'Device binding',
+        unofficialStore: 'Unofficial Store'
     };
 
     if (cordova.platformId === 'ios') {
         checks.deviceID = 'Device ID';
     } else {
         checks.obfuscationIssues = 'Obfuscation Issues';
+        checks.devMode = 'Developer Mode';
     }
 
     Object.entries(checks).forEach(([check, msg]) => {
@@ -110,6 +112,11 @@ function onDeviceReady () {
             changeThreatStyle('secureHardwareNotAvailable');
         },
         // Android & iOS
+        systemVPN: () => {
+            console.log('systemVPN');
+            changeThreatStyle('systemVPN');
+        },
+        // Android & iOS
         passcode: () => {
             console.log('passcode');
             changeThreatStyle('passcode');
@@ -128,6 +135,11 @@ function onDeviceReady () {
         obfuscationIssues: () => {
             console.log('obfuscationIssues');
             changeThreatStyle('obfuscationIssues');
+        },
+        // Android only
+        devMode: () => {
+            console.log('devMode');
+            changeThreatStyle('devMode');
         }
     };
 
