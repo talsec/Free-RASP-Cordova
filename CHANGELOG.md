@@ -1,3 +1,22 @@
+# freeRASP 6.2.0
+
+-   ⚡ Added new threat `systemVPN` for VPN detection
+-   📄 Documentation updates
+
+### Android
+
+-   ⚡ Added new threat `devMode` for Developer mode detection
+-   ⚡ Fixed proguard warning in specific versions of RN
+-   ⚡ Fixed issue with Arabic alphabet in logs caused by the device’s default system locale
+-   ✔️ Increased the version of the GMS dependency
+-   ✔️ Updated CA bundle
+
+### iOS
+
+-   ⚡ Fixed issue with Arabic alphabet in logs caused by the device’s default system locale
+-   ⚡ Passcode check is now periodical
+-   ✔️ Updated CA bundle
+
 # freeRASP 6.1.3
 
 ### iOS
