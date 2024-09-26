@@ -1,5 +1,6 @@
 package com.aheaditec.talsec.cordova
 
+import com.aheaditec.talsec_security.security.api.SuspiciousAppInfo
 import com.aheaditec.talsec_security.security.api.ThreatListener
 
 internal object TalsecThreatHandler : ThreatListener.ThreatDetected, ThreatListener.DeviceState {
@@ -44,6 +45,8 @@ internal object TalsecThreatHandler : ThreatListener.ThreatDetected, ThreatListe
     override fun onObfuscationIssuesDetected() {
         listener?.threatDetected(Threat.ObfuscationIssues)
     }
+
+    override fun onMalwareDetected(p0: MutableList<SuspiciousAppInfo>?) {}
 
     override fun onDeveloperModeDetected() {
        listener?.threatDetected(Threat.DevMode)

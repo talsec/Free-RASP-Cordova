@@ -39,11 +39,13 @@ class TalsecPlugin : CordovaPlugin() {
         }
 
         try {
-            val config = parseTalsecConfigThrowing(configJson)
+            val config = buildTalsecConfigThrowing(configJson)
             callback = callbackContext
             listener.registerListener(this.cordova.context)
             TalsecThreatHandler.listener = ThreatListener
-            Talsec.start(this.cordova.context, config)
+            this.cordova.activity.runOnUiThread {
+                Talsec.start(this.cordova.context, config)
+            }
             sendOngoingPluginResult("started")
             return true
         } catch (e: Exception) {
@@ -85,35 +87,17 @@ class TalsecPlugin : CordovaPlugin() {
         return true
     }
 
-    private fun parseTalsecConfigThrowing(configJson: String): TalsecConfig {
+    private fun buildTalsecConfigThrowing(configJson: String): TalsecConfig {
         val json = JSONObject(configJson)
         val androidConfig = json.getJSONObject("androidConfig")
         val packageName = androidConfig.getString("packageName")
-        val certificateHashes = mutableListOf<String>()
-        val hashes = androidConfig.getJSONArray("certificateHashes")
-        for (i in 0 until hashes.length()) {
-            certificateHashes.add(hashes.getString(i))
-        }
-        val watcherMail = json.getString("watcherMail")
-        val alternativeStores = mutableListOf<String>()
-        if (androidConfig.has("supportedAlternativeStores")) {
-            val stores = androidConfig.getJSONArray("supportedAlternativeStores")
-            for (i in 0 until stores.length()) {
-                alternativeStores.add(stores.getString(i))
-            }
-        }
-        var isProd = true
-        if (json.has("isProd")) {
-            isProd = json.getBoolean("isProd")
-        }
+        val certificateHashes = androidConfig.getArraySafe("certificateHashes")
+        val talsecBuilder = TalsecConfig.Builder(packageName, certificateHashes)
+            .watcherMail(json.getStringSafe("watcherMail"))
+            .supportedAlternativeStores(androidConfig.getArraySafe("supportedAlternativeStores"))
+            .prod(json.getBooleanSafe("isProd"))
 
-        return TalsecConfig(
-            packageName,
-            certificateHashes.toTypedArray(),
-            watcherMail,
-            alternativeStores.toTypedArray(),
-            isProd
-        )
+        return talsecBuilder.build()
     }
 
     internal object ThreatListener : TalsecThreatHandler.TalsecCordova {
