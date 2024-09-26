@@ -5,6 +5,47 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+# [6.3.0] - 2024-09-25
+
+-   Android SDK version: 11.1.0
+-   iOS SDK version: 6.6.0
+
+### Cordova
+
+#### Changed
+
+-   Improved error messages when validation of the freeRASP configuration fails
+
+### Android
+
+#### Added
+
+-   Added the auditing of the internal execution for the future check optimization and overall security improvements.
+
+#### Fixed
+
+-   Fixed native crashes (SEGFAULT errors) in `ifpip` method
+-   Fixed collision for command line tools (like ping) invoked without absolute path
+
+#### Changed
+
+-   ❗️Breaking: Changed the way TalsecConfig is created, we introduced a Builder pattern to make the process more streamlined and readable
+-   Updated OpenSSL to version 3.0.14
+-   Updated CURL to version 8.8.0
+-   Refactored fetching the list of installed applications for root and hook detection.
+
+### iOS
+
+#### Added
+
+-   [Dopamine](https://github.com/opa334/Dopamine) jailbreak detection.
+-   Enhanced and accelerated the data collection logic
+
+#### Changed
+
+-   Updated OpenSSL to version 3.0.14
+-   Updated CURL to version 8.8.0
+
 ## [6.2.1] - 2024-07-02
 
 ### Cordova

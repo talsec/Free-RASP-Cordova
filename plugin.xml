@@ -2,7 +2,7 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         id="cordova-talsec-plugin-freerasp"
-        version="6.2.1">
+        version="6.3.0">
 
   <name>freerasp</name>
   <author>Talsec (info@talsec.app)</author>
@@ -36,6 +36,7 @@
     <source-file src="src/android/TalsecPlugin.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/"/>
     <source-file src="src/android/TalsecThreatHandler.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/"/>
     <source-file src="src/android/Threat.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/"/>
+    <source-file src="src/android/Utils.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/"/>
     <framework src="src/android/talsec.gradle" custom="true" type="gradleReference" />
   </platform>
   

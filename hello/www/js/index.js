@@ -23,144 +23,144 @@
 // See https://cordova.apache.org/docs/en/latest/cordova/events/events.html#deviceready
 document.addEventListener('deviceready', onDeviceReady, false);
 
-function onDeviceReady () {
-    // Cordova is now initialized. Have fun!
-    console.log(`Running cordova-${cordova.platformId}@${cordova.version}`);
+function onDeviceReady() {
+  // Cordova is now initialized. Have fun!
+  console.log(`Running cordova-${cordova.platformId}@${cordova.version}`);
 
-    const checks = {
-        appIntegrity: 'App Integrity',
-        privilegedAccess: 'Privileged Access',
-        debug: 'Debug',
-        hooks: 'Hooks',
-        passcode: 'Passcode',
-        simulator: 'Simulator',
-        secureHardwareNotAvailable: 'Secure Hardware Not Available',
-        systemVPN: 'System VPN',
-        deviceBinding: 'Device binding',
-        unofficialStore: 'Unofficial Store'
-    };
+  const checks = {
+    appIntegrity: 'App Integrity',
+    privilegedAccess: 'Privileged Access',
+    debug: 'Debug',
+    hooks: 'Hooks',
+    passcode: 'Passcode',
+    simulator: 'Simulator',
+    secureHardwareNotAvailable: 'Secure Hardware Not Available',
+    systemVPN: 'System VPN',
+    deviceBinding: 'Device binding',
+    unofficialStore: 'Unofficial Store',
+  };
 
-    if (cordova.platformId === 'ios') {
-        checks.deviceID = 'Device ID';
-    } else {
-        checks.obfuscationIssues = 'Obfuscation Issues';
-        checks.devMode = 'Developer Mode';
-    }
+  if (cordova.platformId === 'ios') {
+    checks.deviceID = 'Device ID';
+  } else {
+    checks.obfuscationIssues = 'Obfuscation Issues';
+    checks.devMode = 'Developer Mode';
+  }
 
-    Object.entries(checks).forEach(([check, msg]) => {
-        const newElem = Object.assign(document.createElement('div'), {
-            id: check,
-            innerHTML: `<p class="event received">${msg}</p>`
-        });
-        document.getElementById('parent').appendChild(newElem);
-        setDefaultThreatStyle(check);
+  Object.entries(checks).forEach(([check, msg]) => {
+    const newElem = Object.assign(document.createElement('div'), {
+      id: check,
+      innerHTML: `<p class="event received">${msg}</p>`,
     });
+    document.getElementById('parent').appendChild(newElem);
+    setDefaultThreatStyle(check);
+  });
 
-    const config = {
-        androidConfig: {
-            packageName: 'com.example.helloapp',
-            certificateHashes: ['your_signing_certificate_hash_base64']
-            // supportedAlternativeStores: ['storeOne', 'storeTwo'],
-        },
-        iosConfig: {
-            appBundleIds: 'com.example.helloapp',
-            appTeamId: 'your_team_ID'
-        },
-        watcherMail: 'your_email_address@example.com',
-        isProd: true
-    };
+  const config = {
+    androidConfig: {
+      packageName: 'com.example.helloapp',
+      certificateHashes: ['AKoRuyLMM91E7lX/Zqp3u4jMmd0A7hH/Iqozu0TMVd0='],
+      // supportedAlternativeStores: ['storeOne', 'storeTwo'],
+    },
+    iosConfig: {
+      appBundleIds: 'com.example.helloapp',
+      appTeamId: 'your_team_ID',
+    },
+    watcherMail: 'your_email_address@example.com',
+    isProd: true,
+  };
 
-    const actions = {
-        // Android & iOS
-        privilegedAccess: () => {
-            console.log('privilegedAccess');
-            changeThreatStyle('privilegedAccess');
-        },
-        // Android & iOS
-        debug: () => {
-            console.log('debug');
-            changeThreatStyle('debug');
-        },
-        // Android & iOS
-        simulator: () => {
-            console.log('simulator');
-            changeThreatStyle('simulator');
-        },
-        // Android & iOS
-        appIntegrity: () => {
-            console.log('appIntegrity');
-            changeThreatStyle('appIntegrity');
-        },
-        // Android & iOS
-        unofficialStore: () => {
-            console.log('unofficialStore');
-            changeThreatStyle('unofficialStore');
-        },
-        // Android & iOS
-        hooks: () => {
-            console.log('hooks');
-            changeThreatStyle('hooks');
-        },
-        // Android & iOS
-        deviceBinding: () => {
-            console.log('deviceBinding');
-            changeThreatStyle('deviceBinding');
-        },
-        // Android & iOS
-        secureHardwareNotAvailable: () => {
-            console.log('secureHardwareNotAvailable');
-            changeThreatStyle('secureHardwareNotAvailable');
-        },
-        // Android & iOS
-        systemVPN: () => {
-            console.log('systemVPN');
-            changeThreatStyle('systemVPN');
-        },
-        // Android & iOS
-        passcode: () => {
-            console.log('passcode');
-            changeThreatStyle('passcode');
-        },
-        // iOS only
-        deviceID: () => {
-            console.log('deviceID');
-            changeThreatStyle('deviceID');
-        },
-        // Android only
-        overlay: () => {
-            console.log('overlay');
-            changeThreatStyle('overlay');
-        },
-        // Android only
-        obfuscationIssues: () => {
-            console.log('obfuscationIssues');
-            changeThreatStyle('obfuscationIssues');
-        },
-        // Android only
-        devMode: () => {
-            console.log('devMode');
-            changeThreatStyle('devMode');
-        }
-    };
+  const actions = {
+    // Android & iOS
+    privilegedAccess: () => {
+      console.log('privilegedAccess');
+      changeThreatStyle('privilegedAccess');
+    },
+    // Android & iOS
+    debug: () => {
+      console.log('debug');
+      changeThreatStyle('debug');
+    },
+    // Android & iOS
+    simulator: () => {
+      console.log('simulator');
+      changeThreatStyle('simulator');
+    },
+    // Android & iOS
+    appIntegrity: () => {
+      console.log('appIntegrity');
+      changeThreatStyle('appIntegrity');
+    },
+    // Android & iOS
+    unofficialStore: () => {
+      console.log('unofficialStore');
+      changeThreatStyle('unofficialStore');
+    },
+    // Android & iOS
+    hooks: () => {
+      console.log('hooks');
+      changeThreatStyle('hooks');
+    },
+    // Android & iOS
+    deviceBinding: () => {
+      console.log('deviceBinding');
+      changeThreatStyle('deviceBinding');
+    },
+    // Android & iOS
+    secureHardwareNotAvailable: () => {
+      console.log('secureHardwareNotAvailable');
+      changeThreatStyle('secureHardwareNotAvailable');
+    },
+    // Android & iOS
+    systemVPN: () => {
+      console.log('systemVPN');
+      changeThreatStyle('systemVPN');
+    },
+    // Android & iOS
+    passcode: () => {
+      console.log('passcode');
+      changeThreatStyle('passcode');
+    },
+    // iOS only
+    deviceID: () => {
+      console.log('deviceID');
+      changeThreatStyle('deviceID');
+    },
+    // Android only
+    overlay: () => {
+      console.log('overlay');
+      changeThreatStyle('overlay');
+    },
+    // Android only
+    obfuscationIssues: () => {
+      console.log('obfuscationIssues');
+      changeThreatStyle('obfuscationIssues');
+    },
+    // Android only
+    devMode: () => {
+      console.log('devMode');
+      changeThreatStyle('devMode');
+    },
+  };
 
-    talsec
-        .start(config, actions)
-        .then(() => {
-            console.log('Talsec initialized.');
-        })
-        .catch((error) => {
-            console.log('Error during Talsec initialization: ', error);
-        });
+  talsec
+    .start(config, actions)
+    .then(() => {
+      console.log('freeRASP initialized.');
+    })
+    .catch((error) => {
+      console.log('Error during freeRASP initialization: ', error);
+    });
 }
 
-function changeThreatStyle (threatType) {
-    document.getElementById(threatType).style.backgroundColor = 'red';
+function changeThreatStyle(threatType) {
+  document.getElementById(threatType).style.backgroundColor = 'red';
 }
 
-function setDefaultThreatStyle (threatType) {
-    document.getElementById(threatType).style.backgroundColor = 'green';
-    document.getElementById(threatType).style.borderRadius = '4px';
-    document.getElementById(threatType).style.margin = '4px 10px';
-    document.getElementById(threatType).style.padding = '2px 0px';
-    document.getElementById(threatType).style.textAlign = 'center';
+function setDefaultThreatStyle(threatType) {
+  document.getElementById(threatType).style.backgroundColor = 'green';
+  document.getElementById(threatType).style.borderRadius = '4px';
+  document.getElementById(threatType).style.margin = '4px 10px';
+  document.getElementById(threatType).style.padding = '2px 0px';
+  document.getElementById(threatType).style.textAlign = 'center';
 }

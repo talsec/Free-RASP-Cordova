@@ -36,7 +36,7 @@ import TalsecRuntime
             try initializeTalsec(talsecConfig: talsecConfig)
         }
         catch let error as NSError {
-            TalsecContext.sendError(msg: error.localizedDescription, callbackId: command.callbackId)
+            TalsecContext.sendError(msg: "Could not initialize freeRASP: \(error.domain)", callbackId: command.callbackId)
             return
         }
         TalsecContext.sendMessage(msg: "started", callbackId: TalsecContext.context.listenerCallbackId, keepCallback: true)
