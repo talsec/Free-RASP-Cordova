@@ -1,0 +1,11 @@
+/* app.component.css */
+ion-header,
+ion-toolbar,
+ion-title {
+  --background: #3880ff;
+  --color: white;
+}
+
+ion-content {
+  --padding: 20px;
+}
