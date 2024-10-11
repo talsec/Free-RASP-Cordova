@@ -1,0 +1,33 @@
+<ion-content scroll-y="true">
+  <ion-list>
+    <ion-list-header>
+      <h1>freeRASP checks:</h1>
+    </ion-list-header>
+
+    <ion-item *ngFor="let check of checks">
+      <ion-label [color]="check.isSecure ? 'success' : 'danger'">
+        {{ check.name }}
+        <p>{{ check.isSecure ? 'secure' : 'danger' }}</p>
+      </ion-label>
+
+      <ng-container *ngIf="check.name === 'Malware'">
+        <malware-modal [isDisabled]="check.isSecure"> </malware-modal>
+      </ng-container>
+
+      <ion-icon
+        [icon]="check.isSecure ? shieldCheckmarkIcon : alertCircleIcon"
+        [color]="check.isSecure ? 'success' : 'danger'"
+        size="large"
+      >
+      </ion-icon>
+    </ion-item>
+  </ion-list>
+
+  <ion-row>
+    <ion-img
+      class="talsecLogo"
+      src="assets/talsec-logo.png"
+      alt="Talsec logo"
+    ></ion-img>
+  </ion-row>
+</ion-content>
