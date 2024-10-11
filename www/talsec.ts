@@ -1,5 +1,18 @@
 /* global cordova */
 
+export type SuspiciousAppInfo = {
+  packageInfo: PackageInfo;
+  reason: string;
+};
+
+export type PackageInfo = {
+  packageName: string;
+  appName?: string;
+  version?: string;
+  appIcon?: string;
+  installerStore?: string;
+};
+
 type NativeEventEmitterActions = {
   privilegedAccess?: () => any;
   debug?: () => any;
@@ -14,6 +27,7 @@ type NativeEventEmitterActions = {
   obfuscationIssues?: () => any;
   devMode?: () => any;
   systemVPN?: () => any;
+  malware?: (suspiciousApps: SuspiciousAppInfo[]) => any;
 };
 
 type TalsecConfig = {
@@ -45,6 +59,7 @@ class Threat {
   static UnofficialStore = new Threat(0);
   static ObfuscationIssues = new Threat(0);
   static DevMode = new Threat(0);
+  static Malware = new Threat(0);
 
   constructor(value: number) {
     this.value = value;
@@ -65,6 +80,7 @@ class Threat {
           this.UnofficialStore,
           this.ObfuscationIssues,
           this.DevMode,
+          this.Malware,
         ]
       : [
           this.AppIntegrity,
@@ -86,10 +102,31 @@ const getThreatCount = (): number => {
   return Threat.getValues().length;
 };
 
+const getThreatChannelData = async (): Promise<[string, string]> => {
+  const dataLength = cordova.platformId === 'ios' ? 1 : 2;
+  const data: [string, string] = await new Promise((resolve, reject) => {
+    cordova.exec(
+      (data) => {
+        resolve(data);
+      },
+      (error) => {
+        reject(error);
+      },
+      'TalsecPlugin',
+      'getThreatChannelData',
+    );
+  });
+  if (data.length !== dataLength || !itemsHaveType(data, 'string')) {
+    onInvalidCallback();
+  }
+  return data;
+};
+
 const itemsHaveType = (data: any[], desidedType: string) => {
   // eslint-disable-next-line valid-typeof
   return data.every((item) => typeof item === desidedType);
 };
+
 const getThreatIdentifiers = async (): Promise<number[]> => {
   const identifiers: number[] = await new Promise((resolve, reject) => {
     cordova.exec(
@@ -111,6 +148,7 @@ const getThreatIdentifiers = async (): Promise<number[]> => {
   }
   return identifiers;
 };
+
 const prepareMapping = async (): Promise<void> => {
   const newValues = await getThreatIdentifiers();
   const threats = Threat.getValues();
@@ -119,6 +157,7 @@ const prepareMapping = async (): Promise<void> => {
     threat.value = newValues[index]!;
   });
 };
+
 const onInvalidCallback = () => {
   cordova.exec(
     () => {},
@@ -128,14 +167,30 @@ const onInvalidCallback = () => {
   );
 };
 
+// parses base64-encoded malware data to SuspiciousAppInfo[]
+const parseMalwareData = (data: string[]): SuspiciousAppInfo[] => {
+  const result: SuspiciousAppInfo[] = [];
+  data.forEach((entry) => {
+    result.push(toSuspiciousAppInfo(entry));
+  });
+  return result;
+};
+
+const toSuspiciousAppInfo = (base64Value: string): SuspiciousAppInfo => {
+  const data = JSON.parse(atob(base64Value));
+  const packageInfo = data.packageInfo as PackageInfo;
+  return { packageInfo, reason: data.reason } as SuspiciousAppInfo;
+};
+
 const start = async (
   config: TalsecConfig,
   eventListenerConfig: NativeEventEmitterActions,
 ) => {
   await prepareMapping();
+  const [key, malwareKey] = await getThreatChannelData();
 
-  const eventListener = (event: number) => {
-    switch (event) {
+  const eventListener = (event: any) => {
+    switch (event[key]) {
       case Threat.PrivilegedAccess.value:
         eventListenerConfig.privilegedAccess?.();
         break;
@@ -175,6 +230,9 @@ const start = async (
       case Threat.SystemVPN.value:
         eventListenerConfig.systemVPN?.();
         break;
+      case Threat.Malware.value:
+        eventListenerConfig.malware?.(parseMalwareData(event[malwareKey]));
+        break;
       default:
         onInvalidCallback();
         break;
@@ -201,6 +259,26 @@ const start = async (
   });
 };
 
+const addToWhitelist = (packageName: string): Promise<string> => {
+  if (cordova.platformId === 'ios') {
+    return Promise.reject('Malware detection not available on iOS');
+  }
+  return new Promise((resolve, reject) => {
+    cordova.exec(
+      (response: string) => {
+        resolve(response);
+      },
+      (error) => {
+        reject(error);
+      },
+      'TalsecPlugin',
+      'addToWhitelist',
+      [packageName],
+    );
+  });
+};
+
 module.exports = {
   start,
+  addToWhitelist,
 };
