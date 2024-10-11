@@ -9,6 +9,11 @@ import TalsecRuntime
         TalsecPlugin.shared = self
     }
     
+    @objc(getThreatChannelData:)
+    private func getThreatChannelData(command: CDVInvokedUrlCommand) -> Void {
+        TalsecContext.sendMessage(msg: [ThreatIdentifiers.threatChannelKey], callbackId: command.callbackId, keepCallback: false)
+    }
+    
     /**
      * Method to get the random identifiers of callbacks
      */
@@ -39,7 +44,7 @@ import TalsecRuntime
             TalsecContext.sendError(msg: "Could not initialize freeRASP: \(error.domain)", callbackId: command.callbackId)
             return
         }
-        TalsecContext.sendMessage(msg: "started", callbackId: TalsecContext.context.listenerCallbackId, keepCallback: true)
+        TalsecContext.sendMessage(msg: "started", callbackId: command.callbackId, keepCallback: true)
     }
     
     @objc(onInvalidCallback:)
@@ -70,19 +75,21 @@ import TalsecRuntime
 }
 
 extension SecurityThreatCenter: SecurityThreatHandler {
+    
     public func threatDetected(_ securityThreat: TalsecRuntime.SecurityThreat) {
         // It is better to implement security reactions (e.g. killing the app) here.
-        
         if (securityThreat.rawValue == "passcodeChange") {
             return
         }
-        TalsecContext.sendMessage(msg: securityThreat.callbackIdentifier, callbackId: TalsecContext.context.listenerCallbackId)
+        if let listenerCallbackId = TalsecContext.context.listenerCallbackId {
+            TalsecContext.sendMessage(msg: [ThreatIdentifiers.threatChannelKey : securityThreat.callbackIdentifier], callbackId: listenerCallbackId)
+        }
     }
 }
 
 class TalsecContext : CDVPlugin {
     static let context = TalsecContext()
-    var listenerCallbackId = "0"
+    var listenerCallbackId: String?
 
     static func sendMessage(msg: Any, callbackId: String, keepCallback: Bool = true) {
         // send the result to JavaScript on the main thread
@@ -103,6 +110,11 @@ class TalsecContext : CDVPlugin {
                 pluginResult = CDVPluginResult(
                     status: CDVCommandStatus_OK,
                     messageAs: arrayMsg
+                )
+            } else if let dictMsg = msg as? [AnyHashable: Any] {
+                pluginResult = CDVPluginResult(
+                    status: CDVCommandStatus_OK,
+                    messageAs: dictMsg
                 )
             }
 
@@ -132,6 +144,7 @@ class TalsecContext : CDVPlugin {
 }
 
 struct ThreatIdentifiers {
+    static let threatChannelKey = String(Int.random(in: 100_000..<999_999_999))
     static let threatIdentifierList: [Int] = (1...12).map { _ in Int.random(in: 100_000..<999_999_999) }
 }
 
