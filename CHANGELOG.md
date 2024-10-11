@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [6.4.0] - 2024-10-24
+
+-   Android SDK version: 11.1.3
+-   iOS SDK version: 6.6.1
+
+### Cordova
+
+#### Added
+
+-  Added configuration fields for malware detection
+
+### Android
+
+#### Added
+
+-   New feature: **malware detection** as a new callback for enhanced app security
+
 ## [6.3.3] - 2024-10-28
 - Android SDK version: 11.1.3
 - iOS SDK version: 6.6.1
@@ -15,8 +32,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Renewed the signing certificate
 
 ## [6.3.2] - 2024-10-18
-- Android SDK version: 11.1.3
-- iOS SDK version: 6.6.0
+
+-   Android SDK version: 11.1.3
+-   iOS SDK version: 6.6.0
 
 ### Android
 

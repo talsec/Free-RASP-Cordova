@@ -1,6 +1,6 @@
 {
     "name": "cordova-talsec-plugin-freerasp",
-    "version": "6.3.3",
+    "version": "6.4.0",
     "description": "Cordova plugin for improving app security and threat monitoring on Android and iOS mobile devices.",
     "cordova": {
         "id": "cordova-talsec-plugin-freerasp",
