@@ -115,11 +115,7 @@ const onInvalidCallback = () => {
 };
 // parses base64-encoded malware data to SuspiciousAppInfo[]
 const parseMalwareData = (data) => {
-  const result = [];
-  data.forEach((entry) => {
-    result.push(toSuspiciousAppInfo(entry));
-  });
-  return result;
+  return data.map((entry) => toSuspiciousAppInfo(entry));
 };
 const toSuspiciousAppInfo = (base64Value) => {
   const data = JSON.parse(atob(base64Value));
