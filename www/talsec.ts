@@ -31,17 +31,29 @@ type NativeEventEmitterActions = {
 };
 
 type TalsecConfig = {
-  androidConfig?: {
-    packageName: string;
-    certificateHashes: string[];
-    supportedAlternativeStores?: string[];
-  };
-  iosConfig?: {
-    appBundleId: string;
-    appTeamId: string;
-  };
+  androidConfig?: TalsecAndroidConfig;
+  iosConfig?: TalsecIosConfig;
   watcherMail: string;
   isProd?: boolean;
+};
+
+type TalsecAndroidConfig = {
+  packageName: string;
+  certificateHashes: string[];
+  supportedAlternativeStores?: string[];
+  malwareConfig?: TalsecMalwareConfig;
+};
+
+type TalsecIosConfig = {
+  appBundleId: string;
+  appTeamId: string;
+};
+
+type TalsecMalwareConfig = {
+  blocklistedHashes?: string[];
+  blocklistedPackageNames?: string[];
+  blocklistedPermissions?: string[][];
+  whitelistedInstallationSources?: string[];
 };
 
 class Threat {
