@@ -4,23 +4,25 @@
       <h1>freeRASP checks:</h1>
     </ion-list-header>
 
-    <ion-item *ngFor="let check of checks">
-      <ion-label [color]="check.isSecure ? 'success' : 'danger'">
-        {{ check.name }}
-        <p>{{ check.isSecure ? 'secure' : 'danger' }}</p>
-      </ion-label>
+    @for (check of checks; track $index) {
+      <ion-item>
+        <ion-label [color]="check.isSecure ? 'success' : 'danger'">
+          {{ check.name }}
+          <p>{{ check.isSecure ? 'secure' : 'danger' }}</p>
+        </ion-label>
 
-      <ng-container *ngIf="check.name === 'Malware'">
-        <malware-modal [isDisabled]="check.isSecure"> </malware-modal>
-      </ng-container>
+        @if (check.name === 'Malware' && !check.isSecure) {
+          <malware-modal />
+        }
 
-      <ion-icon
-        [icon]="check.isSecure ? shieldCheckmarkIcon : alertCircleIcon"
-        [color]="check.isSecure ? 'success' : 'danger'"
-        size="large"
-      >
-      </ion-icon>
-    </ion-item>
+        <ion-icon
+          [icon]="check.isSecure ? shieldCheckmarkIcon : alertCircleIcon"
+          [color]="check.isSecure ? 'success' : 'danger'"
+          size="large"
+        >
+        </ion-icon>
+      </ion-item>
+    }
   </ion-list>
 
   <ion-row>
