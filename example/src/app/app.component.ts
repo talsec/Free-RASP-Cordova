@@ -90,16 +90,18 @@ export class AppComponent implements OnInit {
   async addItemsToMalwareWhitelist() {
     const appsToWhitelist = ['io.ionic.starter', 'com.example.myApp'];
 
-    for (const app of appsToWhitelist) {
-      try {
-        const whitelistResponse = await talsec.addToWhitelist(app);
-        console.info(
-          `${app} stored to Malware Whitelist: ${whitelistResponse}`,
-        );
-      } catch (error) {
-        console.info('Malware whitelist failed: ', error);
-      }
-    }
+    await Promise.all(
+      appsToWhitelist.map(async (app) => {
+        try {
+          const whitelistResponse = await talsec.addToWhitelist(app);
+          console.info(
+            `${app} stored to Malware Whitelist: ${whitelistResponse}`,
+          );
+        } catch (error) {
+          console.info('Malware whitelist failed: ', error);
+        }
+      }),
+    );
   }
 
   updateAppChecks(threatName: string) {
