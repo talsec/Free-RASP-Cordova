@@ -24,8 +24,11 @@ export class AppComponent implements OnInit {
         blocklistedHashes: ['FgvSehLMM91E7lX/Zqp3u4jMmd0A7hH/Iqozu0TMVd0u'],
         blocklistedPackageNames: ['com.wultra.app.screenlogger'],
         blocklistedPermissions: [
-          ['android.permission.BLUETOOTH', 'android.permission.INTERNET'],
-          ['android.permission.INTERNET'],
+          [
+            'android.permission.INTERNET',
+            'android.permission.ACCESS_COARSE_LOCATION',
+          ],
+          ['android.permission.BLUETOOTH'],
           ['android.permission.BATTERY_STATS'],
         ],
         whitelistedInstallationSources: ['com.apkpure.aegon'],

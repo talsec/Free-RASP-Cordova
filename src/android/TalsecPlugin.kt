@@ -159,7 +159,6 @@ class TalsecPlugin : CordovaPlugin() {
     }
 
     override fun malwareDetected(suspiciousApps: MutableList<SuspiciousAppInfo>) {
-      Log.e("Talsec", "sending ${suspiciousApps.size} apps")
       notifyMalware(suspiciousApps)
     }
   }
