@@ -15,14 +15,14 @@ internal object Utils {
     val byteArrayOutputStream = ByteArrayOutputStream()
     bitmap.compress(Bitmap.CompressFormat.PNG, 10, byteArrayOutputStream)
     val byteArray = byteArrayOutputStream.toByteArray()
-    return Base64.encodeToString(byteArray, Base64.DEFAULT)
+    return Base64.encodeToString(byteArray, Base64.NO_WRAP)
   }
 
   /**
    * Retrieves human-readable application name
    */
-  internal fun getAppName(context: Context, applicationInfo: ApplicationInfo): String {
-    return context.packageManager.getApplicationLabel(applicationInfo) as String
+  internal fun getAppName(context: Context, applicationInfo: ApplicationInfo?): String? {
+    return applicationInfo?.let { context.packageManager.getApplicationLabel(it) as String }
   }
 
   /**
