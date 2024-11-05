@@ -10,13 +10,22 @@ import com.aheaditec.talsec_security.security.api.SuspiciousAppInfo
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.json.JSONArray
+import org.json.JSONException
 import org.json.JSONObject
 
+private inline fun <reified T> JSONArray.toPrimitiveArray(): Array<T> {
+  val output = mutableListOf<T>()
 
-internal fun JSONArray.toArray(): Array<String> {
-  val output = mutableListOf<String>()
   for (i in 0 until this.length()) {
-    this.getString(i)?.let(output::add)
+    val element: T = when (T::class) {
+      String::class -> this.getString(i) as T
+      Int::class -> this.getInt(i) as T
+      Double::class -> this.getDouble(i) as T
+      Long::class -> this.getLong(i) as T
+      Boolean::class -> this.getBoolean(i) as T
+      else -> throw JSONException("Cannot parse JSON array - unsupported type")
+    }
+    output.add(element)
   }
   return output.toTypedArray()
 }
@@ -24,7 +33,7 @@ internal fun JSONArray.toArray(): Array<String> {
 internal fun JSONObject.getArraySafe(key: String): Array<String> {
   if (this.has(key)) {
     val inputArray = this.getJSONArray(key)
-    return inputArray.toArray()
+    return inputArray.toPrimitiveArray()
   }
   return arrayOf()
 }
@@ -34,7 +43,7 @@ internal fun JSONObject.getNestedArraySafe(key: String): Array<Array<String>> {
   if (this.has(key)) {
     val inputArray = this.getJSONArray(key)
     for (i in 0 until inputArray.length()) {
-      outArray.add(inputArray.getJSONArray(i).toArray())
+      outArray.add(inputArray.getJSONArray(i).toPrimitiveArray())
     }
   }
   return outArray.toTypedArray()
