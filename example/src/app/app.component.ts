@@ -1,9 +1,10 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { commonChecks, iosChecks, androidChecks } from './utils/checks';
 import { SuspiciousAppsService } from './services/suspicious-apps.service';
+import { SuspiciousAppInfo, Talsec } from 'cordova-talsec-plugin-freerasp';
 
 declare var cordova: any;
-declare var talsec: any;
+declare var talsec: Talsec;
 
 @Component({
   selector: 'app-root',
@@ -84,7 +85,7 @@ export class AppComponent implements OnInit {
     deviceID: () => this.updateAppChecks('Device ID'),
     obfuscationIssues: () => this.updateAppChecks('Obfuscation Issues'),
     devMode: () => this.updateAppChecks('Developer Mode'),
-    malware: (detectedApps: any[]) => {
+    malware: (detectedApps: SuspiciousAppInfo[]) => {
       this.updateMalware(detectedApps);
       this.updateAppChecks('Malware');
     },
@@ -115,7 +116,7 @@ export class AppComponent implements OnInit {
     });
   }
 
-  updateMalware(susApps: any) {
+  updateMalware(susApps: SuspiciousAppInfo[]) {
     this.zone.run(() => {
       this.suspiciousAppsService.setSuspiciousApps([...susApps]);
     });
