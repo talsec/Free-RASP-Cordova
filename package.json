@@ -42,6 +42,7 @@
         "url": "https://github.com/talsec/Free-RASP-Cordova/issues"
     },
     "homepage": "https://github.com/talsec/Free-RASP-Cordova",
+    "types": "www/talsec.d.ts",
     "devDependencies": {
         "@cordova/eslint-config": "^5.0.0",
         "@types/cordova": "^11.0.2",

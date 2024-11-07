@@ -1,5 +1,15 @@
 /* global cordova */
 
+declare var cordova: any;
+
+export interface Talsec {
+  start: (
+    config: TalsecConfig,
+    eventListenerConfig: NativeEventEmitterActions,
+  ) => Promise<void>;
+  addToWhitelist: (packageName: string) => Promise<string>;
+}
+
 export type SuspiciousAppInfo = {
   packageInfo: PackageInfo;
   reason: string;
@@ -13,7 +23,7 @@ export type PackageInfo = {
   installerStore?: string;
 };
 
-type NativeEventEmitterActions = {
+export type NativeEventEmitterActions = {
   privilegedAccess?: () => any;
   debug?: () => any;
   simulator?: () => any;
@@ -30,26 +40,26 @@ type NativeEventEmitterActions = {
   malware?: (suspiciousApps: SuspiciousAppInfo[]) => any;
 };
 
-type TalsecConfig = {
+export type TalsecConfig = {
   androidConfig?: TalsecAndroidConfig;
   iosConfig?: TalsecIosConfig;
   watcherMail: string;
   isProd?: boolean;
 };
 
-type TalsecAndroidConfig = {
+export type TalsecAndroidConfig = {
   packageName: string;
   certificateHashes: string[];
   supportedAlternativeStores?: string[];
   malwareConfig?: TalsecMalwareConfig;
 };
 
-type TalsecIosConfig = {
-  appBundleId: string;
+export type TalsecIosConfig = {
+  appBundleIds: string;
   appTeamId: string;
 };
 
-type TalsecMalwareConfig = {
+export type TalsecMalwareConfig = {
   blocklistedHashes?: string[];
   blocklistedPackageNames?: string[];
   blocklistedPermissions?: string[][];
@@ -118,10 +128,10 @@ const getThreatChannelData = async (): Promise<[string, string]> => {
   const dataLength = cordova.platformId === 'ios' ? 1 : 2;
   const data: [string, string] = await new Promise((resolve, reject) => {
     cordova.exec(
-      (data) => {
+      (data: [string, string]) => {
         resolve(data);
       },
-      (error) => {
+      (error: any) => {
         reject(error);
       },
       'TalsecPlugin',
@@ -142,10 +152,10 @@ const itemsHaveType = (data: any[], desidedType: string) => {
 const getThreatIdentifiers = async (): Promise<number[]> => {
   const identifiers: number[] = await new Promise((resolve, reject) => {
     cordova.exec(
-      (data) => {
+      (data: number[]) => {
         resolve(data);
       },
-      (error) => {
+      (error: any) => {
         reject(error);
       },
       'TalsecPlugin',
@@ -193,7 +203,7 @@ const toSuspiciousAppInfo = (base64Value: string): SuspiciousAppInfo => {
 const start = async (
   config: TalsecConfig,
   eventListenerConfig: NativeEventEmitterActions,
-) => {
+): Promise<void> => {
   await prepareMapping();
   const [key, malwareKey] = await getThreatChannelData();
 
@@ -249,14 +259,14 @@ const start = async (
 
   return new Promise<void>((resolve, reject) => {
     cordova.exec(
-      (message) => {
+      (message: string) => {
         if (message != null && message === 'started') {
           resolve();
         } else {
           eventListener(message);
         }
       },
-      (error) => {
+      (error: any) => {
         console.error(`${error.code}: ${error.message}`);
         reject(error);
       },
@@ -276,7 +286,7 @@ const addToWhitelist = (packageName: string): Promise<string> => {
       (response: string) => {
         resolve(response);
       },
-      (error) => {
+      (error: any) => {
         reject(error);
       },
       'TalsecPlugin',
@@ -286,6 +296,7 @@ const addToWhitelist = (packageName: string): Promise<string> => {
   });
 };
 
+// @ts-ignore
 module.exports = {
   start,
   addToWhitelist,

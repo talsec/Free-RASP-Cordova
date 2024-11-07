@@ -211,6 +211,7 @@ const addToWhitelist = (packageName) => {
     );
   });
 };
+// @ts-ignore
 module.exports = {
   start,
   addToWhitelist,
