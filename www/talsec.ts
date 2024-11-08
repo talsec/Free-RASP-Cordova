@@ -1,6 +1,6 @@
 /* global cordova */
 
-declare var cordova: any;
+declare const cordova: any;
 
 export interface Talsec {
   start: (
