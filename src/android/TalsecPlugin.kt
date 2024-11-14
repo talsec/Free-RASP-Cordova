@@ -146,9 +146,9 @@ class TalsecPlugin : CordovaPlugin() {
     if (androidConfig.has("malwareConfig")) {
       val malwareConfig = androidConfig.getJSONObject("malwareConfig")
       talsecBuilder.whitelistedInstallationSources(malwareConfig.getArraySafe("whitelistedInstallationSources"))
-      talsecBuilder.blocklistedHashes(malwareConfig.getArraySafe("blocklistedHashes"))
-      talsecBuilder.blocklistedPermissions(malwareConfig.getNestedArraySafe("blocklistedPermissions"))
-      talsecBuilder.blocklistedPackageNames(malwareConfig.getArraySafe("blocklistedPackageNames"))
+      talsecBuilder.blacklistedHashes(malwareConfig.getArraySafe("blacklistedHashes"))
+      talsecBuilder.blacklistedPackageNames(malwareConfig.getArraySafe("blacklistedPackageNames"))
+      talsecBuilder.suspiciousPermissions(malwareConfig.getNestedArraySafe("suspiciousPermissions"))
     }
     return talsecBuilder.build()
   }
