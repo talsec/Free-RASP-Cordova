@@ -1,9 +1,0 @@
-env:
-  browser: true
-  es2021: true
-extends: '@cordova/eslint-config/node'
-overrides: []
-parserOptions:
-  ecmaVersion: latest
-  sourceType: module
-rules: {}

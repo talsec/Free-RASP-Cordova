@@ -4,10 +4,15 @@
     "paths": {
       "talsec-react-native-security-plugin": ["www/talsec.ts"]
     },
+    "typeRoots": ["src/types"],
+    "declaration": true,
+    "rootDir": "./www",
+    "outDir": "./www",
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "verbatimModuleSyntax": true,
     "lib": ["esnext", "dom"],
     "module": "esnext",
     "moduleResolution": "node",
@@ -23,5 +28,5 @@
     "strict": true,
     "target": "esnext"
   },
-  "exclude": ["hello"]
+  "exclude": ["example", "./lib/**/*"]
 }

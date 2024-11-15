@@ -1,82 +1,86 @@
 {
-    "name": "cordova-talsec-plugin-freerasp",
-    "version": "6.3.3",
-    "description": "Cordova plugin for improving app security and threat monitoring on Android and iOS mobile devices.",
-    "cordova": {
-        "id": "cordova-talsec-plugin-freerasp",
-        "platforms": [
-            "android",
-            "ios"
-        ]
-    },
-    "scripts": {
-        "lint": "eslint ."
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/talsec/Free-RASP-Cordova.git"
-    },
-    "keywords": [
-        "cordova",
-        "ecosystem:cordova",
-        "cordova-android",
-        "cordova-ios",
-        "cordova-plugin",
-        "cordova-libraries",
-        "freerasp",
-        "security",
-        "tampering-detection",
-        "root-detection",
-        "app-shielding",
-        "rasp",
-        "tampering",
-        "reverse-engineering",
-        "application-security",
-        "frida",
-        "jailbreak",
-        "root"
-    ],
-    "author": "Talsec",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/talsec/Free-RASP-Cordova/issues"
-    },
-    "homepage": "https://github.com/talsec/Free-RASP-Cordova",
-    "devDependencies": {
-        "@cordova/eslint-config": "^5.0.0",
-        "@types/cordova": "^11.0.2",
-        "@types/node": "^20.8.10",
-        "@typescript-eslint/parser": "^6.9.1",
-        "eslint": "^8.40.0",
-        "eslint-plugin-import": "^2.27.5",
-        "eslint-config-prettier": "^8.5.0",
-        "eslint-plugin-prettier": "^4.0.0",
-        "prettier": "^3.0.3",
-        "prettier-eslint": "^16.1.2",
-        "typescript": "^5.2.2"
-    },
-    "eslintConfig": {
-        "root": true,
-        "extends": [
-            "@cordova/eslint-config"
-        ],
-        "rules": {
-            "prettier/prettier": [
-                "off",
-                {
-                    "quoteProps": "consistent",
-                    "singleQuote": true,
-                    "tabWidth": 2,
-                    "trailingComma": "es5",
-                    "useTabs": false
-                }
-            ]
-        }
-    },
-    "prettier": {
-        "singleQuote": true
-    },
-    "eslintIgnore": [
-        "node_modules/"
+  "name": "cordova-talsec-plugin-freerasp",
+  "version": "7.0.0",
+  "description": "Cordova plugin for improving app security and threat monitoring on Android and iOS mobile devices.",
+  "cordova": {
+    "id": "cordova-talsec-plugin-freerasp",
+    "platforms": [
+      "android",
+      "ios"
     ]
+  },
+  "scripts": {
+    "eslint": "eslint . --ext ts",
+    "prettier": "prettier \"**/*.{ts,js,html,css}\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/talsec/Free-RASP-Cordova.git"
+  },
+  "keywords": [
+    "cordova",
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios",
+    "cordova-plugin",
+    "cordova-libraries",
+    "freerasp",
+    "security",
+    "tampering-detection",
+    "root-detection",
+    "app-shielding",
+    "rasp",
+    "tampering",
+    "reverse-engineering",
+    "application-security",
+    "frida",
+    "jailbreak",
+    "root"
+  ],
+  "author": "Talsec",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/talsec/Free-RASP-Cordova/issues"
+  },
+  "homepage": "https://github.com/talsec/Free-RASP-Cordova",
+  "types": "www/talsec.d.ts",
+  "devDependencies": {
+    "@cordova/eslint-config": "^5.0.0",
+    "@types/cordova": "^11.0.2",
+    "@types/node": "^20.8.10",
+    "@typescript-eslint/parser": "^6.9.1",
+    "@typescript-eslint/eslint-plugin": "^6.9.1",
+    "eslint": "^8.40.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^3.0.3",
+    "prettier-eslint": "^16.1.2",
+    "typescript": "^5.2.2"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@cordova/eslint-config"
+    ],
+    "rules": {
+      "prettier/prettier": [
+        "off",
+        {
+          "quoteProps": "consistent",
+          "singleQuote": true,
+          "tabWidth": 2,
+          "trailingComma": "es5",
+          "useTabs": false
+        }
+      ]
+    }
+  },
+  "prettier": {
+    "singleQuote": true
+  },
+  "eslintIgnore": [
+    "node_modules/"
+  ]
 }

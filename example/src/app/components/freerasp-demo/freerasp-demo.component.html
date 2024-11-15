@@ -1,0 +1,35 @@
+<ion-content scroll-y="true">
+  <ion-list>
+    <ion-list-header>
+      <h1>freeRASP checks:</h1>
+    </ion-list-header>
+
+    @for (check of checks; track $index) {
+      <ion-item>
+        <ion-label [color]="check.isSecure ? 'success' : 'danger'">
+          {{ check.name }}
+          <p>{{ check.isSecure ? 'secure' : 'danger' }}</p>
+        </ion-label>
+
+        @if (check.name === 'Malware' && !check.isSecure) {
+          <app-malware-modal />
+        }
+
+        <ion-icon
+          [icon]="check.isSecure ? shieldCheckmarkIcon : alertCircleIcon"
+          [color]="check.isSecure ? 'success' : 'danger'"
+          size="large"
+        >
+        </ion-icon>
+      </ion-item>
+    }
+  </ion-list>
+
+  <ion-row>
+    <ion-img
+      class="talsecLogo"
+      src="assets/talsec-logo.png"
+      alt="Talsec logo"
+    ></ion-img>
+  </ion-row>
+</ion-content>
