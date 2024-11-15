@@ -22,6 +22,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - New feature: **malware detection** as a new callback for enhanced app security
 
+#### Fixed
+
+- Refactoring Magisk checks in the root detection
+- Resolving IllegalArgumentException caused by unregistering not registered receiver in TalsecMonitoringReceiver
+
 ### iOS
 
 #### Added
