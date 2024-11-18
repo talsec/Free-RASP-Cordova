@@ -69,9 +69,8 @@ jobs:
         shell: bash
 
       - name: Compile .ts files
-        run: npx tsc
+        run: npm run tsc
         shell: bash
-
 
       - name: Configure git
         run: |
