@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
       certificateHashes: ['AKoRuyLMM91E7lX/Zqp3u4jMmd0A7hH/Iqozu0TMVd0='],
       malwareConfig: {
         blacklistedHashes: ['FgvSehLMM91E7lX/Zqp3u4jMmd0A7hH/Iqozu0TMVd0u'],
-        blacklistedPackageNames: ['com.wultra.app.screenlogger'],
+        blacklistedPackageNames: ['com.malware.app'],
         suspiciousPermissions: [
           [
             'android.permission.INTERNET',
@@ -89,6 +89,7 @@ export class AppComponent implements OnInit {
       this.updateMalware(detectedApps);
       this.updateAppChecks('Malware');
     },
+    adbEnabled: () => this.updateAppChecks('ADB Enabled'),
   };
 
   async addItemsToMalwareWhitelist() {
