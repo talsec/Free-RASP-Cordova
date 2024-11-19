@@ -15,6 +15,7 @@ class Threat {
   static ObfuscationIssues = new Threat(0);
   static DevMode = new Threat(0);
   static Malware = new Threat(0);
+  static ADBEnabled = new Threat(0);
   constructor(value) {
     this.value = value;
   }
@@ -34,6 +35,7 @@ class Threat {
           this.ObfuscationIssues,
           this.DevMode,
           this.Malware,
+          this.ADBEnabled,
         ]
       : [
           this.AppIntegrity,
@@ -168,6 +170,9 @@ const start = async (config, eventListenerConfig) => {
         break;
       case Threat.Malware.value:
         eventListenerConfig.malware?.(parseMalwareData(event[malwareKey]));
+        break;
+      case Threat.ADBEnabled.value:
+        eventListenerConfig.adbEnabled?.();
         break;
       default:
         onInvalidCallback();
