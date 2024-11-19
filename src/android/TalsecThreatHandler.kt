@@ -54,6 +54,10 @@ internal object TalsecThreatHandler : ThreatListener.ThreatDetected, ThreatListe
     listener?.threatDetected(Threat.DevMode)
   }
 
+  override fun onADBEnabledDetected() {
+    listener?.threatDetected(Threat.ADBEnabled)
+  }
+
   override fun onSystemVPNDetected() {
     listener?.threatDetected(Threat.SystemVPN)
   }
