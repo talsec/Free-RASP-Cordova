@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.1.0] - 2024-11-19
+
+### Cordova
+
+#### Added
+
+- Added `adbEnabled` callback, which allows you to detect USB debugging option enabled in the developer settings on the device
+
+### Android
+
+#### Added
+
+- ADB detection feature
+
 ## [7.0.1] - 2024-11-18
 
 - Android SDK version: 12.0.0
