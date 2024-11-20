@@ -31,6 +31,7 @@ export type NativeEventEmitterActions = {
   devMode?: () => any;
   systemVPN?: () => any;
   malware?: (suspiciousApps: SuspiciousAppInfo[]) => any;
+  adbEnabled?: () => any;
 };
 export type TalsecConfig = {
   androidConfig?: TalsecAndroidConfig;

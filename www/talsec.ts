@@ -38,6 +38,7 @@ export type NativeEventEmitterActions = {
   devMode?: () => any;
   systemVPN?: () => any;
   malware?: (suspiciousApps: SuspiciousAppInfo[]) => any;
+  adbEnabled?: () => any;
 };
 
 export type TalsecConfig = {
@@ -82,6 +83,7 @@ class Threat {
   static ObfuscationIssues = new Threat(0);
   static DevMode = new Threat(0);
   static Malware = new Threat(0);
+  static ADBEnabled = new Threat(0);
 
   constructor(value: number) {
     this.value = value;
@@ -103,6 +105,7 @@ class Threat {
           this.ObfuscationIssues,
           this.DevMode,
           this.Malware,
+          this.ADBEnabled,
         ]
       : [
           this.AppIntegrity,
@@ -250,6 +253,9 @@ const start = async (
         break;
       case Threat.Malware.value:
         eventListenerConfig.malware?.(parseMalwareData(event[malwareKey]));
+        break;
+      case Threat.ADBEnabled.value:
+        eventListenerConfig.adbEnabled?.();
         break;
       default:
         onInvalidCallback();
