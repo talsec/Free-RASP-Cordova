@@ -4,6 +4,7 @@ export interface Talsec {
     eventListenerConfig: NativeEventEmitterActions,
   ) => Promise<void>;
   addToWhitelist: (packageName: string) => Promise<string>;
+  getAppIcon: (packageName: string) => Promise<string>;
 }
 export type SuspiciousAppInfo = {
   packageInfo: PackageInfo;
