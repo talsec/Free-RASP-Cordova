@@ -1,7 +1,11 @@
 package com.aheaditec.talsec.cordova
 
 import android.content.Context
+import android.os.Handler
+import android.os.HandlerThread
+import android.os.Looper
 import android.util.Log
+import com.aheaditec.talsec.cordova.utils.Utils
 import com.aheaditec.talsec.cordova.utils.getArraySafe
 import com.aheaditec.talsec.cordova.utils.getBooleanSafe
 import com.aheaditec.talsec.cordova.utils.getNestedArraySafe
@@ -47,6 +51,7 @@ class TalsecPlugin : CordovaPlugin() {
       "getThreatIdentifiers" -> getThreatIdentifiers(callbackContext)
       "getThreatChannelData" -> getThreatChannelData(callbackContext)
       "addToWhitelist" -> addToWhitelist(callbackContext, args)
+      "getAppIcon" -> getAppIcon(callbackContext, args)
       else -> {
         callbackContext?.error("Talsec plugin executed with unknown action - $action")
         return false
@@ -88,6 +93,24 @@ class TalsecPlugin : CordovaPlugin() {
     return true
   }
 
+  /**
+   * Method retrieves app icon for the given parameter
+   * @param packageName package name of the app we want to retrieve icon for
+   * @return PNG with app icon encoded as a base64 string
+   */
+  fun getAppIcon(callbackContext: CallbackContext?, args: JSONArray?): Boolean {
+    val packageName = args?.optString(0, null) ?: run {
+      callbackContext?.error("Missing packageName parameter in Talsec Native Plugin")
+      return false
+    }
+    // Perform the app icon encoding on a background thread
+    backgroundHandler.post {
+      val encodedData = Utils.getAppIconAsBase64String(cordova.context, packageName)
+      mainHandler.post { callbackContext?.success(encodedData) }
+    }
+    return true
+  }
+
   override fun onPause(multitasking: Boolean) {
     super.onPause(multitasking)
     if (this.cordova.activity.isFinishing) {
@@ -102,6 +125,12 @@ class TalsecPlugin : CordovaPlugin() {
       registered = true
       listener.registerListener(this.cordova.context)
     }
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+
+    backgroundHandlerThread.quitSafely()
   }
 
   /**
@@ -166,23 +195,35 @@ class TalsecPlugin : CordovaPlugin() {
   companion object {
     private var callback: CallbackContext? = null
 
-    val THREAT_CHANNEL_KEY = (10000..999999999).random()
+    private val THREAT_CHANNEL_KEY = (10000..999999999).random()
       .toString() // key of the argument map under which threats are expected
-    val MALWARE_CHANNEL_KEY = (10000..999999999).random()
+    private val MALWARE_CHANNEL_KEY = (10000..999999999).random()
       .toString() // key of the argument map under which malware data is expected
 
     private lateinit var appContext: Context
+    private val backgroundHandlerThread = HandlerThread("BackgroundThread").apply { start() }
+    private val backgroundHandler = Handler(backgroundHandlerThread.looper)
+    private val mainHandler = Handler(Looper.getMainLooper())
+
 
     /**
      * Sends malware detected event to Cordova
      */
     private fun notifyMalware(suspiciousApps: MutableList<SuspiciousAppInfo>) {
-      val response = JSONObject()
-      response.put(THREAT_CHANNEL_KEY, Threat.Malware.value)
-      response.put(MALWARE_CHANNEL_KEY, suspiciousApps.toEncodedJsonArray(appContext))
-      val result = PluginResult(PluginResult.Status.OK, response)
-      result.keepCallback = true
-      callback?.sendPluginResult(result) ?: Log.w("TalsecPlugin", "Listener not registered.")
+      // Perform the malware encoding on a background thread
+      backgroundHandler.post {
+
+        val encodedSuspiciousApps = suspiciousApps.toEncodedJsonArray(appContext)
+
+        mainHandler.post {
+          val response = JSONObject()
+          response.put(THREAT_CHANNEL_KEY, Threat.Malware.value)
+          response.put(MALWARE_CHANNEL_KEY, encodedSuspiciousApps)
+          val result = PluginResult(PluginResult.Status.OK, response)
+          result.keepCallback = true
+          callback?.sendPluginResult(result) ?: Log.w("TalsecPlugin", "Listener not registered.")
+        }
+      }
     }
 
     private fun notifyThreat(threat: Threat) {
