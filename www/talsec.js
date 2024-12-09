@@ -58,16 +58,7 @@ const getThreatCount = () => {
 const getThreatChannelData = async () => {
   const dataLength = cordova.platformId === 'ios' ? 1 : 2;
   const data = await new Promise((resolve, reject) => {
-    cordova.exec(
-      (data) => {
-        resolve(data);
-      },
-      (error) => {
-        reject(error);
-      },
-      'TalsecPlugin',
-      'getThreatChannelData',
-    );
+    cordova.exec(resolve, reject, 'TalsecPlugin', 'getThreatChannelData');
   });
   if (data.length !== dataLength || !itemsHaveType(data, 'string')) {
     onInvalidCallback();
@@ -80,16 +71,7 @@ const itemsHaveType = (data, desidedType) => {
 };
 const getThreatIdentifiers = async () => {
   const identifiers = await new Promise((resolve, reject) => {
-    cordova.exec(
-      (data) => {
-        resolve(data);
-      },
-      (error) => {
-        reject(error);
-      },
-      'TalsecPlugin',
-      'getThreatIdentifiers',
-    );
+    cordova.exec(resolve, reject, 'TalsecPlugin', 'getThreatIdentifiers');
   });
   if (
     identifiers.length !== getThreatCount() ||
@@ -203,21 +185,22 @@ const addToWhitelist = (packageName) => {
     return Promise.reject('Malware detection not available on iOS');
   }
   return new Promise((resolve, reject) => {
-    cordova.exec(
-      (response) => {
-        resolve(response);
-      },
-      (error) => {
-        reject(error);
-      },
-      'TalsecPlugin',
-      'addToWhitelist',
-      [packageName],
-    );
+    cordova.exec(resolve, reject, 'TalsecPlugin', 'addToWhitelist', [
+      packageName,
+    ]);
+  });
+};
+const getAppIcon = (packageName) => {
+  if (cordova.platformId === 'ios') {
+    return Promise.reject('Malware detection not available on iOS');
+  }
+  return new Promise((resolve, reject) => {
+    cordova.exec(resolve, reject, 'TalsecPlugin', 'getAppIcon', [packageName]);
   });
 };
 // @ts-ignore
 module.exports = {
   start,
   addToWhitelist,
+  getAppIcon,
 };

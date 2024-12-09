@@ -8,6 +8,7 @@ export interface Talsec {
     eventListenerConfig: NativeEventEmitterActions,
   ) => Promise<void>;
   addToWhitelist: (packageName: string) => Promise<string>;
+  getAppIcon: (packageName: string) => Promise<string>;
 }
 
 export type SuspiciousAppInfo = {
@@ -130,16 +131,7 @@ const getThreatCount = (): number => {
 const getThreatChannelData = async (): Promise<[string, string]> => {
   const dataLength = cordova.platformId === 'ios' ? 1 : 2;
   const data: [string, string] = await new Promise((resolve, reject) => {
-    cordova.exec(
-      (data: [string, string]) => {
-        resolve(data);
-      },
-      (error: any) => {
-        reject(error);
-      },
-      'TalsecPlugin',
-      'getThreatChannelData',
-    );
+    cordova.exec(resolve, reject, 'TalsecPlugin', 'getThreatChannelData');
   });
   if (data.length !== dataLength || !itemsHaveType(data, 'string')) {
     onInvalidCallback();
@@ -154,16 +146,7 @@ const itemsHaveType = (data: any[], desidedType: string) => {
 
 const getThreatIdentifiers = async (): Promise<number[]> => {
   const identifiers: number[] = await new Promise((resolve, reject) => {
-    cordova.exec(
-      (data: number[]) => {
-        resolve(data);
-      },
-      (error: any) => {
-        reject(error);
-      },
-      'TalsecPlugin',
-      'getThreatIdentifiers',
-    );
+    cordova.exec(resolve, reject, 'TalsecPlugin', 'getThreatIdentifiers');
   });
   if (
     identifiers.length !== getThreatCount() ||
@@ -288,17 +271,18 @@ const addToWhitelist = (packageName: string): Promise<string> => {
     return Promise.reject('Malware detection not available on iOS');
   }
   return new Promise((resolve, reject) => {
-    cordova.exec(
-      (response: string) => {
-        resolve(response);
-      },
-      (error: any) => {
-        reject(error);
-      },
-      'TalsecPlugin',
-      'addToWhitelist',
-      [packageName],
-    );
+    cordova.exec(resolve, reject, 'TalsecPlugin', 'addToWhitelist', [
+      packageName,
+    ]);
+  });
+};
+
+const getAppIcon = (packageName: string): Promise<string> => {
+  if (cordova.platformId === 'ios') {
+    return Promise.reject('Malware detection not available on iOS');
+  }
+  return new Promise((resolve, reject) => {
+    cordova.exec(resolve, reject, 'TalsecPlugin', 'getAppIcon', [packageName]);
   });
 };
 
@@ -306,4 +290,5 @@ const addToWhitelist = (packageName: string): Promise<string> => {
 module.exports = {
   start,
   addToWhitelist,
+  getAppIcon,
 };
