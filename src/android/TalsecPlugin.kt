@@ -119,6 +119,7 @@ class TalsecPlugin : CordovaPlugin() {
         }
         return true
     }
+
     /**
      * Enables or disables screen capture blocking.
      *
@@ -145,6 +146,7 @@ class TalsecPlugin : CordovaPlugin() {
             callbackContext?.error("Failed to block screen capture: ${e.message}")
         }
     }
+
     /**
      * Checks if screen capture blocking is enabled.
      *
