@@ -119,7 +119,16 @@ class TalsecPlugin : CordovaPlugin() {
         }
         return true
     }
-
+    /**
+     * Enables or disables screen capture blocking.
+     *
+     * This method sets the FLAG_SECURE flag on the application's main activity,
+     * which prevents screenshots and screen recording. This feature enhances
+     * security by protecting sensitive app content from being captured.
+     *
+     * @param callbackContext Cordova callback context to return the result.
+     * @param args JSON array where the first parameter is a boolean indicating whether to enable or disable blocking.
+     */
     private fun blockScreenCapture(callbackContext: CallbackContext?, args: JSONArray?) {
         try {
             val enable = args?.optBoolean(0, false) ?: false
@@ -136,7 +145,15 @@ class TalsecPlugin : CordovaPlugin() {
             callbackContext?.error("Failed to block screen capture: ${e.message}")
         }
     }
-
+    /**
+     * Checks if screen capture blocking is enabled.
+     *
+     * This method queries the current status of screen capture blocking and
+     * returns a boolean result indicating whether it is enabled or not.
+     *
+     * @param callbackContext Cordova callback context to return the result.
+     * @return Boolean indicating if screen capture is blocked (`true`) or not (`false`).
+     */
     private fun isScreenCaptureBlocked(callbackContext: CallbackContext?): Boolean {
         return try {
 
