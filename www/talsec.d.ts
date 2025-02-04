@@ -5,6 +5,8 @@ export interface Talsec {
   ) => Promise<void>;
   addToWhitelist: (packageName: string) => Promise<string>;
   getAppIcon: (packageName: string) => Promise<string>;
+  blockScreenCapture: (enable: boolean) => Promise<void>;
+  isScreenCaptureBlocked: () => Promise<boolean>;
 }
 export type SuspiciousAppInfo = {
   packageInfo: PackageInfo;
@@ -33,6 +35,8 @@ export type NativeEventEmitterActions = {
   systemVPN?: () => any;
   malware?: (suspiciousApps: SuspiciousAppInfo[]) => any;
   adbEnabled?: () => any;
+  screenshot?: () => any;
+  screenRecording?: () => any;
 };
 export type TalsecConfig = {
   androidConfig?: TalsecAndroidConfig;

@@ -6,6 +6,37 @@
   </ion-header>
 
   <ion-content>
+    <div id="screenCaptureControls" class="button-container">
+      <!-- Show Block Button if Screen Capture is Unblocked -->
+      <button
+        *ngIf="screenCaptureStatus === 'Unblocked'"
+        class="control-button block-button"
+        (click)="toggleScreenCapture(true)"
+      >
+        Block Screen Capture
+      </button>
+
+      <!-- Show Unblock Button if Screen Capture is Blocked -->
+      <button
+        *ngIf="screenCaptureStatus === 'Blocked'"
+        class="control-button unblock-button"
+        (click)="toggleScreenCapture(false)"
+      >
+        Unblock Screen Capture
+      </button>
+    </div>
+
+    <p class="status-text">
+      Screen capture status:
+      <span
+        [ngClass]="{
+          'status-blocked': screenCaptureStatus === 'Blocked',
+          'status-unblocked': screenCaptureStatus === 'Unblocked'
+        }"
+      >
+        {{ screenCaptureStatus }}
+      </span>
+    </p>
     <app-freerasp-demo [checks]="appChecks"></app-freerasp-demo>
   </ion-content>
 </ion-app>

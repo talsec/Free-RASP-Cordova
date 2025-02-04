@@ -32,8 +32,12 @@
         <param name="android-package" value="com.aheaditec.talsec.cordova.TalsecPlugin"/>
       </feature>
     </config-file>
-
+    <config-file target="AndroidManifest.xml" parent="/*">
+      <uses-permission android:name="android.permission.DETECT_SCREEN_CAPTURE" />
+      <uses-permission android:name="android.permission.DETECT_SCREEN_RECORDING" />
+    </config-file>
     <source-file src="src/android/TalsecPlugin.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/"/>
+    <source-file src="src/android/ScreenProtectorHandler.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/"/>
     <source-file src="src/android/TalsecThreatHandler.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/"/>
     <source-file src="src/android/Threat.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/"/>
     <source-file src="src/android/models/CordovaSuspiciousAppInfo.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/models/"/>
