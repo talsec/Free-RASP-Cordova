@@ -177,7 +177,7 @@ class TalsecPlugin : CordovaPlugin() {
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             this.cordova.activity?.let { activity ->
-                ScreenProtectorHandler.unregisterScreenCaptureHandler(activity) // Fix: Pass `activity`
+                ScreenProtector.unregister(activity, appContext)
             }
         }
     }
@@ -190,10 +190,7 @@ class TalsecPlugin : CordovaPlugin() {
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             this.cordova.activity?.let { activity ->
-                ScreenProtectorHandler.registerScreenCaptureHandler(
-                    activity,
-                    activity
-                ) // Fix: Pass `activity`
+                ScreenProtector.register(activity, appContext)
             }
         }
     }
