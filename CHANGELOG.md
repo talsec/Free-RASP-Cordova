@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.4.0] - [unreleased]
+
+- iOS SDK version: 6.8.0
+- Android SDK version: 14.0.0
+
+### Cordova
+
+#### Added
+
+- Added `screenshot` callback, which allows you to detect screenshot events in the app.
+- Added `screenRecording` callback, which allows you to detect screen Recording events in the app.
+
+### Android
+
+#### Added
+
+- Added `blockScreenCapture` method to block/unblock screen capture.
+- Added `isScreenCaptureBlocked` method to get the current screen capture blocking status.
+
 ## [7.3.0] - 2024-12-29
 
 - iOS SDK version: 6.6.3
