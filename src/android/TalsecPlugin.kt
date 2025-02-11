@@ -16,7 +16,8 @@ import com.aheaditec.talsec_security.security.api.SuspiciousAppInfo
 import com.aheaditec.talsec_security.security.api.Talsec
 import com.aheaditec.talsec_security.security.api.TalsecConfig
 import com.aheaditec.talsec_security.security.api.ThreatListener
-import com.aheaditec.talsec.cordova.ScreenProtectorHandler
+import com.aheaditec.talsec.cordova.ScreenProtector
+
 
 import org.apache.cordova.CallbackContext
 import org.apache.cordova.CordovaInterface
