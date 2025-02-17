@@ -5,7 +5,7 @@ export interface Talsec {
   ) => Promise<void>;
   addToWhitelist: (packageName: string) => Promise<string>;
   getAppIcon: (packageName: string) => Promise<string>;
-  blockScreenCapture: (enable: boolean) => Promise<void>;
+  blockScreenCapture: (enable: boolean) => Promise<boolean>;
   isScreenCaptureBlocked: () => Promise<boolean>;
 }
 export type SuspiciousAppInfo = {

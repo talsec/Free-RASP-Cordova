@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [7.4.0] - [unreleased]
+## [7.4.0] - 2025-02-17
 
 - iOS SDK version: 6.8.0
 - Android SDK version: 14.0.0
@@ -14,15 +14,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### Added
 
-- Added `screenshot` callback, which allows you to detect screenshot events in the app.
-- Added `screenRecording` callback, which allows you to detect screen Recording events in the app.
+- Introduced `blockScreenCapture(boolean enable)` method to block/unblock screen capture.
+- Introduced `isScreenCaptureBlocked()` method to get the current screen capture blocking status.
+- New callbacks:
+  - `screenshot`: Detects when a screenshot is taken
+  - `screenRecording`: Detects when screen recording is active
 
 ### Android
 
 #### Added
 
-- Added `blockScreenCapture` method to block/unblock screen capture.
-- Added `isScreenCaptureBlocked` method to get the current screen capture blocking status.
+- `blockScreenCapture(Activity activity, boolean enable)` for FLAG_SECURE control
+- `isScreenCaptureBlocked()`
+
+### iOS
+
+### Added
+
+- Active Screenshot/Screen Recording protection
 
 ## [7.3.0] - 2024-12-29
 

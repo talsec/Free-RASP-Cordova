@@ -16,8 +16,6 @@ import com.aheaditec.talsec_security.security.api.SuspiciousAppInfo
 import com.aheaditec.talsec_security.security.api.Talsec
 import com.aheaditec.talsec_security.security.api.TalsecConfig
 import com.aheaditec.talsec_security.security.api.ThreatListener
-import com.aheaditec.talsec.cordova.ScreenProtector
-
 
 import org.apache.cordova.CallbackContext
 import org.apache.cordova.CordovaInterface
@@ -44,9 +42,7 @@ class TalsecPlugin : CordovaPlugin() {
     }
 
     override fun execute(
-        action: String?,
-        args: JSONArray?,
-        callbackContext: CallbackContext?
+        action: String?, args: JSONArray?, callbackContext: CallbackContext?
     ): Boolean {
         return when (action) {
             "start" -> start(args, callbackContext)
@@ -55,13 +51,8 @@ class TalsecPlugin : CordovaPlugin() {
             "getThreatChannelData" -> getThreatChannelData(callbackContext)
             "addToWhitelist" -> addToWhitelist(callbackContext, args)
             "getAppIcon" -> getAppIcon(callbackContext, args)
-            "blockScreenCapture" -> {
-                blockScreenCapture(callbackContext, args)
-                true
-            }
-
+            "blockScreenCapture" -> blockScreenCapture(callbackContext, args)
             "isScreenCaptureBlocked" -> isScreenCaptureBlocked(callbackContext)
-
             else -> {
                 callbackContext?.error("Talsec plugin executed with unknown action - $action")
                 return false
@@ -122,51 +113,39 @@ class TalsecPlugin : CordovaPlugin() {
     }
 
     /**
-     * Enables or disables screen capture blocking.
+     * Method to set the FLAG_SECURE flag on the application's main activity,
+     * which prevents screenshots and screen recording.
      *
-     * This method sets the FLAG_SECURE flag on the application's main activity,
-     * which prevents screenshots and screen recording. This feature enhances
-     * security by protecting sensitive app content from being captured.
-     *
-     * @param callbackContext Cordova callback context to return the result.
-     * @param args JSON array where the first parameter is a boolean indicating whether to enable or disable blocking.
+     * @param enable to set whether you want to block/unblock screen capture
      */
-    private fun blockScreenCapture(callbackContext: CallbackContext?, args: JSONArray?) {
+    private fun blockScreenCapture(callbackContext: CallbackContext?, args: JSONArray?): Boolean {
         try {
             val enable = args?.optBoolean(0, false) ?: false
             cordova.activity?.runOnUiThread {
-                try {
-                    Talsec.blockScreenCapture(cordova.activity, enable)
-                    callbackContext?.success("Screen capture blocking is now ${if (enable) "enabled" else "disabled"}.")
-                } catch (e: Exception) {
-                    callbackContext?.error("Error while setting screen capture: ${e.message}")
-
-                }
+                Talsec.blockScreenCapture(cordova.context, enable)
+                callbackContext?.success("Screen capture blocking is now ${if (enable) "enabled" else "disabled"}.")
             }
+            return true
         } catch (e: Exception) {
             callbackContext?.error("Failed to block screen capture: ${e.message}")
+            return false;
         }
     }
 
     /**
-     * Checks if screen capture blocking is enabled.
-     *
-     * This method queries the current status of screen capture blocking and
+     * Method queries the current status of screen capture blocking and
      * returns a boolean result indicating whether it is enabled or not.
      *
-     * @param callbackContext Cordova callback context to return the result.
      * @return Boolean indicating if screen capture is blocked (`true`) or not (`false`).
      */
     private fun isScreenCaptureBlocked(callbackContext: CallbackContext?): Boolean {
-        return try {
-
+        try {
             val isBlocked = Talsec.isScreenCaptureBlocked()
-            val resultJson = JSONObject().put("result", isBlocked)
-            callbackContext?.success(resultJson)
-            true
+            callbackContext?.success(if (isBlocked) 1 else 0)
+            return true;
         } catch (e: Exception) {
             callbackContext?.error("Failed to check screen capture status: ${e.message}")
-            false
+            return false
         }
     }
 
@@ -176,11 +155,7 @@ class TalsecPlugin : CordovaPlugin() {
             listener.unregisterListener(this.cordova.context)
             registered = false
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            this.cordova.activity?.let { activity ->
-                ScreenProtector.unregister(activity, appContext)
-            }
-        }
+        ScreenProtector.unregister(cordova.activity)
     }
 
     override fun onResume(multitasking: Boolean) {
@@ -189,11 +164,8 @@ class TalsecPlugin : CordovaPlugin() {
             registered = true
             listener.registerListener(this.cordova.context)
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            this.cordova.activity?.let { activity ->
-                ScreenProtector.register(activity, appContext)
-            }
-        }
+        ScreenProtector.register(cordova.activity)
+
     }
 
     override fun onDestroy() {
@@ -291,8 +263,7 @@ class TalsecPlugin : CordovaPlugin() {
                     val result = PluginResult(PluginResult.Status.OK, response)
                     result.keepCallback = true
                     callback?.sendPluginResult(result) ?: Log.w(
-                        "TalsecPlugin",
-                        "Listener not registered."
+                        "TalsecPlugin", "Listener not registered."
                     )
                 }
             }

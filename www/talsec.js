@@ -213,25 +213,29 @@ const getAppIcon = (packageName) => {
 const blockScreenCapture = (enable) => {
   if (cordova.platformId === 'ios') {
     return Promise.reject(
-      'Blocking/Unblocking Screen Capture not available on iOS',
+      'Blocking/Unblocking Screen Capture is not available on iOS',
     );
   }
   return new Promise((resolve, reject) => {
-    cordova.exec(resolve, reject, 'TalsecPlugin', 'blockScreenCapture', [
-      enable,
-    ]);
+    cordova.exec(
+      () => resolve(true), // Resolve the promise correctly
+      (error) => reject(`Error blocking screen capture: ${error}`), // Provide a clear error message
+      'TalsecPlugin',
+      'blockScreenCapture',
+      [enable],
+    );
   });
 };
 const isScreenCaptureBlocked = () => {
   if (cordova.platformId === 'ios') {
     return Promise.reject(
-      'Checking Screen Capture Status not available on iOS',
+      'Checking Screen Capture Status is not available on iOS',
     );
   }
   return new Promise((resolve, reject) => {
     cordova.exec(
-      (result) => resolve(result === 'true'),
-      reject,
+      (result) => resolve(result === 1),
+      (error) => reject(`Error checking screen capture status: ${error}`),
       'TalsecPlugin',
       'isScreenCaptureBlocked',
       [],

@@ -1,6 +1,5 @@
 package com.aheaditec.talsec.cordova
 
-
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Activity.ScreenCaptureCallback
@@ -14,6 +13,7 @@ import androidx.core.content.ContextCompat
 import com.aheaditec.talsec_security.security.api.Talsec
 import java.util.function.Consumer
 
+@RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 internal object ScreenProtector {
     private const val TAG = "TalsecScreenProtector"
     private const val SCREEN_CAPTURE_PERMISSION = "android.permission.DETECT_SCREEN_CAPTURE"
@@ -26,21 +26,38 @@ internal object ScreenProtector {
         }
     }
 
-    internal fun register(activity: Activity, context: Context) {
+    /**
+     * Registers screenshot and screen recording detector with the given activity
+     *
+     * **IMPORTANT**: android.permission.DETECT_SCREEN_CAPTURE and
+     * android.permission.DETECT_SCREEN_RECORDING must be
+     * granted for the app in the AndroidManifest.xml
+     */
+    internal fun register(activity: Activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            registerScreenCapture(activity, context)
+            registerScreenCapture(activity)
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-            registerScreenRecording(activity, context)
+            registerScreenRecording(activity)
         }
     }
 
-    // Missing permission is suppressed because the decision to use the screen capture API is made
-    // by developer, and not enforced by the library.
+    /**
+     * Register Talsec Screen Capture (screenshot) Detector for given activity instance.
+     * The MainActivity of the app is registered by the plugin itself, other
+     * activities bust be registered manually as described in the integration guide.
+     *
+     * Missing permission is suppressed because the decision to use the screen
+     * capture API is made by developer, and not enforced by the library.
+     *
+     * **IMPORTANT**: android.permission.DETECT_SCREEN_CAPTURE (API 34+) must be
+     * granted for the app in the AndroidManifest.xml
+     */
     @SuppressLint("MissingPermission")
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
-    private fun registerScreenCapture(activity: Activity, context: Context) {
+    private fun registerScreenCapture(activity: Activity) {
+        val context = activity.applicationContext
         if (!hasPermission(context, SCREEN_CAPTURE_PERMISSION)) {
             reportMissingPermission("screenshot", SCREEN_CAPTURE_PERMISSION)
             return
@@ -49,32 +66,49 @@ internal object ScreenProtector {
         activity.registerScreenCaptureCallback(context.mainExecutor, screenCaptureCallback)
     }
 
-    // Missing permission is suppressed because the decision to use the screen capture API is made
-    // by developer, and not enforced by the library.
+    /**
+     * Register Talsec Screen Recording Detector for given activity instance.
+     * The MainActivity of the app is registered by the plugin itself, other
+     * activities bust be registered manually as described in the integration guide.
+     *
+     * Missing permission is suppressed because the decision to use the screen
+     * capture API is made by developer, and not enforced by the library.
+     *
+     * **IMPORTANT**: android.permission.DETECT_SCREEN_RECORDING (API 35+) must be
+     * granted for the app in the AndroidManifest.xml
+     */
     @SuppressLint("MissingPermission")
     @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
-    private fun registerScreenRecording(activity: Activity, context: Context) {
+    private fun registerScreenRecording(activity: Activity) {
+        val context = activity.applicationContext
         if (!hasPermission(context, SCREEN_RECORDING_PERMISSION)) {
             reportMissingPermission("screen record", SCREEN_RECORDING_PERMISSION)
             return
         }
 
-        activity.windowManager.addScreenRecordingCallback(
+        val initialState = activity.windowManager.addScreenRecordingCallback(
             context.mainExecutor, screenRecordCallback
         )
+        screenRecordCallback.accept(initialState)
+
     }
 
-    // Missing permission is suppressed because the decision to use the screen capture API is made
-    // by developer, and not enforced by the library.
+    /**
+     * Unregisters screenshot and screen recording detector with the given activity
+     *
+     * **IMPORTANT**: android.permission.DETECT_SCREEN_CAPTURE and
+     * android.permission.DETECT_SCREEN_RECORDING must be
+     * granted for the app in the AndroidManifest.xml
+     */
     @SuppressLint("MissingPermission")
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
-    internal fun unregister(activity: Activity, context: Context) {
+    internal fun unregister(activity: Activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            unRegisterScreenCapture(activity, context)
+            unregisterScreenCapture(activity)
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-            unRegisterScreenRecording(activity, context)
+            unregisterScreenRecording(activity)
         }
     }
 
@@ -82,9 +116,9 @@ internal object ScreenProtector {
     // by developer, and not enforced by the library.
     @SuppressLint("MissingPermission")
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
-    private fun unRegisterScreenCapture(activity: Activity, context: Context) {
+    private fun unregisterScreenCapture(activity: Activity) {
+        val context = activity.applicationContext
         if (!hasPermission(context, SCREEN_CAPTURE_PERMISSION)) {
-            reportMissingPermission("screenshot", SCREEN_CAPTURE_PERMISSION)
             return
         }
         activity.unregisterScreenCaptureCallback(screenCaptureCallback)
@@ -94,9 +128,9 @@ internal object ScreenProtector {
     // by developer, and not enforced by the library.
     @SuppressLint("MissingPermission")
     @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
-    private fun unRegisterScreenRecording(activity: Activity, context: Context) {
+    private fun unregisterScreenRecording(activity: Activity) {
+        val context = activity.applicationContext
         if (!hasPermission(context, SCREEN_RECORDING_PERMISSION)) {
-            reportMissingPermission("screen record", SCREEN_RECORDING_PERMISSION)
             return
         }
 
