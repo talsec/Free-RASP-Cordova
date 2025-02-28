@@ -1,11 +1,12 @@
 package com.aheaditec.talsec.cordova
 
 import android.content.Context
+import android.os.Build
 import android.os.Handler
 import android.os.HandlerThread
 import android.os.Looper
 import android.util.Log
-import android.os.Build
+import com.aheaditec.talsec.cordova.utils.ScreenCaptureStatus
 import com.aheaditec.talsec.cordova.utils.Utils
 import com.aheaditec.talsec.cordova.utils.getArraySafe
 import com.aheaditec.talsec.cordova.utils.getBooleanSafe
@@ -16,13 +17,13 @@ import com.aheaditec.talsec_security.security.api.SuspiciousAppInfo
 import com.aheaditec.talsec_security.security.api.Talsec
 import com.aheaditec.talsec_security.security.api.TalsecConfig
 import com.aheaditec.talsec_security.security.api.ThreatListener
-
 import org.apache.cordova.CallbackContext
 import org.apache.cordova.CordovaInterface
 import org.apache.cordova.CordovaPlugin
 import org.apache.cordova.CordovaWebView
 import org.apache.cordova.PluginResult
 import org.json.JSONArray
+import org.json.JSONException
 import org.json.JSONObject
 
 class TalsecPlugin : CordovaPlugin() {
@@ -73,6 +74,13 @@ class TalsecPlugin : CordovaPlugin() {
             TalsecThreatHandler.listener = ThreatListener
             this.cordova.activity.runOnUiThread {
                 Talsec.start(this.cordova.context, config)
+                mainHandler.post {
+                    talsecStarted = true
+                    // This code must be called only AFTER Talsec.start
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                        ScreenProtector.register(cordova.activity)
+                    }
+                }
             }
             sendOngoingPluginResult("started")
             return true
@@ -120,15 +128,25 @@ class TalsecPlugin : CordovaPlugin() {
      */
     private fun blockScreenCapture(callbackContext: CallbackContext?, args: JSONArray?): Boolean {
         try {
-            val enable = args?.optBoolean(0, false) ?: false
-            cordova.activity?.runOnUiThread {
-                Talsec.blockScreenCapture(cordova.context, enable)
-                callbackContext?.success("Screen capture blocking is now ${if (enable) "enabled" else "disabled"}.")
+            val enable = args?.getBoolean(0) ?: run {
+                callbackContext?.error("Missing enable parameter in Talsec Native Plugin")
+                return false
+            }
+            cordova.activity.runOnUiThread {
+                try {
+                    Talsec.blockScreenCapture(cordova.context, enable)
+                    callbackContext?.success("Screen capture is now ${if (enable) "Blocked" else "Enabled"}.")
+                } catch (e: Exception) {
+                    callbackContext?.error("Failed to block screen capture: ${e.message}")
+                }
             }
             return true
+        } catch (e: JSONException) {
+            callbackContext?.error("Invalid argument: Expected a boolean value")
+            return false
         } catch (e: Exception) {
             callbackContext?.error("Failed to block screen capture: ${e.message}")
-            return false;
+            return false
         }
     }
 
@@ -141,8 +159,9 @@ class TalsecPlugin : CordovaPlugin() {
     private fun isScreenCaptureBlocked(callbackContext: CallbackContext?): Boolean {
         try {
             val isBlocked = Talsec.isScreenCaptureBlocked()
-            callbackContext?.success(if (isBlocked) 1 else 0)
-            return true;
+            val status = if (isBlocked) ScreenCaptureStatus.BLOCKED else ScreenCaptureStatus.ALLOWED
+            callbackContext?.success(status)
+            return true
         } catch (e: Exception) {
             callbackContext?.error("Failed to check screen capture status: ${e.message}")
             return false
@@ -155,7 +174,22 @@ class TalsecPlugin : CordovaPlugin() {
             listener.unregisterListener(this.cordova.context)
             registered = false
         }
-        ScreenProtector.unregister(cordova.activity)
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            ScreenProtector.register(cordova.activity)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            ScreenProtector.unregister(cordova.activity)
+        }
     }
 
     override fun onResume(multitasking: Boolean) {
@@ -164,8 +198,6 @@ class TalsecPlugin : CordovaPlugin() {
             registered = true
             listener.registerListener(this.cordova.context)
         }
-        ScreenProtector.register(cordova.activity)
-
     }
 
     override fun onDestroy() {
@@ -246,6 +278,7 @@ class TalsecPlugin : CordovaPlugin() {
         private val backgroundHandler = Handler(backgroundHandlerThread.looper)
         private val mainHandler = Handler(Looper.getMainLooper())
 
+        internal var talsecStarted = false
 
         /**
          * Sends malware detected event to Cordova

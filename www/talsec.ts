@@ -9,7 +9,7 @@ export interface Talsec {
   ) => Promise<void>;
   addToWhitelist: (packageName: string) => Promise<string>;
   getAppIcon: (packageName: string) => Promise<string>;
-  blockScreenCapture: (enable: boolean) => Promise<boolean>;
+  blockScreenCapture: (enable: boolean) => Promise<string>;
   isScreenCaptureBlocked: () => Promise<boolean>;
 }
 
@@ -302,7 +302,7 @@ const getAppIcon = (packageName: string): Promise<string> => {
   });
 };
 
-const blockScreenCapture = (enable: boolean): Promise<boolean> => {
+const blockScreenCapture = (enable: boolean): Promise<string> => {
   if (cordova.platformId === 'ios') {
     return Promise.reject(
       'Blocking/Unblocking Screen Capture is not available on iOS',
@@ -310,13 +310,9 @@ const blockScreenCapture = (enable: boolean): Promise<boolean> => {
   }
 
   return new Promise((resolve, reject) => {
-    cordova.exec(
-      () => resolve(true), // Resolve the promise correctly
-      (error: any) => reject(`Error blocking screen capture: ${error}`), // Provide a clear error message
-      'TalsecPlugin',
-      'blockScreenCapture',
-      [enable],
-    );
+    cordova.exec(resolve, reject, 'TalsecPlugin', 'blockScreenCapture', [
+      enable,
+    ]);
   });
 };
 
@@ -329,8 +325,8 @@ const isScreenCaptureBlocked = (): Promise<boolean> => {
 
   return new Promise((resolve, reject) => {
     cordova.exec(
-      (result: number) => resolve(result === 1),
-      (error: any) => reject(`Error checking screen capture status: ${error}`),
+      (result: number) => resolve(result === ScreenCaptureStatus.BLOCKED),
+      reject,
       'TalsecPlugin',
       'isScreenCaptureBlocked',
       [],

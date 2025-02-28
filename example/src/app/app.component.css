@@ -10,17 +10,15 @@ ion-content {
   --padding: 20px;
 }
 
-/* Center and space the buttons properly */
 .button-container {
   display: flex;
   justify-content: center;
-  gap: 15px; /* Space between buttons */
+  gap: 15px;
   padding: 20px;
 }
 
-/* Modern button styling */
 .control-button {
-  flex: 1; /* Make buttons take equal width */
+  flex: 1;
   padding: 15px;
   font-size: 12px;
   font-weight: bold;
@@ -32,9 +30,8 @@ ion-content {
   text-align: center;
 }
 
-/* Specific styles for each button */
 .block-button {
-  background-color: #ff4d4d; /* Red for block */
+  background-color: #ff4d4d;
   color: white;
   box-shadow: 0px 4px 6px rgba(255, 77, 77, 0.3);
 }
@@ -45,7 +42,7 @@ ion-content {
 }
 
 .unblock-button {
-  background-color: #4caf50; /* Green for unblock */
+  background-color: #4caf50;
   color: white;
   box-shadow: 0px 4px 6px rgba(76, 175, 80, 0.3);
 }
@@ -62,7 +59,6 @@ ion-content {
   margin: 20px 0;
 }
 
-/* Dynamically change text color based on status */
 .status-blocked {
   color: red;
   font-weight: bold;

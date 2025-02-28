@@ -135,7 +135,6 @@ export class AppComponent implements OnInit {
         `Screen capture blocking ${enable ? 'enabled' : 'disabled'}.`,
       );
 
-      // Update the status message
       this.zone.run(() => {
         this.screenCaptureStatus = enable ? 'Blocked' : 'Unblocked';
       });

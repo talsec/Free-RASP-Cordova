@@ -34,6 +34,10 @@ internal object ScreenProtector {
      * granted for the app in the AndroidManifest.xml
      */
     internal fun register(activity: Activity) {
+        if (!TalsecPlugin.talsecStarted) {
+            return
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             registerScreenCapture(activity)
         }
@@ -103,6 +107,10 @@ internal object ScreenProtector {
     @SuppressLint("MissingPermission")
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     internal fun unregister(activity: Activity) {
+        if (!TalsecPlugin.talsecStarted) {
+            return
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             unregisterScreenCapture(activity)
         }
