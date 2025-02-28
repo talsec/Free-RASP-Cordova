@@ -134,6 +134,11 @@ class Threat {
   };
 }
 
+const ScreenCaptureStatus = {
+  ALLOWED: 0,
+  BLOCKED: 1,
+} as const;
+
 const getThreatCount = (): number => {
   return Threat.getValues().length;
 };
