@@ -13,58 +13,24 @@ ion-content {
 .button-container {
   display: flex;
   justify-content: center;
-  gap: 15px;
-  padding: 20px;
+  padding: 1rem;
 }
 
 .control-button {
-  flex: 1;
-  padding: 15px;
-  font-size: 12px;
-  font-weight: bold;
+  padding: 1rem;
+  font-size: 1rem;
   text-transform: uppercase;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
+  border-radius: 0.5rem;
   text-align: center;
+  width: 50%;
 }
 
 .block-button {
-  background-color: #ff4d4d;
+  background-color: green;
   color: white;
-  box-shadow: 0px 4px 6px rgba(255, 77, 77, 0.3);
-}
-
-.block-button:hover {
-  background-color: #cc0000;
-  box-shadow: 0px 6px 10px rgba(204, 0, 0, 0.5);
 }
 
 .unblock-button {
-  background-color: #4caf50;
+  background-color: darkred;
   color: white;
-  box-shadow: 0px 4px 6px rgba(76, 175, 80, 0.3);
-}
-
-.unblock-button:hover {
-  background-color: #388e3c;
-  box-shadow: 0px 6px 10px rgba(56, 142, 60, 0.5);
-}
-
-.status-text {
-  text-align: center;
-  font-size: 20px;
-  font-weight: bold;
-  margin: 20px 0;
-}
-
-.status-blocked {
-  color: red;
-  font-weight: bold;
-}
-
-.status-unblocked {
-  color: green;
-  font-weight: bold;
 }

@@ -58,6 +58,10 @@ class Threat {
         ];
   };
 }
+const ScreenCaptureStatus = {
+  ALLOWED: 0,
+  BLOCKED: 1,
+};
 const getThreatCount = () => {
   return Threat.getValues().length;
 };
@@ -217,13 +221,9 @@ const blockScreenCapture = (enable) => {
     );
   }
   return new Promise((resolve, reject) => {
-    cordova.exec(
-      () => resolve(true), // Resolve the promise correctly
-      (error) => reject(`Error blocking screen capture: ${error}`), // Provide a clear error message
-      'TalsecPlugin',
-      'blockScreenCapture',
-      [enable],
-    );
+    cordova.exec(resolve, reject, 'TalsecPlugin', 'blockScreenCapture', [
+      enable,
+    ]);
   });
 };
 const isScreenCaptureBlocked = () => {
@@ -234,8 +234,8 @@ const isScreenCaptureBlocked = () => {
   }
   return new Promise((resolve, reject) => {
     cordova.exec(
-      (result) => resolve(result === 1),
-      (error) => reject(`Error checking screen capture status: ${error}`),
+      (result) => resolve(result === ScreenCaptureStatus.BLOCKED),
+      reject,
       'TalsecPlugin',
       'isScreenCaptureBlocked',
       [],

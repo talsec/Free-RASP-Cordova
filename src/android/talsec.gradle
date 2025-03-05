@@ -1,10 +1,15 @@
+ext {
+  cdvCompileSdkVersion = 35
+  cdvTargetSdkVersion = 35
+}
+
 repositories {
     maven { url "https://europe-west3-maven.pkg.dev/talsec-artifact-repository/freerasp" }
     maven { url 'https://jitpack.io' }
 }
 
 dependencies {
-    implementation "com.aheaditec.talsec.security:TalsecSecurity-Community-Cordova:14.0.0"
+    implementation "com.aheaditec.talsec.security:TalsecSecurity-Community-Cordova:14.0.1"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1"
 }
 

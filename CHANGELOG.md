@@ -5,10 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [7.4.0] - 2025-02-17
+## [7.4.0] - 2025-03-05
 
 - iOS SDK version: 6.8.0
-- Android SDK version: 14.0.0
+- Android SDK version: 14.0.1
 
 ### Cordova
 
@@ -20,18 +20,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `screenshot`: Detects when a screenshot is taken
   - `screenRecording`: Detects when screen recording is active
 
+#### Changed
+
+- Set following required SDK versions for Android plugin:
+  -  targetSdkVersion to 35
+  -  compileSdkVersion to 35
+
 ### Android
 
 #### Added
 
-- `blockScreenCapture(Activity activity, boolean enable)` for FLAG_SECURE control
-- `isScreenCaptureBlocked()`
+- Passive and active screenshot/screen recording protection
+
+#### Changed
+
+- Improved root detection
+
+#### Fixed
+
+- Proguard rules to address warnings from okhttp dependency
 
 ### iOS
 
 ### Added
 
-- Active Screenshot/Screen Recording protection
+- Passive Screenshot/Screen Recording protection
 
 ## [7.3.0] - 2024-12-29
 

@@ -107,7 +107,7 @@ class TalsecPlugin : CordovaPlugin() {
      * @param packageName package name of the app we want to retrieve icon for
      * @return PNG with app icon encoded as a base64 string
      */
-    fun getAppIcon(callbackContext: CallbackContext?, args: JSONArray?): Boolean {
+    private fun getAppIcon(callbackContext: CallbackContext?, args: JSONArray?): Boolean {
         val packageName = args?.optString(0, null) ?: run {
             callbackContext?.error("Missing packageName parameter in Talsec Native Plugin")
             return false
@@ -120,12 +120,6 @@ class TalsecPlugin : CordovaPlugin() {
         return true
     }
 
-    /**
-     * Method to set the FLAG_SECURE flag on the application's main activity,
-     * which prevents screenshots and screen recording.
-     *
-     * @param enable to set whether you want to block/unblock screen capture
-     */
     private fun blockScreenCapture(callbackContext: CallbackContext?, args: JSONArray?): Boolean {
         try {
             val enable = args?.getBoolean(0) ?: run {
@@ -150,12 +144,6 @@ class TalsecPlugin : CordovaPlugin() {
         }
     }
 
-    /**
-     * Method queries the current status of screen capture blocking and
-     * returns a boolean result indicating whether it is enabled or not.
-     *
-     * @return Boolean indicating if screen capture is blocked (`true`) or not (`false`).
-     */
     private fun isScreenCaptureBlocked(callbackContext: CallbackContext?): Boolean {
         try {
             val isBlocked = Talsec.isScreenCaptureBlocked()

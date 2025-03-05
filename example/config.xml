@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.ionic.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="io.ionic.starter" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>example</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="support@talsec.app" href="http://talsec.app/">Talsec Team</author>
@@ -19,9 +19,13 @@
         <preference name="android-compileSdkVersion" value="35" />
         <hook src="scripts/modifyGradle.js" type="after_prepare" />
         <preference name="Scheme" value="http" />
-        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application" xmlns:android="http://schemas.android.com/apk/res/android">
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
             <application android:networkSecurityConfig="@xml/network_security_config" />
         </edit-config>
+        <config-file parent="/*" target="AndroidManifest.xml">
+            <uses-permission android:name="android.permission.DETECT_SCREEN_CAPTURE" />
+            <uses-permission android:name="android.permission.DETECT_SCREEN_RECORDING" />
+        </config-file>
         <resource-file src="resources/android/xml/network_security_config.xml" target="app/src/main/res/xml/network_security_config.xml" />
         <allow-intent href="market:*" />
         <icon src="resources/android/icon/drawable-hdpi-icon.png" />
