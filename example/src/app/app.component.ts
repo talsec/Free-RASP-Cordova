@@ -55,7 +55,7 @@ export class AppComponent implements OnInit {
       await this.startFreeRASP();
       if (cordova.platformId === 'android') {
         await this.addItemsToMalwareWhitelist();
-        this.checkScreenCaptureStatus();
+        await this.checkScreenCaptureStatus();
       }
     });
   }
