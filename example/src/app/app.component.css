@@ -9,3 +9,28 @@ ion-title {
 ion-content {
   --padding: 20px;
 }
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.control-button {
+  padding: 1rem;
+  font-size: 1rem;
+  text-transform: uppercase;
+  border-radius: 0.5rem;
+  text-align: center;
+  width: 50%;
+}
+
+.block-button {
+  background-color: green;
+  color: white;
+}
+
+.unblock-button {
+  background-color: darkred;
+  color: white;
+}

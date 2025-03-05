@@ -16,6 +16,8 @@ class Threat {
   static DevMode = new Threat(0);
   static Malware = new Threat(0);
   static ADBEnabled = new Threat(0);
+  static Screenshot = new Threat(0);
+  static ScreenRecording = new Threat(0);
   constructor(value) {
     this.value = value;
   }
@@ -36,6 +38,8 @@ class Threat {
           this.DevMode,
           this.Malware,
           this.ADBEnabled,
+          this.Screenshot,
+          this.ScreenRecording,
         ]
       : [
           this.AppIntegrity,
@@ -49,9 +53,15 @@ class Threat {
           this.DeviceBinding,
           this.DeviceID,
           this.UnofficialStore,
+          this.Screenshot,
+          this.ScreenRecording,
         ];
   };
 }
+const ScreenCaptureStatus = {
+  ALLOWED: 0,
+  BLOCKED: 1,
+};
 const getThreatCount = () => {
   return Threat.getValues().length;
 };
@@ -156,6 +166,12 @@ const start = async (config, eventListenerConfig) => {
       case Threat.ADBEnabled.value:
         eventListenerConfig.adbEnabled?.();
         break;
+      case Threat.Screenshot.value:
+        eventListenerConfig.screenshot?.();
+        break;
+      case Threat.ScreenRecording.value:
+        eventListenerConfig.screenRecording?.();
+        break;
       default:
         onInvalidCallback();
         break;
@@ -198,9 +214,39 @@ const getAppIcon = (packageName) => {
     cordova.exec(resolve, reject, 'TalsecPlugin', 'getAppIcon', [packageName]);
   });
 };
+const blockScreenCapture = (enable) => {
+  if (cordova.platformId === 'ios') {
+    return Promise.reject(
+      'Blocking/Unblocking Screen Capture is not available on iOS',
+    );
+  }
+  return new Promise((resolve, reject) => {
+    cordova.exec(resolve, reject, 'TalsecPlugin', 'blockScreenCapture', [
+      enable,
+    ]);
+  });
+};
+const isScreenCaptureBlocked = () => {
+  if (cordova.platformId === 'ios') {
+    return Promise.reject(
+      'Checking Screen Capture Status is not available on iOS',
+    );
+  }
+  return new Promise((resolve, reject) => {
+    cordova.exec(
+      (result) => resolve(result === ScreenCaptureStatus.BLOCKED),
+      reject,
+      'TalsecPlugin',
+      'isScreenCaptureBlocked',
+      [],
+    );
+  });
+};
 // @ts-ignore
 module.exports = {
   start,
   addToWhitelist,
   getAppIcon,
+  blockScreenCapture,
+  isScreenCaptureBlocked,
 };

@@ -16,6 +16,8 @@ export class AppComponent implements OnInit {
     ...commonChecks,
     ...(cordova.platformId === 'ios' ? iosChecks : androidChecks),
   ];
+  screenCaptureBlocked: boolean = false;
+  platformId = cordova.platformId;
 
   config = {
     androidConfig: {
@@ -53,6 +55,7 @@ export class AppComponent implements OnInit {
       await this.startFreeRASP();
       if (cordova.platformId === 'android') {
         await this.addItemsToMalwareWhitelist();
+        await this.checkScreenCaptureStatus();
       }
     });
   }
@@ -90,6 +93,8 @@ export class AppComponent implements OnInit {
       this.updateAppChecks('Malware');
     },
     adbEnabled: () => this.updateAppChecks('ADB Enabled'),
+    screenshot: () => this.updateAppChecks('Screenshot'),
+    screenRecording: () => this.updateAppChecks('Screen Recording'),
   };
 
   async addItemsToMalwareWhitelist() {
@@ -121,5 +126,30 @@ export class AppComponent implements OnInit {
     this.zone.run(() => {
       this.suspiciousAppsService.setSuspiciousApps([...susApps]);
     });
+  }
+
+  async toggleScreenCapture(enable: boolean) {
+    try {
+      await talsec.blockScreenCapture(enable);
+      console.info(
+        `Screen capture blocking is ${enable ? 'enabled' : 'disabled'}.`,
+      );
+      this.zone.run(() => {
+        this.screenCaptureBlocked = enable;
+      });
+    } catch (e) {
+      console.error('Error while changing screen capture blocking status:');
+    }
+  }
+
+  async checkScreenCaptureStatus() {
+    try {
+      const isBlocked = await talsec.isScreenCaptureBlocked();
+      this.zone.run(() => {
+        this.screenCaptureBlocked = isBlocked;
+      });
+    } catch (e) {
+      console.error('Error checking screen capture blocking status:');
+    }
   }
 }

@@ -6,6 +6,27 @@
   </ion-header>
 
   <ion-content>
+    <div
+      *ngIf="platformId === 'android'"
+      id="screenCaptureControls"
+      class="button-container"
+    >
+      <button
+        *ngIf="!screenCaptureBlocked"
+        class="control-button block-button"
+        (click)="toggleScreenCapture(true)"
+      >
+        Block Screen Capture
+      </button>
+      <button
+        *ngIf="screenCaptureBlocked"
+        class="control-button unblock-button"
+        (click)="toggleScreenCapture(false)"
+      >
+        Unblock Screen Capture
+      </button>
+    </div>
+
     <app-freerasp-demo [checks]="appChecks"></app-freerasp-demo>
   </ion-content>
 </ion-app>

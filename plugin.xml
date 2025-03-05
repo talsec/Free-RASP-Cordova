@@ -2,7 +2,7 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         id="cordova-talsec-plugin-freerasp"
-        version="7.3.0">
+        version="7.4.0">
 
   <name>freerasp</name>
   <author>Talsec (info@talsec.app)</author>
@@ -32,13 +32,14 @@
         <param name="android-package" value="com.aheaditec.talsec.cordova.TalsecPlugin"/>
       </feature>
     </config-file>
-
     <source-file src="src/android/TalsecPlugin.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/"/>
+    <source-file src="src/android/ScreenProtector.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/"/>
     <source-file src="src/android/TalsecThreatHandler.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/"/>
     <source-file src="src/android/Threat.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/"/>
     <source-file src="src/android/models/CordovaSuspiciousAppInfo.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/models/"/>
     <source-file src="src/android/utils/Extensions.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/utils/"/>
     <source-file src="src/android/utils/Utils.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/utils/"/>
+    <source-file src="src/android/utils/ScreenCaptureStatus.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/utils/"/>
     <framework src="src/android/talsec.gradle" custom="true" type="gradleReference" />
   </platform>
   

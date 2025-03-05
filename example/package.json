@@ -22,6 +22,7 @@
     "@ionic/cordova-builders": "^12.1.2",
     "cordova-plugin-add-swift-support": "2.0.2",
     "ionicons": "^7.0.0",
+    "prettier": "^3.5.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.2"
@@ -33,7 +34,7 @@
     "@angular-eslint/eslint-plugin-template": "^18.0.0",
     "@angular-eslint/schematics": "^18.0.0",
     "@angular-eslint/template-parser": "^18.0.0",
-    "@angular/cli": "^18.0.0",
+    "@angular/cli": "18.2.14",
     "@angular/compiler-cli": "^18.0.0",
     "@angular/language-service": "^18.0.0",
     "@ionic/angular-toolkit": "^11.0.1",
