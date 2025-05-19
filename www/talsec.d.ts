@@ -7,6 +7,7 @@ export interface Talsec {
   getAppIcon: (packageName: string) => Promise<string>;
   blockScreenCapture: (enable: boolean) => Promise<string>;
   isScreenCaptureBlocked: () => Promise<boolean>;
+  storeExternalId(data: string): Promise<string>;
 }
 export type SuspiciousAppInfo = {
   packageInfo: PackageInfo;

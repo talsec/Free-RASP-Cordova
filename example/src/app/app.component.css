@@ -13,24 +13,23 @@ ion-content {
 .button-container {
   display: flex;
   justify-content: center;
-  padding: 1rem;
+  padding: 1rem 1rem 0 1rem;
 }
 
 .control-button {
-  padding: 1rem;
+  padding: 0.5rem;
   font-size: 1rem;
   text-transform: uppercase;
   border-radius: 0.5rem;
   text-align: center;
   width: 50%;
+  height: 4.3rem;
 }
 
-.block-button {
-  background-color: green;
-  color: white;
-}
-
-.unblock-button {
-  background-color: darkred;
-  color: white;
+.centered-div {
+  padding: 1rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

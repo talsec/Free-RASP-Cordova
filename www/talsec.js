@@ -215,11 +215,6 @@ const getAppIcon = (packageName) => {
   });
 };
 const blockScreenCapture = (enable) => {
-  if (cordova.platformId === 'ios') {
-    return Promise.reject(
-      'Blocking/Unblocking Screen Capture is not available on iOS',
-    );
-  }
   return new Promise((resolve, reject) => {
     cordova.exec(resolve, reject, 'TalsecPlugin', 'blockScreenCapture', [
       enable,
@@ -227,11 +222,6 @@ const blockScreenCapture = (enable) => {
   });
 };
 const isScreenCaptureBlocked = () => {
-  if (cordova.platformId === 'ios') {
-    return Promise.reject(
-      'Checking Screen Capture Status is not available on iOS',
-    );
-  }
   return new Promise((resolve, reject) => {
     cordova.exec(
       (result) => resolve(result === ScreenCaptureStatus.BLOCKED),
@@ -242,6 +232,19 @@ const isScreenCaptureBlocked = () => {
     );
   });
 };
+const storeExternalId = (externalId) => {
+  return new Promise((resolve, reject) => {
+    cordova.exec(
+      () => {
+        resolve(true);
+      },
+      reject,
+      'TalsecPlugin',
+      'storeExternalId',
+      [externalId],
+    );
+  });
+};
 // @ts-ignore
 module.exports = {
   start,
@@ -249,4 +252,5 @@ module.exports = {
   getAppIcon,
   blockScreenCapture,
   isScreenCaptureBlocked,
+  storeExternalId,
 };

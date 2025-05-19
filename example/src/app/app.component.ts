@@ -18,6 +18,11 @@ export class AppComponent implements OnInit {
   ];
   screenCaptureBlocked: boolean = false;
   platformId = cordova.platformId;
+  isModalOpen = false;
+  inputText = '';
+  showToast = false;
+  toastMessage = '';
+  toastColor: 'success' | 'warning' = 'success';
 
   config = {
     androidConfig: {
@@ -44,6 +49,33 @@ export class AppComponent implements OnInit {
     watcherMail: 'your_email_address@example.com',
     isProd: true,
   };
+
+  openModal() {
+    this.isModalOpen = true;
+  }
+
+  closeModal() {
+    this.isModalOpen = false;
+  }
+
+  onInputChange(event: any) {
+    this.inputText = event.target.value;
+  }
+
+  async handleModalSend() {
+    try {
+      await talsec.storeExternalId(this.inputText);
+      this.toastColor = 'success';
+      this.toastMessage = 'External ID stored';
+    } catch (error: any) {
+      this.toastColor = 'warning';
+      this.toastMessage = `Error while storing external ID ${error.message}`;
+    }
+
+    this.showToast = true;
+
+    this.closeModal();
+  }
 
   constructor(
     private zone: NgZone,

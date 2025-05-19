@@ -54,6 +54,7 @@ class TalsecPlugin : CordovaPlugin() {
             "getAppIcon" -> getAppIcon(callbackContext, args)
             "blockScreenCapture" -> blockScreenCapture(callbackContext, args)
             "isScreenCaptureBlocked" -> isScreenCaptureBlocked(callbackContext)
+            "storeExternalId" -> storeExternalId(callbackContext, args)
             else -> {
                 callbackContext?.error("Talsec plugin executed with unknown action - $action")
                 return false
@@ -153,6 +154,24 @@ class TalsecPlugin : CordovaPlugin() {
         } catch (e: Exception) {
             callbackContext?.error("Failed to check screen capture status: ${e.message}")
             return false
+        }
+    }
+
+    private fun storeExternalId(
+        callbackContext: CallbackContext?, args: JSONArray?
+    ): Boolean {
+        val externalIdValue = args?.optString(0, null) ?: kotlin.run {
+            callbackContext?.error("Missing external ID parameter in freeRASP Native Plugin")
+            return false
+        }
+
+        return try {
+            Talsec.storeExternalId(cordova.context, externalIdValue)
+            callbackContext?.success("OK.")
+            true
+        } catch (e: Exception) {
+            callbackContext?.error("Error during storeExternalId operation in freeRASP Native Plugin")
+            false
         }
     }
 
