@@ -308,12 +308,6 @@ const getAppIcon = (packageName: string): Promise<string> => {
 };
 
 const blockScreenCapture = (enable: boolean): Promise<string> => {
-  if (cordova.platformId === 'ios') {
-    return Promise.reject(
-      'Blocking/Unblocking Screen Capture is not available on iOS',
-    );
-  }
-
   return new Promise((resolve, reject) => {
     cordova.exec(resolve, reject, 'TalsecPlugin', 'blockScreenCapture', [
       enable,
@@ -322,12 +316,6 @@ const blockScreenCapture = (enable: boolean): Promise<string> => {
 };
 
 const isScreenCaptureBlocked = (): Promise<boolean> => {
-  if (cordova.platformId === 'ios') {
-    return Promise.reject(
-      'Checking Screen Capture Status is not available on iOS',
-    );
-  }
-
   return new Promise((resolve, reject) => {
     cordova.exec(
       (result: number) => resolve(result === ScreenCaptureStatus.BLOCKED),
@@ -339,6 +327,20 @@ const isScreenCaptureBlocked = (): Promise<boolean> => {
   });
 };
 
+const storeExternalId = (externalId: string): Promise<boolean> => {
+  return new Promise((resolve, reject) => {
+    cordova.exec(
+      () => {
+        resolve(true);
+      },
+      reject,
+      'TalsecPlugin',
+      'storeExternalId',
+      [externalId],
+    );
+  });
+};
+
 // @ts-ignore
 module.exports = {
   start,
@@ -346,4 +348,5 @@ module.exports = {
   getAppIcon,
   blockScreenCapture,
   isScreenCaptureBlocked,
+  storeExternalId,
 };

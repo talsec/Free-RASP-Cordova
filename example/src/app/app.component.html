@@ -6,26 +6,64 @@
   </ion-header>
 
   <ion-content>
-    <div
-      *ngIf="platformId === 'android'"
-      id="screenCaptureControls"
-      class="button-container"
-    >
-      <button
+    <div id="screenCaptureControls" class="button-container">
+      <ion-button
         *ngIf="!screenCaptureBlocked"
-        class="control-button block-button"
+        class="control-button"
         (click)="toggleScreenCapture(true)"
       >
         Block Screen Capture
-      </button>
-      <button
+      </ion-button>
+      <ion-button
         *ngIf="screenCaptureBlocked"
-        class="control-button unblock-button"
+        color="danger"
+        class="control-button"
         (click)="toggleScreenCapture(false)"
       >
         Unblock Screen Capture
-      </button>
+      </ion-button>
+      <ion-button class="control-button" (click)="openModal()">
+        Store External ID
+      </ion-button>
     </div>
+    <ion-modal [isOpen]="isModalOpen" (didDismiss)="closeModal()">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>Set External ID</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="closeModal()">Dismiss</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+
+        <ion-content class="ion-padding">
+          <ion-input
+            labelPlacement="floating"
+            fill="solid"
+            [(ngModel)]="inputText"
+            placeholder="Type something..."
+            (ionInput)="onInputChange($event)"
+          >
+            <div slot="label">External ID</div>
+          </ion-input>
+          <div class="centered-div">
+            <ion-button (click)="handleModalSend()">Send</ion-button>
+          </div>
+        </ion-content>
+
+        <ion-footer> </ion-footer>
+      </ng-template>
+    </ion-modal>
+
+    <ion-toast
+      [isOpen]="showToast"
+      [message]="toastMessage"
+      [duration]="2000"
+      [position]="'bottom'"
+      [color]="toastColor"
+      (didDismiss)="showToast = false"
+    ></ion-toast>
 
     <app-freerasp-demo [checks]="appChecks"></app-freerasp-demo>
   </ion-content>

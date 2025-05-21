@@ -51,6 +51,63 @@ import TalsecRuntime
     private func onInvalidCallback(command: CDVInvokedUrlCommand) -> Void {
         abort()
     }
+
+    @objc(blockScreenCapture:)
+    private func blockScreenCapture(command: CDVInvokedUrlCommand) -> Void {
+        guard let enable = (command.arguments[0] as? Bool) else {
+            TalsecContext.sendError(msg: "Wrong format of the enable argument", callbackId: command.callbackId)
+            return
+        }
+        
+        getProtectedWindow { window in
+            if let window = window {
+                Talsec.blockScreenCapture(enable: enable, window: window)
+                TalsecContext.sendMessage(msg: "OK", callbackId: command.callbackId)
+            } else {
+                TalsecContext.sendError(msg: "No windows found to block screen capture", callbackId: command.callbackId)
+            }
+        }
+    }
+    
+    @objc(isScreenCaptureBlocked:)
+    private func isScreenCaptureBlocked(command: CDVInvokedUrlCommand) -> Void {
+        getProtectedWindow { window in
+            if let window = window {
+                let isBlocked = Talsec.isScreenCaptureBlocked(in: window)
+                TalsecContext.sendMessage(msg: isBlocked ? ScreenCaptureStatus.blocked.rawValue : ScreenCaptureStatus.allowed.rawValue, callbackId: command.callbackId)
+            } else {
+                TalsecContext.sendError(msg: "Error while checking if screen capture is blocked", callbackId: command.callbackId)
+            }
+        }
+    }
+    
+    private func getProtectedWindow(completion: @escaping (UIWindow?) -> Void) {
+        DispatchQueue.main.async {
+            if #available(iOS 13.0, *) {
+                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                    if let window = windowScene.windows.first {
+                        completion(window)
+                    } else {
+                        completion(nil)
+                    }
+                } else {
+                    completion(nil)
+                }
+            }
+        }
+    }
+
+    @objc(storeExternalId:)
+    private func storeExternalId(command: CDVInvokedUrlCommand) {
+        
+        guard let data = command.arguments[0] as? String else {
+            TalsecContext.sendError(msg: "External id must be String", callbackId: command.callbackId)
+            return
+        }
+        
+        UserDefaults.standard.set(data, forKey: "app.talsec.externalid")
+        TalsecContext.sendMessage(msg: "OK", callbackId: command.callbackId, keepCallback: false)
+    }
     
     func initializeTalsec(talsecConfig: NSDictionary) throws {
         guard let iosConfig = talsecConfig["iosConfig"] as? NSDictionary else {
@@ -72,6 +129,11 @@ import TalsecRuntime
             Talsec.start(config: config)
         })
     }
+}
+
+enum ScreenCaptureStatus: Int {
+    case allowed = 0
+    case blocked = 1
 }
 
 extension SecurityThreatCenter: SecurityThreatHandler {
