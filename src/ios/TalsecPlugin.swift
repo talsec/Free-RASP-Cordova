@@ -180,12 +180,16 @@ class TalsecContext : CDVPlugin {
                 )
             }
 
-            pluginResult?.setKeepCallbackAs(keepCallback)
-            
-            context.commandDelegate?.send(
-                pluginResult,
-                callbackId: callbackId
-            )
+            if let result = pluginResult {
+                result.setKeepCallbackAs(keepCallback)
+                
+                context.commandDelegate?.send(
+                    result,
+                    callbackId: callbackId
+                )
+            } else {
+                TalsecContext.sendError(msg: "Unsupported operation", callbackId: callbackId)
+            }
         }
     }
 
