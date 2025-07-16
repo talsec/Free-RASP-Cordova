@@ -5,6 +5,49 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.1.0] - 2025-07-16
+
+- iOS SDK version: 6.12.1
+- Android SDK version: 16.0.1
+
+### Cordova
+
+#### Fixed
+
+- Fixed error on iOS with unsafe call
+
+### Android
+
+#### Added
+
+- Added support for 16 KB memory page sizes
+- Added `multiInstance` callback
+  - We are introducing a new capability, detecting whether the application is running in various multi instancing environments
+
+#### Changed
+
+- The ADB service running as a root is a signal for root detection
+- Improved emulator detection
+- Internal security improvements
+
+#### Fixed
+
+- Removed malware report duplicates
+
+### iOS
+
+#### Added
+
+- Added palera1n jailbreak detection
+
+#### Changed
+
+- Improved Dopamine jailbreak detection
+
+#### Fixed
+
+- Resolved memory-related stability issues.
+
 ## [8.0.0] - 2025-05-19
 
 - iOS SDK version: 6.11.0
