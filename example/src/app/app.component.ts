@@ -127,6 +127,7 @@ export class AppComponent implements OnInit {
     adbEnabled: () => this.updateAppChecks('ADB Enabled'),
     screenshot: () => this.updateAppChecks('Screenshot'),
     screenRecording: () => this.updateAppChecks('Screen Recording'),
+    multiInstance: () => this.updateAppChecks('Multi Instance'),
   };
 
   async addItemsToMalwareWhitelist() {
