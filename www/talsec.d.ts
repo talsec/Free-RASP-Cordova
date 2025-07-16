@@ -7,7 +7,7 @@ export interface Talsec {
   getAppIcon: (packageName: string) => Promise<string>;
   blockScreenCapture: (enable: boolean) => Promise<string>;
   isScreenCaptureBlocked: () => Promise<boolean>;
-  storeExternalId(data: string): Promise<string>;
+  storeExternalId: (value: string) => Promise<boolean>;
 }
 export type SuspiciousAppInfo = {
   packageInfo: PackageInfo;
@@ -38,6 +38,7 @@ export type NativeEventEmitterActions = {
   adbEnabled?: () => any;
   screenshot?: () => any;
   screenRecording?: () => any;
+  multiInstance?: () => any;
 };
 export type TalsecConfig = {
   androidConfig?: TalsecAndroidConfig;
