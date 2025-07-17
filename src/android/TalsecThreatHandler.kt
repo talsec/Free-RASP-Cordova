@@ -71,6 +71,10 @@ internal object TalsecThreatHandler : ThreatListener.ThreatDetected, ThreatListe
         listener?.threatDetected(Threat.ScreenRecording)
     }
 
+    override fun onMultiInstanceDetected() {
+        listener?.threatDetected(Threat.MultiInstance)
+    }
+
     internal interface TalsecCordova {
         fun threatDetected(threatType: Threat)
 

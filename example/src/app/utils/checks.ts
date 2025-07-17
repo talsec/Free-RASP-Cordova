@@ -20,4 +20,5 @@ export const androidChecks = [
   { name: 'Developer Mode', isSecure: true },
   { name: 'Malware', isSecure: true },
   { name: 'ADB Enabled', isSecure: true },
+  { name: 'Multi Instance', isSecure: true },
 ];

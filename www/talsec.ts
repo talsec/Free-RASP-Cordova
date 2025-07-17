@@ -11,6 +11,7 @@ export interface Talsec {
   getAppIcon: (packageName: string) => Promise<string>;
   blockScreenCapture: (enable: boolean) => Promise<string>;
   isScreenCaptureBlocked: () => Promise<boolean>;
+  storeExternalId: (value: string) => Promise<boolean>;
 }
 
 export type SuspiciousAppInfo = {
@@ -44,6 +45,7 @@ export type NativeEventEmitterActions = {
   adbEnabled?: () => any;
   screenshot?: () => any;
   screenRecording?: () => any;
+  multiInstance?: () => any;
 };
 
 export type TalsecConfig = {
@@ -91,6 +93,7 @@ class Threat {
   static ADBEnabled = new Threat(0);
   static Screenshot = new Threat(0);
   static ScreenRecording = new Threat(0);
+  static MultiInstance = new Threat(0);
 
   constructor(value: number) {
     this.value = value;
@@ -115,6 +118,7 @@ class Threat {
           this.ADBEnabled,
           this.Screenshot,
           this.ScreenRecording,
+          this.MultiInstance,
         ]
       : [
           this.AppIntegrity,
@@ -260,6 +264,9 @@ const start = async (
         break;
       case Threat.ScreenRecording.value:
         eventListenerConfig.screenRecording?.();
+        break;
+      case Threat.MultiInstance.value:
+        eventListenerConfig.multiInstance?.();
         break;
       default:
         onInvalidCallback();

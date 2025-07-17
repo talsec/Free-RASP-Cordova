@@ -18,6 +18,7 @@ class Threat {
   static ADBEnabled = new Threat(0);
   static Screenshot = new Threat(0);
   static ScreenRecording = new Threat(0);
+  static MultiInstance = new Threat(0);
   constructor(value) {
     this.value = value;
   }
@@ -40,6 +41,7 @@ class Threat {
           this.ADBEnabled,
           this.Screenshot,
           this.ScreenRecording,
+          this.MultiInstance,
         ]
       : [
           this.AppIntegrity,
@@ -171,6 +173,9 @@ const start = async (config, eventListenerConfig) => {
         break;
       case Threat.ScreenRecording.value:
         eventListenerConfig.screenRecording?.();
+        break;
+      case Threat.MultiInstance.value:
+        eventListenerConfig.multiInstance?.();
         break;
       default:
         onInvalidCallback();
