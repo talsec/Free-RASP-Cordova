@@ -8,7 +8,7 @@
 
 freeRASP for Cordova is a mobile in-app protection and security monitoring plugin. It aims to cover the main aspects of RASP (Runtime App Self Protection) and application shielding.
 
-:loudspeaker: [The official documentation has been moved to a new location. You can now find it here](https://docs.talsec.app/docs-and-articles-portal). :loudspeaker:
+:loudspeaker: [The official documentation has been moved to a new location. You can now find it here](https://docs.talsec.app/docs-and-articles-portal?utm_source=github). :loudspeaker:
 
 # Overview
 
@@ -28,7 +28,7 @@ Key features are the detection and prevention of
 -   Untrusted installation method
 -   App/Device (un)binding
 
-Additional freeRASP features include low latency, easy integration and a weekly [Security Report](https://docs.talsec.app/freerasp/security-report) containing detailed information about detected incidents and potential threats, summarizing the state of your app security.
+Additional freeRASP features include low latency, easy integration and a weekly [Security Report](https://docs.talsec.app/freerasp/security-report?utm_source=github) containing detailed information about detected incidents and potential threats, summarizing the state of your app security.
 
 The commercial version provides a top-notch protection level, extra features, support and maintenance. One of the most valued commercial features is AppiCrypt® - App Integrity Cryptogram.
 
@@ -52,19 +52,19 @@ After the integration of freeRASP, make sure you visit the [freeMalwareDetection
 
 # :book: Discover the Official freeRASP Documentation
 
-Visit the [GitBook page](https://docs.talsec.app/freerasp) for comprehensive and up-to-date guides, tutorials, and technical documentation specifically for freeRASP. It serves as your go-to resource, offering everything from basic instructions to advanced tips and tricks to help you get the most out of the project.
+Visit the [GitBook page](https://docs.talsec.app/freerasp?utm_source=github) for comprehensive and up-to-date guides, tutorials, and technical documentation specifically for freeRASP. It serves as your go-to resource, offering everything from basic instructions to advanced tips and tricks to help you get the most out of the project.
 
-:loudspeaker: [The official documentation has been moved to a new location. You can now find it here](https://docs.talsec.app/docs-and-articles-portal). :loudspeaker:
+:loudspeaker: [The official documentation has been moved to a new location. You can now find it here](https://docs.talsec.app/docs-and-articles-portal?utm_source=github). :loudspeaker:
 
 ## :link: Integration Guide
 
-For integrating freeRASP on the Cordova platform, be sure to follow all the steps in the [Integration Guide](https://docs.talsec.app/freerasp/integration). This guide provides detailed instructions to help you achieve a smooth and efficient integration.
+For integrating freeRASP on the Cordova platform, be sure to follow all the steps in the [Integration Guide](https://docs.talsec.app/freerasp/integration?utm_source=github). This guide provides detailed instructions to help you achieve a smooth and efficient integration.
 
 Be sure to bookmark it and stay informed! :books: :sparkles:.
 
 # :rocket: What's New and Changelog
 
-Stay informed and make the most of freeRASP by checking out [What's New and Changelog](https://docs.talsec.app/freerasp/whats-new-and-changelog)! Here, you’ll discover the latest features, enhancements, and bug fixes we’ve implemented to improve your experience across all platforms, including Android, iOS, Flutter, React Native, Capacitor, and Cordova.
+Stay informed and make the most of freeRASP by checking out [What's New and Changelog](https://docs.talsec.app/freerasp/whats-new-and-changelog?utm_source=github)! Here, you’ll discover the latest features, enhancements, and bug fixes we’ve implemented to improve your experience across all platforms, including Android, iOS, Flutter, React Native, Capacitor, and Cordova.
 
 Don’t miss out on any updates and explore the changelog to see how we’re continually making freeRASP better for you!
 
@@ -76,4 +76,4 @@ You can check out the project board [here](https://github.com/orgs/talsec/projec
 
 # :page_facing_up: License
 
-This project is provided as freemium software, i.e. there is a [fair usage policy](https://docs.talsec.app/freerasp/features-and-pricing-plans#plans-comparison) that imposes some limitations on the free usage. The SDK software consists of open-source and binary parts, which is the property of Talsec. The open-source part is licensed under the MIT License - see the LICENSE file for details.
+This project is provided as freemium software, i.e. there is a [fair usage policy](https://docs.talsec.app/freerasp/features-and-pricing-plans#plans-comparison?utm_source=github) that imposes some limitations on the free usage. The SDK software consists of open-source and binary parts, which is the property of Talsec. The open-source part is licensed under the MIT License - see the LICENSE file for details.
