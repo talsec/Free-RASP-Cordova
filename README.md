@@ -6,7 +6,7 @@
 
 # freeRASP for Cordova
 
-freeRASP for Cordova is a mobile in-app protection and security monitoring plugin. It aims to cover the main aspects of RASP (Runtime App Self Protection) and application shielding.
+freeRASP for Cordova is a mobile in-app threat detection and security monitoring plugin. It aims to cover the main aspects of RASP (Runtime App Self Protection) and application shielding.
 
 :loudspeaker: [The official documentation has been moved to a new location. You can now find it here](https://docs.talsec.app/docs-and-articles-portal?utm_source=github). :loudspeaker:
 
