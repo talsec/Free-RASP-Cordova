@@ -3,25 +3,26 @@ on:
   pull_request:
     types: [closed]
     branches:
-      - 'master'
+      - "master"
   push:
     tags:
-      - 'v*'
+      - "v*"
+
+permissions:
+  contents: read
+  id-token: write
 
 jobs:
   release_gh:
-    name: Create new GitHub release 
+    name: Create new GitHub release
     if: contains(github.event.pull_request.labels.*.name, 'release')
 
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20.x'
-          registry-url: 'https://registry.npmjs.org'
+      - name: Setup
+        uses: ./.github/actions/setup
 
       - name: git config
         run: |
@@ -48,25 +49,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20.x'
-          registry-url: 'https://registry.npmjs.org'
-          node-version-file: .nvmrc
-
-      - name: Cache npm dependencies
-        id: npm-cache
-        uses: actions/cache@v4
-        with:
-          path: '~/.npm'
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Install dependencies
-        run: npm ci
-        shell: bash
+      - name: Setup
+        uses: ./.github/actions/setup
 
       - name: Compile .ts files
         run: npm run tsc
@@ -76,8 +60,6 @@ jobs:
         run: |
           git config user.name "${GITHUB_ACTOR}"
           git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-        
-      - name: Publish package 
+
+      - name: Publish package
         run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
