@@ -23,6 +23,7 @@ export class AppComponent implements OnInit {
   showToast = false;
   toastMessage = '';
   toastColor: 'success' | 'warning' = 'success';
+  checksFinished = false;
 
   config = {
     androidConfig: {
@@ -98,7 +99,7 @@ export class AppComponent implements OnInit {
       ...(cordova.platformId === 'ios' ? iosChecks : androidChecks),
     ];
     try {
-      await talsec.start(this.config, this.actions);
+      await talsec.start(this.config, this.actions, this.raspExecutionStateActions);
       console.log('freeRASP initialized.');
     } catch (error: any) {
       console.log('Error during freeRASP initialization: ', error);
@@ -131,6 +132,15 @@ export class AppComponent implements OnInit {
     timeSpoofing: () => this.updateAppChecks('Time Spoofing'),
     locationSpoofing: () => this.updateAppChecks('Location Spoofing'),
     unsecureWifi: () => this.updateAppChecks('Unsecure Wi-Fi'),
+  };
+
+  raspExecutionStateActions = {
+    allChecksFinished: () => {
+      this.zone.run(() => {
+        this.checksFinished = true;
+      });
+      console.log('All checks finished');
+    },
   };
 
   async addItemsToMalwareWhitelist() {
