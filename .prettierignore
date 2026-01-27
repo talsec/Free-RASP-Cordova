@@ -1,4 +1,3 @@
-example/www
-example/plugins
-example/platforms
-example/dist
+**/plugins/
+**/platforms/
+**/dist/
