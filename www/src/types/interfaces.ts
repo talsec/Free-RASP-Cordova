@@ -1,4 +1,4 @@
-import { ThreatEventActions } from './types';
+import { RaspExecutionStateEventActions, ThreatEventActions } from './types';
 
 export interface Talsec {
   start: (
