@@ -42,7 +42,7 @@
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "cordova-android": "^14.0.1",
-    "cordova-ios": "^7.1.1",
+    "cordova-ios": "^8.0.0",
     "cordova-plugin-device": "2.0.2",
     "cordova-plugin-ionic-keyboard": "^2.0.5",
     "cordova-plugin-ionic-webview": "^5.0.0",

@@ -128,6 +128,9 @@ export class AppComponent implements OnInit {
     screenshot: () => this.updateAppChecks('Screenshot'),
     screenRecording: () => this.updateAppChecks('Screen Recording'),
     multiInstance: () => this.updateAppChecks('Multi Instance'),
+    timeSpoofing: () => this.updateAppChecks('Time Spoofing'),
+    locationSpoofing: () => this.updateAppChecks('Location Spoofing'),
+    unsecureWifi: () => this.updateAppChecks('Unsecure Wi-Fi'),
   };
 
   async addItemsToMalwareWhitelist() {
