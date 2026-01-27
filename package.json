@@ -84,6 +84,8 @@
     "singleQuote": true
   },
   "eslintIgnore": [
-    "node_modules/"
+    "node_modules/",
+    "example/plugins/",
+    "example/platforms"
   ]
 }
