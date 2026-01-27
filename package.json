@@ -13,7 +13,8 @@
     "eslint": "eslint . --ext ts",
     "prettier": "prettier \"**/*.{ts,js,html,css}\"",
     "typecheck": "tsc --noEmit",
-    "tsc": "tsc && node scripts/remove-export.js && prettier --write www/talsec.*"
+    "tsc": "tsc && node scripts/remove-export.js && prettier --write www/src/talsec.*",
+    "build": "esbuild www/src/talsec.ts --bundle --outfile=www/dist/talsec.js --format=cjs --platform=node --external:cordova"
   },
   "repository": {
     "type": "git",
@@ -50,8 +51,9 @@
     "@cordova/eslint-config": "^5.0.0",
     "@types/cordova": "^11.0.2",
     "@types/node": "^20.8.10",
-    "@typescript-eslint/parser": "^6.9.1",
     "@typescript-eslint/eslint-plugin": "^6.9.1",
+    "@typescript-eslint/parser": "^6.9.1",
+    "esbuild": "^0.27.2",
     "eslint": "^8.40.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.27.5",

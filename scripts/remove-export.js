@@ -31,5 +31,5 @@ const removeExportStatement = (filePath) => {
   }
 };
 
-const filePath = path.resolve(__dirname, '../www/talsec.js');
+const filePath = path.resolve(__dirname, '../www/dist/talsec.js');
 removeExportStatement(filePath);

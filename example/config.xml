@@ -31,6 +31,8 @@
         <icon src="resources/android/icon/drawable-hdpi-icon.png" />
     </platform>
     <platform name="ios">
+        <hook src="scripts/setIOSTarget.js" type="after_prepare" />
+        <resource-file src="resources/README.md" target="README.md" />
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
         <icon src="resources/ios/icon/icon-20.png" width="20" />

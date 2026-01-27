@@ -9,9 +9,27 @@ import TalsecRuntime
         TalsecPlugin.shared = self
     }
     
+    private static func flushThreatCache() {
+        TalsecContext.threatCache.forEach { threat in
+            if let callbackId = TalsecContext.context.threatCallbackCordova {
+                TalsecContext.sendMessage(msg: [EventIdentifiers.threatChannelKey : threat.callbackIdentifier], callbackId: callbackId)
+            }
+        }
+        TalsecContext.threatCache.removeAll()
+    }
+
+    private static func flushExecutionStateCache() {
+        TalsecContext.executionStateCache.forEach { threat in
+            if let callbackId = TalsecContext.context.raspExecutionStateCallbackCordova {
+                TalsecContext.sendMessage(msg: [EventIdentifiers.raspExecutionStateChannelKey : threat.callbackIdentifier], callbackId: callbackId)
+            }
+        }
+        TalsecContext.executionStateCache.removeAll()
+    }
+    
     @objc(getThreatChannelData:)
     private func getThreatChannelData(command: CDVInvokedUrlCommand) -> Void {
-        TalsecContext.sendMessage(msg: [ThreatIdentifiers.threatChannelKey], callbackId: command.callbackId, keepCallback: false)
+        TalsecContext.sendMessage(msg: [EventIdentifiers.threatChannelKey], callbackId: command.callbackId, keepCallback: false)
     }
     
     /**
@@ -19,19 +37,27 @@ import TalsecRuntime
      */
     @objc(getThreatIdentifiers:)
     private func getThreatIdentifiers(command: CDVInvokedUrlCommand) -> Void {
-        let threatIdentifiers = SecurityThreat.allCases
-            .filter {
-                threat in threat.rawValue != "passcodeChange"
-            }
-            .map {
-                threat in threat.callbackIdentifier
-            }
+        let threatIdentifiers = getCordovaThreatIdentifiers()
+        TalsecContext.sendMessage(msg: threatIdentifiers, callbackId: command.callbackId, keepCallback: false)
+    }
+    
+    @objc(getRaspExecutionStateChannelData:)
+    private func getRaspExecutionStateChannelData(command: CDVInvokedUrlCommand) -> Void {
+        TalsecContext.sendMessage(msg: [EventIdentifiers.raspExecutionStateChannelKey], callbackId: command.callbackId, keepCallback: false)
+    }
+    
+    /**
+     * Method to get the random identifiers of callbacks
+     */
+    @objc(getRaspExecutionStateIdentifiers:)
+    private func getRaspExecutionStateIdentifiers(command: CDVInvokedUrlCommand) -> Void {
+        let threatIdentifiers = getCordovaRaspExecutionStateIdentifiers()
         TalsecContext.sendMessage(msg: threatIdentifiers, callbackId: command.callbackId, keepCallback: false)
     }
     
     @objc(start:)
     func start(command: CDVInvokedUrlCommand) {
-        TalsecContext.context.listenerCallbackId = command.callbackId
+        TalsecContext.context.threatCallbackCordova = command.callbackId
         
         guard let talsecConfig = command.arguments[0] as? NSDictionary else {
             TalsecContext.sendError(msg: "Missing config parameter in Talsec Native Plugin", callbackId: command.callbackId)
@@ -44,7 +70,14 @@ import TalsecRuntime
             TalsecContext.sendError(msg: "Could not initialize freeRASP: \(error.domain)", callbackId: command.callbackId)
             return
         }
+        TalsecPlugin.flushThreatCache()
         TalsecContext.sendMessage(msg: "started", callbackId: command.callbackId, keepCallback: true)
+    }
+
+    @objc(registerRaspExecutionStateListener:)
+    private func registerRaspExecutionStateListener(command: CDVInvokedUrlCommand) {
+        TalsecContext.context.raspExecutionStateCallbackCordova = command.callbackId
+        TalsecPlugin.flushExecutionStateCache()
     }
     
     @objc(onInvalidCallback:)
@@ -131,27 +164,35 @@ import TalsecRuntime
     }
 }
 
-enum ScreenCaptureStatus: Int {
-    case allowed = 0
-    case blocked = 1
-}
-
-extension SecurityThreatCenter: SecurityThreatHandler {
+extension SecurityThreatCenter: @retroactive SecurityThreatHandler, @retroactive RaspExecutionState {
     
     public func threatDetected(_ securityThreat: TalsecRuntime.SecurityThreat) {
         // It is better to implement security reactions (e.g. killing the app) here.
         if (securityThreat.rawValue == "passcodeChange") {
             return
         }
-        if let listenerCallbackId = TalsecContext.context.listenerCallbackId {
-            TalsecContext.sendMessage(msg: [ThreatIdentifiers.threatChannelKey : securityThreat.callbackIdentifier], callbackId: listenerCallbackId)
+        if let listenerCallbackId = TalsecContext.context.threatCallbackCordova {
+            TalsecContext.sendMessage(msg: [EventIdentifiers.threatChannelKey : securityThreat.callbackIdentifier], callbackId: listenerCallbackId)
+        } else {
+            TalsecContext.threatCache.insert(securityThreat)
+        }
+    }
+    
+    public func onAllChecksFinished() {
+        if let listenerCallbackId = TalsecContext.context.raspExecutionStateCallbackCordova {
+            TalsecContext.sendMessage(msg: [EventIdentifiers.raspExecutionStateChannelKey : RaspExecutionStates.allChecksFinished], callbackId: listenerCallbackId)
+        } else {
+            TalsecContext.executionStateCache.insert(RaspExecutionStates.allChecksFinished)
         }
     }
 }
 
 class TalsecContext : CDVPlugin {
     static let context = TalsecContext()
-    var listenerCallbackId: String?
+    static var threatCache = Set<SecurityThreat>()
+    static var executionStateCache = Set<RaspExecutionStates>()
+    var threatCallbackCordova: String?
+    var raspExecutionStateCallbackCordova: String?
 
     static func sendMessage(msg: Any, callbackId: String, keepCallback: Bool = true) {
         // send the result to JavaScript on the main thread
@@ -160,22 +201,22 @@ class TalsecContext : CDVPlugin {
 
             if let intMsg = msg as? Int {
                 pluginResult = CDVPluginResult(
-                    status: CDVCommandStatus_OK,
+                    status: CDVCommandStatus.ok,
                     messageAs: intMsg
                 )
             } else if let stringMsg = msg as? String {
                 pluginResult = CDVPluginResult(
-                    status: CDVCommandStatus_OK,
+                    status: CDVCommandStatus.ok,
                     messageAs: stringMsg
                 )
             } else if let arrayMsg = msg as? [Any] {
                 pluginResult = CDVPluginResult(
-                    status: CDVCommandStatus_OK,
+                    status: CDVCommandStatus.ok,
                     messageAs: arrayMsg
                 )
             } else if let dictMsg = msg as? [AnyHashable: Any] {
                 pluginResult = CDVPluginResult(
-                    status: CDVCommandStatus_OK,
+                    status: CDVCommandStatus.ok,
                     messageAs: dictMsg
                 )
             }
@@ -197,7 +238,7 @@ class TalsecContext : CDVPlugin {
         DispatchQueue.main.async {
             // send the result to JavaScript on the main thread
             let pluginResult = CDVPluginResult(
-                status: CDVCommandStatus_ERROR,
+                status: CDVCommandStatus.error,
                 messageAs: msg
             )
             
@@ -205,50 +246,6 @@ class TalsecContext : CDVPlugin {
                 pluginResult,
                 callbackId: callbackId
             )
-        }
-    }
-}
-
-struct ThreatIdentifiers {
-    static let threatChannelKey = String(Int.random(in: 100_000..<999_999_999))
-    static let threatIdentifierList: [Int] = (1...14).map { _ in Int.random(in: 100_000..<999_999_999) }
-}
-
-/// An extension to unify callback names with Cordova ones.
-extension SecurityThreat {
-    var callbackIdentifier: Int {
-        switch self {
-            case .signature:
-                return ThreatIdentifiers.threatIdentifierList[0]
-            case .jailbreak:
-                return ThreatIdentifiers.threatIdentifierList[1]
-            case .debugger:
-                return ThreatIdentifiers.threatIdentifierList[2]
-            case .runtimeManipulation:
-                return ThreatIdentifiers.threatIdentifierList[3]
-            case .passcode:
-                return ThreatIdentifiers.threatIdentifierList[4]
-            case .passcodeChange:
-                return ThreatIdentifiers.threatIdentifierList[5]
-            case .simulator:
-                return ThreatIdentifiers.threatIdentifierList[6]
-            case .missingSecureEnclave:
-                return ThreatIdentifiers.threatIdentifierList[7]
-            case .systemVPN:
-                return ThreatIdentifiers.threatIdentifierList[8]
-            case .deviceChange:
-                return ThreatIdentifiers.threatIdentifierList[9]
-            case .deviceID:
-                return ThreatIdentifiers.threatIdentifierList[10]
-            case .unofficialStore:
-                return ThreatIdentifiers.threatIdentifierList[11]
-            case .screenshot:
-                return ThreatIdentifiers.threatIdentifierList[12]
-            case .screenRecording:
-                return ThreatIdentifiers.threatIdentifierList[13]
-
-            @unknown default:
-                abort()
         }
     }
 }
