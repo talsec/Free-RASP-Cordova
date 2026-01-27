@@ -1,6 +1,6 @@
 {
   "name": "cordova-talsec-plugin-freerasp",
-  "version": "8.1.1",
+  "version": "8.2.0",
   "description": "Cordova plugin for improving app security and threat monitoring on Android and iOS mobile devices.",
   "cordova": {
     "id": "cordova-talsec-plugin-freerasp",
@@ -55,9 +55,9 @@
     "@typescript-eslint/parser": "^6.9.1",
     "esbuild": "^0.27.2",
     "eslint": "^8.40.0",
-    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-prettier": "^8.10.0",
     "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^3.0.3",
     "prettier-eslint": "^16.1.2",
     "typescript": "^5.2.2"
