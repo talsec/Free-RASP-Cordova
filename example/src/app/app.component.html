@@ -65,6 +65,25 @@
       (didDismiss)="showToast = false"
     ></ion-toast>
 
+    <ion-list>
+      <ion-list-header>
+        <h1>Execution state:</h1>
+      </ion-list-header>
+      <ion-item>
+        <ion-label [color]="checksFinished ? 'success' : 'primary'">
+          All Checks Finished
+          <p>{{ checksFinished ? 'Finished' : 'Pending' }}</p>
+        </ion-label>
+        <ion-spinner *ngIf="!checksFinished" name="crescent" color="primary"></ion-spinner>
+        <ion-icon
+          *ngIf="checksFinished"
+          name="shield-checkmark-outline"
+          color="success"
+          size="large"
+        ></ion-icon>
+      </ion-item>
+    </ion-list>
+
     <app-freerasp-demo [checks]="appChecks"></app-freerasp-demo>
   </ion-content>
 </ion-app>
