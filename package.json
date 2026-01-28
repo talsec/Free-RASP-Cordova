@@ -13,7 +13,7 @@
     "eslint": "eslint . --ext ts",
     "prettier": "prettier \"**/*.{ts,js,html,css}\"",
     "typecheck": "tsc --noEmit",
-    "tsc": "tsc",
+    "tsc": "tsc --emitDeclarationOnly",
     "build": "esbuild www/src/talsec.ts --bundle --outfile=www/dist/talsec.js --format=cjs --platform=node --external:cordova"
   },
   "repository": {
