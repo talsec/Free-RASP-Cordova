@@ -6,7 +6,6 @@
     "typeRoots": ["./node_modules/@types", "www/src/types"],
     "types": ["cordova"],
     "declaration": true,
-    "emitDeclarationOnly": true,
     "rootDir": "./www/src",
     "outDir": "./www/dist/types",
     "allowUnreachableCode": false,
