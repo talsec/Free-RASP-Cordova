@@ -14,24 +14,6 @@ export const storeExternalId = (externalId: string): Promise<boolean> => {
   });
 };
 
-export const getCryptogram = (nonce: string): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    cordova.exec(resolve, reject, 'TalsecPlugin', 'getCryptogram', [nonce]);
-  });
-};
-
-export const getSecretVaultVersion = (): Promise<number> => {
-  return new Promise((resolve, reject) => {
-    cordova.exec(resolve, reject, 'TalsecPlugin', 'getSecretVaultVersion', []);
-  });
-};
-
-export const getSecret = (key: string): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    cordova.exec(resolve, reject, 'TalsecPlugin', 'getSecret', [key]);
-  });
-};
-
 export const addToWhitelist = (packageName: string): Promise<string> => {
   if (cordova.platformId === 'ios') {
     return Promise.reject('Malware detection not available on iOS');
