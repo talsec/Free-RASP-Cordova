@@ -13,7 +13,7 @@
     "eslint": "eslint . --ext ts",
     "prettier": "prettier \"**/*.{ts,js,html,css}\"",
     "typecheck": "tsc --noEmit",
-    "tsc": "tsc && node scripts/remove-export.js && prettier --write www/src/talsec.*",
+    "tsc": "tsc",
     "build": "esbuild www/src/talsec.ts --bundle --outfile=www/dist/talsec.js --format=cjs --platform=node --external:cordova"
   },
   "repository": {
@@ -46,7 +46,7 @@
     "url": "https://github.com/talsec/Free-RASP-Cordova/issues"
   },
   "homepage": "https://docs.talsec.app/freerasp",
-  "types": "www/talsec.d.ts",
+  "types": "www/dist/types/talsec.d.ts",
   "devDependencies": {
     "@cordova/eslint-config": "^5.0.0",
     "@types/cordova": "^11.0.2",

@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
     "paths": {
-      "talsec-react-native-security-plugin": ["./www/src/talsec.ts"]
+      "cordova-talsec-plugin-freerasp": ["./www/src/talsec.ts"]
     },
     "typeRoots": ["./node_modules/@types", "www/src/types"],
     "types": ["cordova"],
     "declaration": true,
+    "emitDeclarationOnly": true,
     "rootDir": "./www/src",
-    "outDir": "./www/dist",
+    "outDir": "./www/dist/types",
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "esModuleInterop": true,
