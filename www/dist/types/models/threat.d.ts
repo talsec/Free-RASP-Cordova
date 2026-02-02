@@ -11,7 +11,6 @@ export declare class Threat {
     static DeviceBinding: Threat;
     static DeviceID: Threat;
     static UnofficialStore: Threat;
-    static Overlay: Threat;
     static ObfuscationIssues: Threat;
     static DevMode: Threat;
     static Malware: Threat;

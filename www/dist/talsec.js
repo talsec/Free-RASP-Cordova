@@ -111,7 +111,6 @@ var Threat = class _Threat {
   static DeviceBinding = new _Threat(0);
   static DeviceID = new _Threat(0);
   static UnofficialStore = new _Threat(0);
-  static Overlay = new _Threat(0);
   static ObfuscationIssues = new _Threat(0);
   static DevMode = new _Threat(0);
   static Malware = new _Threat(0);
@@ -137,7 +136,6 @@ var Threat = class _Threat {
       this.SystemVPN,
       this.DeviceBinding,
       this.UnofficialStore,
-      this.Overlay,
       this.ObfuscationIssues,
       this.DevMode,
       this.Malware,
@@ -266,9 +264,6 @@ var registerThreatListener = async (config) => {
         break;
       case Threat.Passcode.value:
         config.passcode?.();
-        break;
-      case Threat.Overlay.value:
-        config.overlay?.();
         break;
       case Threat.SecureHardwareNotAvailable.value:
         config.secureHardwareNotAvailable?.();

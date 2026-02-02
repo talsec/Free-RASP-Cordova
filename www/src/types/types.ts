@@ -23,7 +23,6 @@ export type ThreatEventActions = {
   deviceBinding?: () => any;
   deviceID?: () => any;
   passcode?: () => any;
-  overlay?: () => any;
   secureHardwareNotAvailable?: () => any;
   obfuscationIssues?: () => any;
   devMode?: () => any;

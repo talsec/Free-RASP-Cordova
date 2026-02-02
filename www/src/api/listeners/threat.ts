@@ -37,9 +37,6 @@ export const registerThreatListener = async (
       case Threat.Passcode.value:
         config.passcode?.();
         break;
-      case Threat.Overlay.value:
-        config.overlay?.();
-        break;
       case Threat.SecureHardwareNotAvailable.value:
         config.secureHardwareNotAvailable?.();
         break;
