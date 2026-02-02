@@ -61,6 +61,7 @@ class TalsecPlugin : CordovaPlugin() {
             "blockScreenCapture" -> blockScreenCapture(callbackContext, args)
             "isScreenCaptureBlocked" -> isScreenCaptureBlocked(callbackContext)
             "storeExternalId" -> storeExternalId(callbackContext, args)
+            "registerListener" -> registerListener(callbackContext)
             "registerRaspExecutionStateListener" -> registerRaspExecutionStateListener(callbackContext)
             else -> {
                 callbackContext?.error("Talsec plugin executed with unknown action - $action")
@@ -70,6 +71,11 @@ class TalsecPlugin : CordovaPlugin() {
     }
 
     private fun start(args: JSONArray?, callbackContext: CallbackContext?): Boolean {
+        if (talsecStarted) {
+          callbackContext?.success("started")
+          return true
+        }
+
         val configJson = args?.optString(0, null) ?: kotlin.run {
             callbackContext?.error("Missing config parameter in Talsec Native Plugin")
             return false
@@ -77,7 +83,6 @@ class TalsecPlugin : CordovaPlugin() {
 
         try {
             val config = buildTalsecConfigThrowing(configJson)
-            threatCallbackCordova = callbackContext
             listener.registerListener(this.cordova.context)
             TalsecThreatHandler.setNewListener(ThreatListener)
             this.cordova.activity.runOnUiThread {
@@ -90,9 +95,7 @@ class TalsecPlugin : CordovaPlugin() {
                     }
                 }
             }
-            sendOngoingPluginResult("started")
-            flushThreatCache()
-            isThreatListenerRegistered = true
+            callbackContext?.success("started")
             return true
         } catch (e: Exception) {
             callbackContext?.error("Error during Talsec Native plugin initialization - ${e.message}")
@@ -274,6 +277,13 @@ class TalsecPlugin : CordovaPlugin() {
         return true
     }
 
+    private fun registerListener(callbackContext: CallbackContext?): Boolean {
+        threatCallbackCordova = callbackContext
+        flushThreatCache()
+        isThreatListenerRegistered = true
+        return true
+    }
+
     private fun registerRaspExecutionStateListener(callbackContext: CallbackContext?): Boolean {
         raspExecutionStateCallbackCordova = callbackContext
         flushExecutionStateCache()
@@ -343,7 +353,7 @@ class TalsecPlugin : CordovaPlugin() {
         private val mainHandler = Handler(Looper.getMainLooper())
 
         internal var talsecStarted = false
-        
+
         // Trigger lazy initialization of the events
         private fun initializeEventKeys() {
             ThreatEvent.ALL_EVENTS
