@@ -89,8 +89,29 @@ export class AppComponent implements OnInit {
       if (cordova.platformId === 'android') {
         await this.addItemsToMalwareWhitelist();
         await this.checkScreenCaptureStatus();
+        this.requestPermissions();
       }
     });
+  }
+
+  requestPermissions() {
+    const permissions = cordova.plugins.permissions;
+    const list = [
+      permissions.ACCESS_FINE_LOCATION,
+      permissions.ACCESS_COARSE_LOCATION,
+    ];
+
+    permissions.requestPermissions(
+      list,
+      (status: any) => {
+        if (!status.hasPermission) {
+          console.log('Permissions not granted');
+        }
+      },
+      (error: any) => {
+        console.error('Error requesting permissions', error);
+      },
+    );
   }
 
   async startFreeRASP() {
