@@ -10,6 +10,7 @@ import kotlinx.serialization.Serializable
 data class CordovaSuspiciousAppInfo(
     val packageInfo: CordovaPackageInfo,
     val reason: String,
+    val permissions: Set<String>?
 )
 
 /**

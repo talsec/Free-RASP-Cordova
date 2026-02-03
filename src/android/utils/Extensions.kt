@@ -70,6 +70,7 @@ internal fun SuspiciousAppInfo.toCordovaSuspiciousAppInfo(context: Context): Cor
     return CordovaSuspiciousAppInfo(
         packageInfo = this.packageInfo.toCordovaPackageInfo(context),
         reason = this.reason,
+        permissions = this.permissions
     )
 }
 

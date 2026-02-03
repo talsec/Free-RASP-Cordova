@@ -1,8 +1,8 @@
 import {
   RaspExecutionStateEventActions,
+  TalsecConfig,
   ThreatEventActions,
 } from '../../types/types';
-import { TalsecConfig } from '../../types/interfaces';
 import { registerThreatListener } from '../listeners/threat';
 import { registerRaspExecutionStateListener } from '../listeners/raspExecutionState';
 import { onInvalidCallback } from './native';

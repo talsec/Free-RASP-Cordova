@@ -1,3 +1,2 @@
-import { RaspExecutionStateEventActions, ThreatEventActions } from '../../types/types';
-import { TalsecConfig } from '../../types/interfaces';
+import { RaspExecutionStateEventActions, TalsecConfig, ThreatEventActions } from '../../types/types';
 export declare const start: (config: TalsecConfig, eventListenerConfig: ThreatEventActions, raspExecutionStateActions?: RaspExecutionStateEventActions) => Promise<void>;
