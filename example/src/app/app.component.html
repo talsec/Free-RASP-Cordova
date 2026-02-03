@@ -74,7 +74,11 @@
           All Checks Finished
           <p>{{ checksFinished ? 'Finished' : 'Pending' }}</p>
         </ion-label>
-        <ion-spinner *ngIf="!checksFinished" name="crescent" color="primary"></ion-spinner>
+        <ion-spinner
+          *ngIf="!checksFinished"
+          name="crescent"
+          color="primary"
+        ></ion-spinner>
         <ion-icon
           *ngIf="checksFinished"
           name="shield-checkmark-outline"
