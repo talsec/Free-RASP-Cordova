@@ -12,6 +12,7 @@ export type TalsecConfig = {
     iosConfig?: TalsecIosConfig;
     watcherMail: string;
     isProd?: boolean;
+    killOnBypass?: boolean;
 };
 export type TalsecAndroidConfig = {
     packageName: string;
