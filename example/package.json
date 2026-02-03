@@ -20,8 +20,6 @@
     "@angular/router": "^18.0.0",
     "@ionic/angular": "^8.0.0",
     "@ionic/cordova-builders": "^12.1.2",
-    "cordova-ios": "8.0.0",
-    "cordova-plugin-add-swift-support": "2.0.2",
     "cordova-plugin-android-permissions": "^1.1.5",
     "ionicons": "^7.0.0",
     "prettier": "^3.5.1",
@@ -44,9 +42,9 @@
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "cordova-android": "^14.0.1",
+    "cordova-ios": "^8.0.0",
     "cordova-plugin-device": "2.0.2",
     "cordova-plugin-ionic-keyboard": "^2.0.5",
-    "cordova-plugin-ionic-webview": "^5.0.0",
     "cordova-plugin-splashscreen": "5.0.2",
     "cordova-plugin-statusbar": "^2.4.2",
     "cordova-talsec-plugin-freerasp": "file:..",
@@ -69,11 +67,9 @@
       "cordova-plugin-statusbar": {},
       "cordova-plugin-device": {},
       "cordova-plugin-splashscreen": {},
-      "cordova-plugin-ionic-webview": {},
       "cordova-plugin-ionic-keyboard": {},
-      "cordova-plugin-add-swift-support": {},
-      "cordova-talsec-plugin-freerasp": {},
-      "cordova-plugin-android-permissions": {}
+      "cordova-plugin-android-permissions": {},
+      "cordova-talsec-plugin-freerasp": {}
     },
     "platforms": [
       "android",
