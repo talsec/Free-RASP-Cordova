@@ -48,6 +48,7 @@ export class AppComponent implements OnInit {
       appTeamId: 'your_team_ID',
     },
     watcherMail: 'your_email_address@example.com',
+    killOnBypass: true,
     isProd: true,
   };
 
@@ -120,7 +121,11 @@ export class AppComponent implements OnInit {
       ...(cordova.platformId === 'ios' ? iosChecks : androidChecks),
     ];
     try {
-      await talsec.start(this.config, this.actions, this.raspExecutionStateActions);
+      await talsec.start(
+        this.config,
+        this.actions,
+        this.raspExecutionStateActions,
+      );
       console.log('freeRASP initialized.');
     } catch (error: any) {
       console.log('Error during freeRASP initialization: ', error);
