@@ -318,6 +318,7 @@ class TalsecPlugin : CordovaPlugin() {
             .watcherMail(json.getStringSafe("watcherMail"))
             .supportedAlternativeStores(androidConfig.getArraySafe("supportedAlternativeStores"))
             .prod(json.getBooleanSafe("isProd"))
+            .killOnBypass(json.getBooleanSafe("killOnBypass", false))
 
         if (androidConfig.has("malwareConfig")) {
             val malwareConfig = androidConfig.getJSONObject("malwareConfig")
