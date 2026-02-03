@@ -57,8 +57,6 @@ import TalsecRuntime
     
     @objc(start:)
     func start(command: CDVInvokedUrlCommand) {
-        TalsecContext.context.threatCallbackCordova = command.callbackId
-        
         guard let talsecConfig = command.arguments[0] as? NSDictionary else {
             TalsecContext.sendError(msg: "Missing config parameter in Talsec Native Plugin", callbackId: command.callbackId)
             return
@@ -70,8 +68,13 @@ import TalsecRuntime
             TalsecContext.sendError(msg: "Could not initialize freeRASP: \(error.domain)", callbackId: command.callbackId)
             return
         }
+        TalsecContext.sendMessage(msg: "started", callbackId: command.callbackId, keepCallback: false)
+    }
+  
+    @objc(registerListener:)
+    private func registerListener(command: CDVInvokedUrlCommand) {
+        TalsecContext.context.threatCallbackCordova = command.callbackId
         TalsecPlugin.flushThreatCache()
-        TalsecContext.sendMessage(msg: "started", callbackId: command.callbackId, keepCallback: true)
     }
 
     @objc(registerRaspExecutionStateListener:)
@@ -180,7 +183,7 @@ extension SecurityThreatCenter: @retroactive SecurityThreatHandler, @retroactive
     
     public func onAllChecksFinished() {
         if let listenerCallbackId = TalsecContext.context.raspExecutionStateCallbackCordova {
-            TalsecContext.sendMessage(msg: [EventIdentifiers.raspExecutionStateChannelKey : RaspExecutionStates.allChecksFinished], callbackId: listenerCallbackId)
+            TalsecContext.sendMessage(msg: [EventIdentifiers.raspExecutionStateChannelKey : RaspExecutionStates.allChecksFinished.callbackIdentifier], callbackId: listenerCallbackId)
         } else {
             TalsecContext.executionStateCache.insert(RaspExecutionStates.allChecksFinished)
         }
