@@ -35,7 +35,6 @@
     <source-file src="src/android/TalsecPlugin.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/"/>
     <source-file src="src/android/ScreenProtector.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/"/>
     <source-file src="src/android/TalsecThreatHandler.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/"/>
-    <source-file src="src/android/TalsecMode.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/"/>
     <source-file src="src/android/models/CordovaSuspiciousAppInfo.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/models/"/>
     <source-file src="src/android/utils/Extensions.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/utils/"/>
     <source-file src="src/android/utils/Utils.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/utils/"/>

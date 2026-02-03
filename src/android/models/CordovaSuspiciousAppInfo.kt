@@ -8,9 +8,9 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class CordovaSuspiciousAppInfo(
-    val packageInfo: CordovaPackageInfo,
-    val reason: String,
-    val permissions: Set<String>?
+  val packageInfo: CordovaPackageInfo,
+  val reason: String,
+  val permissions: Set<String>?
 )
 
 /**
@@ -18,9 +18,9 @@ data class CordovaSuspiciousAppInfo(
  */
 @Serializable
 data class CordovaPackageInfo(
-    val packageName: String,
-    val appName: String?,
-    val version: String?,
-    val appIcon: String?,
-    val installerStore: String?
+  val packageName: String,
+  val appName: String?,
+  val version: String?,
+  val appIcon: String?,
+  val installerStore: String?
 )
