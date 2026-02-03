@@ -9,7 +9,7 @@ on:
       - "v*"
 
 permissions:
-  contents: read
+  contents: write
   id-token: write
 
 jobs:
@@ -53,6 +53,10 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Compile .ts files
+        run: npm run build
+        shell: bash
+
+      - name: Compile types
         run: npm run tsc
         shell: bash
 
