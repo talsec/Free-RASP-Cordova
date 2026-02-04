@@ -3,7 +3,7 @@ config.example.json
 *.zip
 *.tgz
 scripts/
-www/talsec.ts   
+www/src/
 
 # OSX
 #

@@ -2,7 +2,7 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         id="cordova-talsec-plugin-freerasp"
-        version="8.1.1">
+        version="8.2.0">
 
   <name>freerasp</name>
   <author>Talsec (info@talsec.app)</author>
@@ -17,9 +17,9 @@
     <engine name="cordova" version=">=9.0.0"/>
   </engines>
 
-  <asset src="www/talsec.js" target="js/talsec.js"/>
+  <asset src="www/dist/talsec.js" target="js/talsec.js"/>
 
-  <js-module src="www/talsec.js" name="talsec">
+  <js-module src="www/dist/talsec.js" name="talsec">
     <clobbers target="talsec" />
   </js-module>
 
@@ -35,11 +35,14 @@
     <source-file src="src/android/TalsecPlugin.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/"/>
     <source-file src="src/android/ScreenProtector.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/"/>
     <source-file src="src/android/TalsecThreatHandler.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/"/>
-    <source-file src="src/android/Threat.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/"/>
     <source-file src="src/android/models/CordovaSuspiciousAppInfo.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/models/"/>
     <source-file src="src/android/utils/Extensions.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/utils/"/>
     <source-file src="src/android/utils/Utils.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/utils/"/>
     <source-file src="src/android/utils/ScreenCaptureStatus.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/utils/"/>
+    <source-file src="src/android/utils/RandomGenerator.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/utils/"/>
+    <source-file src="src/android/events/BaseRaspEvent.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/events/"/>
+    <source-file src="src/android/events/RaspExecutionStateEvent.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/events/"/>
+    <source-file src="src/android/events/ThreatEvent.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/events/"/>
     <framework src="src/android/talsec.gradle" custom="true" type="gradleReference" />
   </platform>
   
@@ -50,6 +53,12 @@
       </feature>
     </config-file>
     <header-file src="src/ios/TalsecBridging-Header.h" />
+    <source-file src="src/ios/models/RaspExecutionStates.swift" />
+    <source-file src="src/ios/models/SecurityThreat.swift" />
+    <source-file src="src/ios/utils/EventIdentifiers.swift" />
+    <source-file src="src/ios/utils/RandomGenerator.swift" />
+    <source-file src="src/ios/utils/ScreenCaptureStatus.swift" />
+    <source-file src="src/ios/utils/Utils.swift" />
     <source-file src="src/ios/TalsecPlugin.swift" />
     <framework src="src/ios/TalsecRuntime.xcframework" custom="true" embed="true" />
   </platform>

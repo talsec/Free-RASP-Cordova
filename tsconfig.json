@@ -1,21 +1,20 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
     "paths": {
-      "talsec-react-native-security-plugin": ["www/talsec.ts"]
+      "cordova-talsec-plugin-freerasp": ["./www/src/talsec.ts"]
     },
-    "typeRoots": ["src/types"],
+    "typeRoots": ["./node_modules/@types", "www/src/types"],
+    "types": ["cordova"],
     "declaration": true,
-    "rootDir": "./www",
-    "outDir": "./www",
+    "rootDir": "./www/src",
+    "outDir": "./www/dist/types",
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "verbatimModuleSyntax": true,
     "lib": ["esnext", "dom"],
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "noImplicitUseStrict": false,
@@ -28,5 +27,5 @@
     "strict": true,
     "target": "esnext"
   },
-  "exclude": ["example", "./lib/**/*"]
+  "exclude": ["example", "www/dist"]
 }
