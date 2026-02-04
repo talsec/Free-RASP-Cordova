@@ -33,7 +33,6 @@ export const getThreatIdentifiers = async (): Promise<number[]> => {
 export const prepareMapping = async (): Promise<void> => {
   const newValues = await getThreatIdentifiers();
   const threats = Threat.getValues();
-  // eslint-disable-next-line array-callback-return
   threats.map((threat, index) => {
     threat.value = newValues[index]!;
   });
