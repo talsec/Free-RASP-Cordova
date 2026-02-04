@@ -148,9 +148,7 @@ internal object TalsecThreatHandler : ThreatListener.ThreatDetected, ThreatListe
 
   internal interface TalsecCordova {
     fun threatDetected(threatEventType: ThreatEvent)
-
     fun raspExecutionStateChanged(event: RaspExecutionStateEvent)
-
     fun malwareDetected(suspiciousApps: MutableList<SuspiciousAppInfo>)
   }
 }
