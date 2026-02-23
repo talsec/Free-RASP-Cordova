@@ -5,7 +5,78 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [8.2.0] - 2025-02-03
+## [8.3.0] - 2026-02-23
+
+- Android SDK version: 18.0.2
+- iOS SDK version: 6.13.0
+
+### Cordova
+
+#### Added
+
+- Added cache for freeRASP callbacks when listener is not registered with the app
+- Added API for `automation` callback into `ThreatEventActions` (Android only)
+
+#### Fixed
+
+- Prevent multiple registration of the freeRASP listeners on the native side
+
+#### Changed
+
+- Updated compile and target SDK versions to 36 on Android
+- Higher compileSdk from [rootProject, plugin] is now used in build.gradle on Android
+
+### Android
+
+#### Added
+
+- Added support for `KernelSU` to the existing root detection capabilities
+- Added support for `HMA` to the existing root detection capabilities
+- Added new malware detection capabilities
+- Added `onAutomationDetected()` callback to `ThreatDetected` interface
+  - We are introducing a new capability, detecting whether the device is being automated using tools like Appium
+- Added value restrictions to `externalId`
+  - Method `storeExternalId()` now returns `ExternalIdResult`, which indicates `Success` or `Error` when `externalId` violates restrictions
+
+#### Fixed
+
+- Fixed exception handling for the KeyStore `getEntry` operation
+- Fixed issue in `ScreenProtector` concerning the `onScreenRecordingDetected` invocations
+- Merged internal shared libraries into a single one, reducing the final APK size
+- Fixed bug related to key storing in keystore type detection (hw-backed keystore check)
+- Fixed manifest queries merge
+
+#### Changed
+
+- Removed unused library `tmlib`
+- Refactoring of signature verification code
+- Updated compile and target API to 36
+- Improved root detection capabilities
+- Detection of wireless ADB added to ADB detections
+
+## [4.3.2] - 2026-01-03
+
+- Android SDK version: 17.0.1
+- iOS SDK version: 6.13.0
+
+### Cordova
+
+#### Fixed
+
+- Resolved potential NullPointerException when execution state events are being sent 
+
+## [4.3.1] - 2025-12-16
+
+- Android SDK version: 17.0.1
+- iOS SDK version: 6.13.0
+
+### Cordova
+
+#### Fixed
+
+- Resolved duplicate classes error on iOS [(issue #128)](https://github.com/talsec/Free-RASP-ReactNative/issues/128)
+
+## [4.3.0] - 2025-10-31
 
 - Android SDK version: 17.0.1
 - iOS SDK version: 6.13.0
@@ -19,11 +90,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added API for `unsecureWifi` callback into `ThreatEventActions` (Android only)
 - Added API for `allChecksFinished` callback into new `RaspExecutionStateEventActions` object
 - Added matched permissions to `SuspiciousAppInfo` object when malware detection reason is `suspiciousPermission`
-
-#### Changed
-
-- Changed deprecated initialize for pluginInitialize on Android
-- Improved the RASP listener registration
 
 #### Fixed
 
@@ -64,7 +130,53 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Updated internal dependencies
 
-## [8.1.1] - 2025-08-05
+## [4.2.4] - 2025-09-17
+
+- iOS SDK version: 6.12.1
+- Android SDK version: 16.0.4
+
+### Cordova
+
+#### Fixed
+
+- iOS dependencies are now installed via `install_modules_dependencies` by default
+
+## [4.2.3] - 2025-09-03
+
+- iOS SDK version: 6.12.1
+- Android SDK version: 16.0.4
+
+### Android
+
+#### Fixed
+
+- Root detection related bugs causing false positives
+
+#### Changed
+
+- Deprecated Nexus repository removed (GCP artifact registry is the main supported distribution repository)
+
+## [4.2.2] - 2025-08-21
+
+- iOS SDK version: 6.12.1
+- Android SDK version: 16.0.1
+
+### Cordova
+
+#### Changed
+
+- Replaced deprecated `getCurrentActivity()` call on Android (compatibility with RN 0.81+)
+
+## [4.2.1] - 2025-08-05
+
+- iOS SDK version: 6.12.1
+- Android SDK version: 16.0.1
+
+### Cordova
+
+#### Fixed
+
+- Possible conflict with other packages during proguard code minification
 
 ### Android
 
@@ -76,16 +188,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Decreased version of `Kotlin` to `2.0.0`
 
-## [8.1.0] - 2025-07-16
+## [4.2.0] - 2025-07-16
 
 - iOS SDK version: 6.12.1
 - Android SDK version: 16.0.1
-
-### Cordova
-
-#### Fixed
-
-- Fixed error on iOS with unsafe call
 
 ### Android
 
@@ -119,7 +225,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Resolved memory-related stability issues.
 
-## [8.0.0] - 2025-05-19
+## [4.1.0] - 2025-05-15
 
 - iOS SDK version: 6.11.0
 - Android SDK version: 15.1.0
@@ -130,10 +236,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added interface for screenshot / screen recording blocking on iOS
 - Added interface for external ID storage
-
-#### Changed
-
-- Plugin now requires kotlin version >= 2.0.0
 
 ### Android
 
@@ -159,10 +261,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Resolved an issue with the screen recording detection.
 - Resolved an issue that prevented Xcode tests from running correctly.
 
-## [7.4.1] - 2024-03-25
+## [4.0.0] - 2025-03-25
 
-- iOS SDK version: 6.9.0
+- iOS SDK version:  6.9.0
 - Android SDK version: 15.0.0
+
+### Cordova
+
+#### Changed
+
+- Android SDK requires `kotlinVersion` >= `2.0.0`
+- Set Java verison to 17
 
 ### Android
 
@@ -186,26 +295,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Deep signing of the OpenSSL binaries.
 
-## [7.4.0] - 2025-03-05
+## [3.14.1] - 2025-03-10
 
-- iOS SDK version: 6.8.0
+- iOS SDK version:  6.8.0
+- Android SDK version: 14.0.1
+
+### Cordova
+
+#### Fixed
+
+- Take Android targetSdkVersion, compileSdkVersion from plugin only
+
+## [3.14.0] - 2025-03-05
+
+- iOS SDK version:  6.8.0
 - Android SDK version: 14.0.1
 
 ### Cordova
 
 #### Added
 
-- Introduced `blockScreenCapture(boolean enable)` method to block/unblock screen capture.
-- Introduced `isScreenCaptureBlocked()` method to get the current screen capture blocking status.
+- `blockScreenCapture` method to block/unblock screen capture
+- `isScreenCaptureBlocked` method to get the current screen capture blocking status
 - New callbacks:
-  - `screenshot`: Detects when a screenshot is taken
-  - `screenRecording`: Detects when screen recording is active
+    - `screenshot`: Detects when a screenshot is taken
+    - `screenRecording`: Detects when screen recording is active
 
 #### Changed
 
-- Set following required SDK versions for Android plugin:
-  - targetSdkVersion to 35
-  - compileSdkVersion to 35
+- Raised Android compileSDK level to 35
+
+#### Fixed
+
+- Compatibility issues with RN New Architecture
+- Added proguard rules for malware data serialization in release mode on Android
 
 ### Android
 
@@ -223,13 +346,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### iOS
 
-### Added
+#### Added
 
-- Passive Screenshot/Screen Recording protection
+- Passive Screenshot/Screen Recording detection
 
-## [7.3.0] - 2024-12-29
+## [3.13.0] - 2024-12-20
 
-- iOS SDK version: 6.6.3
+- iOS SDK version:  6.6.3
 - Android SDK version: 13.2.0
 
 ### Android
@@ -239,9 +362,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added request integrity information to data collection headers.
 - Enhanced and accelerated the data collection logic.
 
-## [7.2.0] - 2024-12-06
+## [3.12.0] - 2024-12-06
 
-- iOS SDK version: 6.6.3
+- iOS SDK version:  6.6.3
 - Android SDK version: 13.0.0
 
 ### Cordova
@@ -257,7 +380,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Malware data is now parsed on background thread to improve responsiveness
 
-## [7.1.0] - 2024-11-19
+## [3.11.0] - 2024-11-19
 
 ### Cordova
 
@@ -271,35 +394,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - ADB detection feature
 
-## [7.0.1] - 2024-11-18
+## [3.10.0] - 2024-11-15
 
-- Android SDK version: 12.0.0
-- iOS SDK version: 6.6.3
-
-### Cordova
-
-#### Fixed
-
-- Removed conflicting export on npmjs
-
-## [7.0.0] - 2024-11-15
-
-- Android SDK version: 12.0.0
-- iOS SDK version: 6.6.3
+-   Android SDK version: 12.0.0
+-   iOS SDK version: 6.6.3
 
 ### Cordova
 
 #### Added
 
-- **BREAKING CHANGE:** New dependency is required to run freeRASP; add following plugin to `android/build.gradle`:
-
-```gradle
-plugins{
-    id 'org.jetbrains.kotlin.plugin.serialization' version '1.7.10'
-}
-```
-
-- Added configuration fields for malware detection
+-  Added configuration fields for malware detection
 
 ### Android
 
@@ -310,7 +414,6 @@ plugins{
 #### Fixed
 
 - Refactoring Magisk checks in the root detection
-- Resolving IllegalArgumentException caused by unregistering not registered receiver in TalsecMonitoringReceiver
 
 ### iOS
 
@@ -324,47 +427,48 @@ plugins{
   - Team ID: PBDDS45LQS
   - Team Name: Lynx SFT s.r.o.
 
-## [6.3.3] - 2024-10-28
-
+## [3.9.3] - 2024-10-28
 - Android SDK version: 11.1.3
 - iOS SDK version: 6.6.1
 
 ### iOS
 
 #### Changed
-
 - Renewed the signing certificate
 
-## [6.3.2] - 2024-10-18
-
+## [3.9.2] - 2024-10-18
 - Android SDK version: 11.1.3
 - iOS SDK version: 6.6.0
+
+-   Android SDK version: 11.1.3
+-   iOS SDK version: 6.6.0
 
 ### Android
 
 #### Fixed
-
 - Reported ANR issues present on some devices were resolved ([GH Flutter issue #138](https://github.com/talsec/Free-RASP-Flutter/issues/138))
 - Reported crashes caused by ConcurrentModificationException and NullPointerException were resolved ([GH Flutter issue #140](https://github.com/talsec/Free-RASP-Flutter/issues/140))
 - Reported crashes caused by the UnsupportedOperationException were resolved
 
-## [6.3.1] - 2024-09-30
-
+## [3.9.1] - 2024-09-30
 - Android SDK version: 11.1.1
 - iOS SDK version: 6.6.0
 
 ### Android
 
 #### Fixed
-
 - False positives for hook detection
 
-## [6.3.0] - 2024-09-25
+## [3.9.0] - 2024-09-25
 
 - Android SDK version: 11.1.0
 - iOS SDK version: 6.6.0
 
 ### Cordova
+
+#### Fixed
+
+- Fixed incorrect path to types in package.json
 
 #### Changed
 
@@ -393,24 +497,29 @@ plugins{
 #### Added
 
 - [Dopamine](https://github.com/opa334/Dopamine) jailbreak detection.
-- Enhanced and accelerated the data collection logic
 
 #### Changed
 
 - Updated OpenSSL to version 3.0.14
 - Updated CURL to version 8.8.0
 
-## [6.2.1] - 2024-07-02
+## [3.8.2] - 2024-09-02
+
+### Cordova
+
+#### Fixed
+- Updated proguard rules to resolve build issues in RN 0.75.x
+
+## [3.8.1] - 2024-06-19
 
 ### Cordova
 
 #### Changed
-
 - CHANGELOG now adheres to the [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
 
-## [6.2.0] - 2024-05-31
+## [3.8.0] - 2024-05-31
 
-# freeRASP 6.2.0
+# freeRASP 3.8.0
 
 - ⚡ Added new threat `systemVPN` for VPN detection
 - 📄 Documentation updates
@@ -419,40 +528,30 @@ plugins{
 
 - ⚡ Added new threat `devMode` for Developer mode detection
 - ⚡ Fixed proguard warning in specific versions of RN
-- ⚡ Fixed issue with Arabic alphabet in logs caused by the device’s default system locale
+- ⚡ Fixed issue with almost identical logging messages for different threats
 - ✔️ Increased the version of the GMS dependency
 - ✔️ Updated CA bundle
 
 ### iOS
-
+- ⚡ Enhanced and accelerated the data collection logic
 - ⚡ Fixed issue with Arabic alphabet in logs caused by the device’s default system locale
 - ⚡ Passcode check is now periodical
 - ✔️ Updated CA bundle
 
-# freeRASP 6.1.3
+# freeRASP 3.7.2
 
-### iOS
+- ⚡ Update expo config plugin to fix release build issue in RN 0.73
 
-- ⚡ Fixed BAD_ACCESS error occurring in specific versions of `cordova-ios` plugin ([#28](https://github.com/talsec/Free-RASP-Cordova/issues/28))
-
-# freeRASP 6.1.2
-
-### Android
-
-- ❗ Removed the talsec namespace that caused change of namespaces for whole app
-
-### iOS
-
-- ⚡ Fixed issue causing app crash with lower versions of `cordova-ios` plugin
-
-# freeRASP 6.1.1
+# freeRASP 3.7.1
 
 ### Android
 
 - ⚡ Updated freeRASP SDK artifact hosting ensuring better stability and availibility
+- ⚡ Fixed compatibility issues with RN < 0.63
 
-# freeRASP 6.1.0
+# freeRASP 3.7.0
 
+- ⚡ Added support for apps built with Expo SDK
 - 📄 Documentation updates
 
 ### Android
@@ -472,34 +571,36 @@ plugins{
 - ⚡ Fixed memory leak ([freeRASP iOS issue #13](https://github.com/talsec/Free-RASP-iOS/issues/13))
 - ⚡ Updated `CURL` to `8.5.0` and `OpenSSL` to `1.1.1w`
 
-# freeRASP 6.0.1
+# freeRASP 3.6.1
 
-### Android
-
-- ⚡ Fixed bug that prevented firing callbacks in specific situations
+- 📄 Documentation updates
 
 ### iOS
 
 - ⚡ Fixed bug that caused app being killed in specific situations ([#42](https://github.com/talsec/Free-RASP-ReactNative/issues/42))
 
-# freeRASP 6.0.0
+# freeRASP 3.6.0
 
-- ❗ **BREAKING API CHANGE**: changed the way how threats are received. Now, it is necessary to pass object with reactions to `talsec.start()` method instead of a function.
-- ⚡ Improved message passing between native iOS/Android and Cordova
-- ✔️ Restricted message passing to valid callbacks only. If an invalid callback is received, the SDK will kill the app
 - ⚡ Improved reaction obfuscation
-- 📄 Documentation updates and improvements
+- 📄 Documentation updates
 
 ### Android
 
 - ⚡ Fixed ProviderException which could be occassionally triggered
+- ⚡ Fixed bug causing incompatibility with some versions of React Native ([#38](https://github.com/talsec/Free-RASP-ReactNative/issues/38))
 
 ### iOS
 
 - ❗ Raised supported Xcode version to 14.3.1
 - ⚡ Improved SDK obfuscation
 
-# freeRASP 5.4.0
+# freeRASP 3.5.0
+
+- ⚠️ Updated the `talsecStart()` method to return `Promise<string>`. If freeRASP starts successfuly, the method will return `freeRASP started` string. There are not any changes of the interface if you are using the provided `useFreeRasp` hook.
+- ⚡ Improved the message passing between native iOS/Android and React Native sides
+- ✔️ Restricted message passing to valid callbacks only. If an invalid callback is received, the SDK will kill the app
+
+# freeRASP 3.4.0
 
 - 📄 Documentation updates and improvements
 
@@ -511,20 +612,26 @@ plugins{
 - ⚡ fixed issue with DeadObjectException on Android 5 and 6 caused by excessive PackageManager.queryIntentActivities() usage
 - ⚡ improved root detection capabilities
 
-# freeRASP 5.3.0
+# freeRASP 3.3.1
+
+### iOS
+
+- ⚡ Fixed issue with duplicate headers that caused `Multiple commands produce ...` error ([#11](https://github.com/talsec/Free-RASP-ReactNative/issues/11), [#26](https://github.com/talsec/Free-RASP-ReactNative/issues/26))
+
+# freeRASP 3.3.0
 
 ### Android
 
-- ✔️ Removed PolarSSL native library from main flow of the application
+- ✔️ Removed PolarSSL native library
 - ✔️ Fixed issue with denied USE_BIOMETRICS permission
 
-# freeRASP 5.2.0
+# freeRASP 3.2.0
 
 ### Android
 
-- ⚡ Added support for AGP 8.0
+- ✔️ Added support for AGP 8.0
 
-# freeRASP 5.1.0
+# freeRASP 3.1.0
 
 ### Android
 
@@ -535,59 +642,47 @@ plugins{
 - ⚡ Reduced timeout period for logging from 20 sec to 5 sec
 - ⚡ Logging is now async in all calls
 
-# freeRASP 5.0.0
+# freeRASP 3.0.0
 
 ### Android
 
 - ❗ BREAKING CHANGE: Raised minimum supported Android version to 6.0 (API level 23)
-- ✔️ Removed deprecated BouncyCastle dependency that could cause errors in the build phase
+- ✔️ Removed deprecated BouncyCastle dependency that could cause [errors in the build phase](https://github.com/talsec/Free-RASP-ReactNative/issues/13)
 - ✔️ Fixed issue that could cause NullPointerException
 - 🆕 Added new `obfuscationIssues` check, which is triggered when freeRASP doesn't detect any obfuscation of the source code
 
-# freeRASP 4.0.1
+### iOS
+
+- ⚠️ `passcodeChange` check has been deprecated
+- 🛠️ Refactored the code base
+
+# freeRASP 2.0.3
 
 ### iOS
 
 - ✔️ Fixed issue with metadata in iOS framework
+- 📄 Documentation updates and improvements
 
-# freeRASP 4.0.0
-
-## What's new?
-
-Android devices now support device state listeners. What's more, we unified remaining Android and iOS interfaces for more convenient developer's experience.
-
-### Android & iOS
-
-- ❗ BREAKING API CHANGE: Renamed `device binding` to `deviceBinding` to align it with the camelCase convention. This makes the case consistent with our other checks.
-
-### Android
-
-- 🆕 Android now has support for device state callbacks:
-  - 📲 **`Secure Hardware Not Available`**: fires when hardware-backed KeyStore is not available
-  - 📲 **`Passcode`**: fires when freeRASP detects that device is not secured with any type of lock
-
-### iOS
-
-- ❗ BREAKING API CHANGE: Renamed `Missing Secure Enclave` to **`Secure Hardware Not Available`** to match the newly added Android callback. The functionality remains unchanged.
-- ❗️ `PasscodeChange` check has been deprecated
-
-### Other improvements
+# freeRASP 2.0.2
 
 - 📄 Documentation updates and improvements
 
-# freeRASP 3.0.1
+# freeRASP 2.0.1
 
 - 📄 Documentation updates and improvements
 
-# freeRASP 3.0.0
+# freeRASP 2.0.0
 
 ## What's new?
 
-Most of the changes relates to accomodating a new way of choosing between the dev and release version of the SDK. Android has also removed the HMS dependencies and improved the root detection capabilities.
+Most of the changes relates to accomodating a new way of choosing between the dev and release version of the SDK. There are also some breaking changes in the API, such as renaming parameters and changing types of callbacks. Android has also removed the HMS dependencies and improved the root detection capabilities.
 
 ### JS/TS interface
 
+- ❗ BREAKING API CHANGE: Renamed **'device binding'** to **deviceBinding**
+  - ❗ This allows us to remove apostrophes from other callbacks, too. E.g. **'privilegedAccess'** to **privilegedAccess**
 - ❗ Added **isProd** boolean parameter, which now differentiates between the release (true) and dev (false) version of the SDK. By default set to **true**
+- ❗ **androidConfig** and **iosConfig** are from now on optionals, you can omit a platform if you are not developing for it
 
 ### Android
 
@@ -609,20 +704,27 @@ Most of the changes relates to accomodating a new way of choosing between the de
 - 📄 Documentation updates and improvements
 - ⚡ Updated demo app for new implementation
 
-# freeRASP 2.0.0
+# freeRASP 1.1.0
 
-A new round of fixes and improvements! Here's the list of all the new things we included in the latest release.
+We are proud to share with you the first batch of improvements of freeRASP!
 
-- ❗ BREAKING API CHANGE: Added multi-signature support for certificate hashes of Android apps
-- ✔️ Fixed a bug with supportedAlternativeStores ([issue](https://github.com/talsec/Free-RASP-Cordova/issues/3))
-- ✔️ Fixed NPE bug in RootDetector when there are no running processes ([issue](https://github.com/talsec/Free-RASP-Flutter/issues/40)) on Android
-- ✔️ Removed deprecated SafetyNet dependency ([issue](https://github.com/talsec/Free-RASP-Flutter/issues/28)) on Android
-- ✔️ Fixed the ANR issue ([issue](https://github.com/talsec/Free-RASP-Flutter/issues/32)) on Android
-- ✔️ Updated HMS and GMS dependencies on Android
-- 🔎 Improved detection of Blue Stacks emulator and Nox emulator ([issue](https://github.com/talsec/Free-RASP-Android/issues/6)) on Android
-- ❗ Improved device binding detection to not trigger for moving the app to a new device on iOS
-- ⚡ Improved hook detection and logging on iOS
-- 🔎 Improved logging of non-existing hardware for biometrics on iOS
+## What's new?
+
+Android devices now support device state listeners. What's more, we unified remaining Android and iOS interfaces for more convenient developer's experience.
+
+### Android
+
+- 🆕 Android now has support for device state callbacks:
+  - 📲 **`Secure Hardware Not Available`**: fires when hardware-backed KeyStore is not available
+  - 📲 **`Passcode`**: fires when freeRASP detects that device is not secured with any type of lock
+
+### iOS
+
+- ❗ BREAKING API CHANGE: Renamed `Missing Secure Enclave` to **`Secure Hardware Not Available`** to match the newly added Android callback. The functionality remains unchanged.
+
+### Other improvements
+
+- 📄 Documentation updates and improvements
 
 # freeRASP 1.0.0
 
