@@ -15,4 +15,5 @@ export interface Talsec {
   blockScreenCapture: (enable: boolean) => Promise<string>;
   isScreenCaptureBlocked: () => Promise<boolean>;
   storeExternalId: (value: string) => Promise<boolean>;
+  removeExternalId: () => Promise<boolean>;
 }
