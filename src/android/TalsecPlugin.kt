@@ -31,13 +31,6 @@ import org.json.JSONObject
 
 class TalsecPlugin : CordovaPlugin() {
 
-    private var isThreatListenerRegistered = false
-    private var isExecutionStateListenerRegistered = false
-
-    private val listener by lazy {
-        PluginListener(this.cordova.context)
-    }
-
     override fun execute(
         action: String?, args: JSONArray?, callbackContext: CallbackContext?
     ): Boolean {
@@ -71,6 +64,7 @@ class TalsecPlugin : CordovaPlugin() {
         // Trigger lazy initialization of the events
         ThreatEvent.ALL_EVENTS
         RaspExecutionStateEvent.ALL_EVENTS
+        TalsecThreatHandler.initializeDispatchers(PluginListener(this.cordova.context))
     }
 
     override fun onStart() {
@@ -82,8 +76,8 @@ class TalsecPlugin : CordovaPlugin() {
 
     override fun onPause(multitasking: Boolean) {
         super.onPause(multitasking)
-        TalsecThreatHandler.threatDispatcher.listener = null
-        TalsecThreatHandler.executionStateDispatcher.listener = null
+        TalsecThreatHandler.threatDispatcher.onPause()
+        TalsecThreatHandler.executionStateDispatcher.onPause()
     }
 
     override fun onStop() {
@@ -91,16 +85,14 @@ class TalsecPlugin : CordovaPlugin() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             ScreenProtector.unregister(cordova.activity)
         }
+        TalsecThreatHandler.threatDispatcher.unregisterListener()
+        TalsecThreatHandler.executionStateDispatcher.unregisterListener()
     }
 
     override fun onResume(multitasking: Boolean) {
         super.onResume(multitasking)
-        if (isThreatListenerRegistered) {
-            TalsecThreatHandler.threatDispatcher.listener = listener
-        }
-        if (isExecutionStateListenerRegistered) {
-            TalsecThreatHandler.executionStateDispatcher.listener = listener
-        }
+        TalsecThreatHandler.threatDispatcher.onResume()
+        TalsecThreatHandler.executionStateDispatcher.onResume()
     }
 
     override fun onDestroy() {
@@ -284,16 +276,12 @@ class TalsecPlugin : CordovaPlugin() {
     }
 
     private fun registerListener(callbackContext: CallbackContext?): Boolean {
-        listener.threatCallbackContext = callbackContext
-        TalsecThreatHandler.threatDispatcher.listener = listener
-        isThreatListenerRegistered = true
+        TalsecThreatHandler.threatDispatcher.registerListener(callbackContext)
         return true
     }
 
     private fun registerRaspExecutionStateListener(callbackContext: CallbackContext?): Boolean {
-        listener.executionStateCallbackContext = callbackContext
-        TalsecThreatHandler.executionStateDispatcher.listener = listener
-        isExecutionStateListenerRegistered = true
+        TalsecThreatHandler.executionStateDispatcher.registerListener(callbackContext)
         return true
     }
 
@@ -330,8 +318,8 @@ class TalsecPlugin : CordovaPlugin() {
         private val context: Context
     ) : PluginThreatListener, PluginExecutionStateListener {
 
-        var threatCallbackContext: CallbackContext? = null
-        var executionStateCallbackContext: CallbackContext? = null
+        override var threatCallbackContext: CallbackContext? = null
+        override var executionStateCallbackContext: CallbackContext? = null
 
         override fun threatDetected(threatEventType: ThreatEvent) {
             val params = JSONObject()

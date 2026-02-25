@@ -10,9 +10,13 @@ import com.aheaditec.talsec_security.security.api.ThreatListener
 
 internal object TalsecThreatHandler {
 
-    internal val threatDispatcher = ThreatDispatcher()
-    internal val executionStateDispatcher = ExecutionStateDispatcher()
+    internal lateinit var threatDispatcher: ThreatDispatcher
+    internal lateinit var executionStateDispatcher: ExecutionStateDispatcher
 
+    fun initializeDispatchers(listener: TalsecPlugin.PluginListener) {
+        threatDispatcher = ThreatDispatcher(listener)
+        executionStateDispatcher = ExecutionStateDispatcher(listener)
+    }
     private val threatDetected = object : ThreatListener.ThreatDetected() {
         override fun onRootDetected() {
             threatDispatcher.dispatchThreat(ThreatEvent.PrivilegedAccess)
