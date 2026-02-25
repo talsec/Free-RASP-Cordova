@@ -65,12 +65,8 @@ class TalsecPlugin : CordovaPlugin() {
         ThreatEvent.ALL_EVENTS
         RaspExecutionStateEvent.ALL_EVENTS
         TalsecThreatHandler.initializeDispatchers(PluginListener(this.cordova.context))
-    }
-
-    override fun onStart() {
-        super.onStart()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            ScreenProtector.register(cordova.activity)
+            ScreenProtector.register(this.cordova.activity)
         }
     }
 
@@ -78,6 +74,13 @@ class TalsecPlugin : CordovaPlugin() {
         super.onPause(multitasking)
         TalsecThreatHandler.threatDispatcher.onPause()
         TalsecThreatHandler.executionStateDispatcher.onPause()
+        if (this.cordova.activity.isFinishing) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                ScreenProtector.unregister(cordova.activity)
+            }
+            TalsecThreatHandler.threatDispatcher.unregisterListener()
+            TalsecThreatHandler.executionStateDispatcher.unregisterListener()
+        }
     }
 
     override fun onStop() {
