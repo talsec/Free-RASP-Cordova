@@ -74,28 +74,22 @@ class TalsecPlugin : CordovaPlugin() {
         super.onPause(multitasking)
         TalsecThreatHandler.threatDispatcher.onPause()
         TalsecThreatHandler.executionStateDispatcher.onPause()
-        if (this.cordova.activity.isFinishing) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                ScreenProtector.unregister(cordova.activity)
-            }
-            TalsecThreatHandler.threatDispatcher.unregisterListener()
-            TalsecThreatHandler.executionStateDispatcher.unregisterListener()
-        }
-    }
-
-    override fun onStop() {
-        super.onStop()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             ScreenProtector.unregister(cordova.activity)
         }
-        TalsecThreatHandler.threatDispatcher.unregisterListener()
-        TalsecThreatHandler.executionStateDispatcher.unregisterListener()
+        if (this.cordova.activity.isFinishing) {
+            TalsecThreatHandler.threatDispatcher.unregisterListener()
+            TalsecThreatHandler.executionStateDispatcher.unregisterListener()
+        }
     }
 
     override fun onResume(multitasking: Boolean) {
         super.onResume(multitasking)
         TalsecThreatHandler.threatDispatcher.onResume()
         TalsecThreatHandler.executionStateDispatcher.onResume()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            ScreenProtector.register(this.cordova.activity)
+        }
     }
 
     override fun onDestroy() {
