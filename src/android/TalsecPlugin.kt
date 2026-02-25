@@ -29,41 +29,13 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 
-typealias CordovaCallback = (String, JSONObject) -> Unit
-
 class TalsecPlugin : CordovaPlugin() {
-
-    private var threatCallbackContext: CallbackContext? = null
-    private var executionStateCallbackContext: CallbackContext? = null
 
     private var isThreatListenerRegistered = false
     private var isExecutionStateListenerRegistered = false
 
     private val listener by lazy {
-        PluginListener(appContext, listenerCallback)
-    }
-
-    private val listenerCallback: CordovaCallback = { channel, data ->
-        val result = PluginResult(PluginResult.Status.OK, data)
-        result.keepCallback = true
-        if (channel == ThreatEvent.CHANNEL_NAME) {
-            threatCallbackContext?.sendPluginResult(result) ?: Log.w("TalsecPlugin", "Threat listener not registered.")
-        } else if (channel == RaspExecutionStateEvent.CHANNEL_NAME) {
-            executionStateCallbackContext?.sendPluginResult(result) ?: Log.w("TalsecPlugin", "Execution state listener not registered.")
-        }
-    }
-
-    override fun pluginInitialize() {
-        super.pluginInitialize()
-        // Trigger lazy initialization of the events
-        ThreatEvent.ALL_EVENTS
-        RaspExecutionStateEvent.ALL_EVENTS
-
-        if (this.cordova == null) {
-            Log.e("Talsec", "Unable to get Android Context.")
-            return
-        }
-        appContext = this.cordova.context
+        PluginListener(this.cordova.context)
     }
 
     override fun execute(
@@ -83,12 +55,57 @@ class TalsecPlugin : CordovaPlugin() {
             "storeExternalId" -> storeExternalId(callbackContext, args)
             "removeExternalId" -> removeExternalId(callbackContext)
             "registerListener" -> registerListener(callbackContext)
-            "registerRaspExecutionStateListener" -> registerRaspExecutionStateListener(callbackContext)
+            "registerRaspExecutionStateListener" -> registerRaspExecutionStateListener(
+                callbackContext
+            )
+
             else -> {
                 callbackContext?.error("Talsec plugin executed with unknown action - $action")
                 return false
             }
         }
+    }
+
+    override fun pluginInitialize() {
+        super.pluginInitialize()
+        // Trigger lazy initialization of the events
+        ThreatEvent.ALL_EVENTS
+        RaspExecutionStateEvent.ALL_EVENTS
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            ScreenProtector.register(cordova.activity)
+        }
+    }
+
+    override fun onPause(multitasking: Boolean) {
+        super.onPause(multitasking)
+        TalsecThreatHandler.threatDispatcher.listener = null
+        TalsecThreatHandler.executionStateDispatcher.listener = null
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            ScreenProtector.unregister(cordova.activity)
+        }
+    }
+
+    override fun onResume(multitasking: Boolean) {
+        super.onResume(multitasking)
+        if (isThreatListenerRegistered) {
+            TalsecThreatHandler.threatDispatcher.listener = listener
+        }
+        if (isExecutionStateListenerRegistered) {
+            TalsecThreatHandler.executionStateDispatcher.listener = listener
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        backgroundHandlerThread.quitSafely()
     }
 
     private fun start(args: JSONArray?, callbackContext: CallbackContext?): Boolean {
@@ -207,12 +224,6 @@ class TalsecPlugin : CordovaPlugin() {
         }
     }
 
-    override fun onPause(multitasking: Boolean) {
-        super.onPause(multitasking)
-        TalsecThreatHandler.threatDispatcher.listener = null
-        TalsecThreatHandler.executionStateDispatcher.listener = null
-    }
-
     private fun removeExternalId(callbackContext: CallbackContext?): Boolean {
         return try {
             Talsec.removeExternalId(cordova.context)
@@ -222,35 +233,6 @@ class TalsecPlugin : CordovaPlugin() {
             callbackContext?.error("Error during removeExternalId operation in freeRASP Native Plugin")
             false
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            ScreenProtector.register(cordova.activity)
-        }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            ScreenProtector.unregister(cordova.activity)
-        }
-    }
-
-    override fun onResume(multitasking: Boolean) {
-        super.onResume(multitasking)
-        if (isThreatListenerRegistered) {
-            TalsecThreatHandler.threatDispatcher.listener = listener
-        }
-        if (isExecutionStateListenerRegistered) {
-            TalsecThreatHandler.executionStateDispatcher.listener = listener
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        backgroundHandlerThread.quitSafely()
     }
 
     /**
@@ -302,14 +284,14 @@ class TalsecPlugin : CordovaPlugin() {
     }
 
     private fun registerListener(callbackContext: CallbackContext?): Boolean {
-        threatCallbackContext = callbackContext
+        listener.threatCallbackContext = callbackContext
         TalsecThreatHandler.threatDispatcher.listener = listener
         isThreatListenerRegistered = true
         return true
     }
 
     private fun registerRaspExecutionStateListener(callbackContext: CallbackContext?): Boolean {
-        executionStateCallbackContext = callbackContext
+        listener.executionStateCallbackContext = callbackContext
         TalsecThreatHandler.executionStateDispatcher.listener = listener
         isExecutionStateListenerRegistered = true
         return true
@@ -337,53 +319,52 @@ class TalsecPlugin : CordovaPlugin() {
     }
 
     companion object {
-        private lateinit var appContext: Context
         private val backgroundHandlerThread = HandlerThread("BackgroundThread").apply { start() }
         private val backgroundHandler = Handler(backgroundHandlerThread.looper)
         private val mainHandler = Handler(Looper.getMainLooper())
 
         internal var talsecStarted = false
+    }
 
-        internal fun notifyEvent(
-            event: BaseRaspEvent,
-            notifyListenersCallback: CordovaCallback
-        ) {
+    internal class PluginListener(
+        private val context: Context
+    ) : PluginThreatListener, PluginExecutionStateListener {
+
+        var threatCallbackContext: CallbackContext? = null
+        var executionStateCallbackContext: CallbackContext? = null
+
+        override fun threatDetected(threatEventType: ThreatEvent) {
             val params = JSONObject()
-            params.put(event.channelKey, event.value)
-            notifyListenersCallback(event.channelName, params)
+            params.put(threatEventType.channelKey, threatEventType.value)
+            sendResult(params, threatCallbackContext)
         }
 
-        internal fun notifyMalware(
-            suspiciousApps: MutableList<SuspiciousAppInfo>,
-            context: Context,
-            notifyListenersCallback: CordovaCallback
-        ) {
+        override fun malwareDetected(suspiciousApps: MutableList<SuspiciousAppInfo>) {
             backgroundHandler.post {
                 val encodedSuspiciousApps = suspiciousApps.toEncodedJsonArray(context)
                 mainHandler.post {
                     val params = JSONObject()
                     params.put(ThreatEvent.CHANNEL_KEY, ThreatEvent.Malware.value)
                     params.put(ThreatEvent.MALWARE_CHANNEL_KEY, encodedSuspiciousApps)
-                    notifyListenersCallback(ThreatEvent.CHANNEL_NAME, params)
+                    sendResult(params, threatCallbackContext)
                 }
             }
         }
-    }
-
-    internal class PluginListener(
-        private val context: Context,
-        private val pluginCallback: CordovaCallback
-    ) : PluginThreatListener, PluginExecutionStateListener {
-        override fun threatDetected(threatEventType: ThreatEvent) {
-            notifyEvent(threatEventType, pluginCallback)
-        }
-
-        override fun malwareDetected(suspiciousApps: MutableList<SuspiciousAppInfo>) {
-            notifyMalware(suspiciousApps, context, pluginCallback)
-        }
 
         override fun raspExecutionStateChanged(event: RaspExecutionStateEvent) {
-            notifyEvent(event, pluginCallback)
+            val params = JSONObject()
+            params.put(event.channelKey, event.value)
+            sendResult(params, executionStateCallbackContext)
+        }
+
+        private fun sendResult(json: JSONObject, callbackContext: CallbackContext?) {
+            if (callbackContext != null) {
+                val result = PluginResult(PluginResult.Status.OK, json)
+                result.keepCallback = true
+                callbackContext.sendPluginResult(result)
+            } else {
+                Log.w("TalsecPlugin", "Listener not registered.")
+            }
         }
     }
 }
