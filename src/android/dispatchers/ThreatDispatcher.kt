@@ -23,6 +23,9 @@ internal class ThreatDispatcher(private val listener: PluginThreatListener) {
     }
 
     fun onResume() {
+        if (listener.threatCallbackContext == null) {
+            return
+        }
         isAppListening = true
         flushCache()
     }

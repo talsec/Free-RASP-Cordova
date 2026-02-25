@@ -21,6 +21,9 @@ internal class ExecutionStateDispatcher(private val listener: PluginExecutionSta
     }
 
     fun onResume() {
+        if (listener.executionStateCallbackContext == null) {
+            return
+        }
         isAppListening = true
         flushCache()
     }

@@ -106,7 +106,7 @@ class TalsecPlugin : CordovaPlugin() {
 
         try {
             val config = buildTalsecConfigThrowing(configJson)
-            TalsecThreatHandler.registerListener(this.cordova.context)
+            TalsecThreatHandler.registerSDKListener(this.cordova.context)
             this.cordova.activity.runOnUiThread {
                 Talsec.start(this.cordova.context, config)
                 mainHandler.post {
