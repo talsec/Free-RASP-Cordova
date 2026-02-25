@@ -35,6 +35,7 @@
     </platform>
     <platform name="ios">
         <hook src="scripts/setIOSTarget.js" type="after_prepare" />
+        <hook src="scripts/fix-ios-build-path.js" type="before_build" />
         <resource-file src="resources/README.md" target="README.md" />
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />

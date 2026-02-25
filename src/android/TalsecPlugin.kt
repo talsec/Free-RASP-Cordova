@@ -62,8 +62,7 @@ class TalsecPlugin : CordovaPlugin() {
     override fun pluginInitialize() {
         super.pluginInitialize()
         // Trigger lazy initialization of the events
-        ThreatEvent.ALL_EVENTS
-        RaspExecutionStateEvent.ALL_EVENTS
+        initializeEventKeys()
         TalsecThreatHandler.initializeDispatchers(PluginListener(this.cordova.context))
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             ScreenProtector.register(this.cordova.activity)
@@ -280,6 +279,11 @@ class TalsecPlugin : CordovaPlugin() {
     private fun registerRaspExecutionStateListener(callbackContext: CallbackContext?): Boolean {
         TalsecThreatHandler.executionStateDispatcher.registerListener(callbackContext)
         return true
+    }
+
+    private fun initializeEventKeys() {
+        ThreatEvent.ALL_EVENTS
+        RaspExecutionStateEvent.ALL_EVENTS
     }
 
     private fun buildTalsecConfigThrowing(configJson: String): TalsecConfig {
