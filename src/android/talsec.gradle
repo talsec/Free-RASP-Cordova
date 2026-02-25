@@ -1,6 +1,6 @@
 ext {
-  cdvCompileSdkVersion = 36
-  cdvTargetSdkVersion = 36
+    cdvCompileSdkVersion = 36
+    cdvTargetSdkVersion = 36
 }
 
 repositories {

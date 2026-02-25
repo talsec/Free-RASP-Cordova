@@ -17,6 +17,7 @@ internal object TalsecThreatHandler {
         threatDispatcher = ThreatDispatcher(listener)
         executionStateDispatcher = ExecutionStateDispatcher(listener)
     }
+
     private val threatDetected = object : ThreatListener.ThreatDetected() {
         override fun onRootDetected() {
             threatDispatcher.dispatchThreat(ThreatEvent.PrivilegedAccess)

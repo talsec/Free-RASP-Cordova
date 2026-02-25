@@ -21,12 +21,12 @@ internal class ExecutionStateDispatcher(private val listener: PluginExecutionSta
     }
 
     fun onResume() {
-      isAppListening = true
-      flushCache()
+        isAppListening = true
+        flushCache()
     }
 
     fun onPause() {
-      isAppListening = false
+        isAppListening = false
     }
 
     fun dispatch(event: RaspExecutionStateEvent) {
