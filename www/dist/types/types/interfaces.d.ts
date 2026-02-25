@@ -6,4 +6,27 @@ export interface Talsec {
     blockScreenCapture: (enable: boolean) => Promise<string>;
     isScreenCaptureBlocked: () => Promise<boolean>;
     storeExternalId: (value: string) => Promise<boolean>;
+    removeExternalId: () => Promise<boolean>;
 }
+export type TalsecConfig = {
+    androidConfig?: TalsecAndroidConfig;
+    iosConfig?: TalsecIosConfig;
+    watcherMail: string;
+    isProd?: boolean;
+};
+export type TalsecAndroidConfig = {
+    packageName: string;
+    certificateHashes: string[];
+    supportedAlternativeStores?: string[];
+    malwareConfig?: TalsecMalwareConfig;
+};
+export type TalsecIosConfig = {
+    appBundleIds: string;
+    appTeamId: string;
+};
+export type TalsecMalwareConfig = {
+    blacklistedHashes?: string[];
+    blacklistedPackageNames?: string[];
+    suspiciousPermissions?: string[][];
+    whitelistedInstallationSources?: string[];
+};
