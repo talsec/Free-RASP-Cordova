@@ -25,6 +25,7 @@ __export(talsec_exports, {
   getAppIcon: () => getAppIcon,
   isScreenCaptureBlocked: () => isScreenCaptureBlocked,
   onInvalidCallback: () => onInvalidCallback,
+  removeExternalId: () => removeExternalId,
   start: () => start,
   storeExternalId: () => storeExternalId
 });
@@ -47,6 +48,19 @@ var storeExternalId = (externalId) => {
       "TalsecPlugin",
       "storeExternalId",
       [externalId]
+    );
+  });
+};
+var removeExternalId = () => {
+  return new Promise((resolve, reject) => {
+    cordova.exec(
+      () => {
+        resolve(true);
+      },
+      reject,
+      "TalsecPlugin",
+      "removeExternalId",
+      []
     );
   });
 };
@@ -121,6 +135,7 @@ var Threat = class _Threat {
   static TimeSpoofing = new _Threat(0);
   static LocationSpoofing = new _Threat(0);
   static UnsecureWifi = new _Threat(0);
+  static Automation = new _Threat(0);
   constructor(value) {
     this.value = value;
   }
@@ -145,7 +160,8 @@ var Threat = class _Threat {
       this.MultiInstance,
       this.TimeSpoofing,
       this.LocationSpoofing,
-      this.UnsecureWifi
+      this.UnsecureWifi,
+      this.Automation
     ] : [
       this.AppIntegrity,
       this.PrivilegedAccess,
@@ -304,6 +320,9 @@ var registerThreatListener = async (config) => {
       case Threat.UnsecureWifi.value:
         config.unsecureWifi?.();
         break;
+      case Threat.Automation.value:
+        config.automation?.();
+        break;
       default:
         onInvalidCallback();
         break;
@@ -417,6 +436,7 @@ var start = async (config, eventListenerConfig, raspExecutionStateActions) => {
   getAppIcon,
   isScreenCaptureBlocked,
   onInvalidCallback,
+  removeExternalId,
   start,
   storeExternalId
 });

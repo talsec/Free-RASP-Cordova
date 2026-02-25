@@ -21,6 +21,7 @@ export declare class Threat {
     static TimeSpoofing: Threat;
     static LocationSpoofing: Threat;
     static UnsecureWifi: Threat;
+    static Automation: Threat;
     constructor(value: number);
     static getValues(): Threat[];
 }

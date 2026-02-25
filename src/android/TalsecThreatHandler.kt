@@ -13,7 +13,7 @@ internal object TalsecThreatHandler {
     internal val threatDispatcher = ThreatDispatcher()
     internal val executionStateDispatcher = ExecutionStateDispatcher()
 
-    private val threatDetected = object : ThreatListener.ThreatDetected {
+    private val threatDetected = object : ThreatListener.ThreatDetected() {
         override fun onRootDetected() {
             threatDispatcher.dispatchThreat(ThreatEvent.PrivilegedAccess)
         }
@@ -79,7 +79,7 @@ internal object TalsecThreatHandler {
         }
     }
 
-    private val deviceState = object : ThreatListener.DeviceState {
+    private val deviceState = object : ThreatListener.DeviceState() {
         override fun onUnlockedDeviceDetected() {
             threatDispatcher.dispatchThreat(ThreatEvent.Passcode)
         }
@@ -101,7 +101,7 @@ internal object TalsecThreatHandler {
         }
     }
 
-    private val raspExecutionState = object : ThreatListener.RaspExecutionState {
+    private val raspExecutionState = object : ThreatListener.RaspExecutionState() {
         override fun onAllChecksFinished() {
             executionStateDispatcher.dispatch(RaspExecutionStateEvent.AllChecksFinished)
         }
