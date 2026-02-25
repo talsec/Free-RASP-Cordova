@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [8.3.0] - 2026-02-23
 
 - Android SDK version: 18.0.4
-- iOS SDK version: 6.13.0
+- iOS SDK version: 6.14.1
 
 ### Cordova
 
@@ -62,6 +62,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### Removed
 
 - Removed deprecated `monitoring` feature
+
+### iOS
+
+#### Added
+
+- Added time spoofing detection, detecting an inaccurate device clock. It is a new threat `timeSpoofing`.
+
+#### Changed
+
+- Improved jailbreak detection methods
 
 ## [8.2.0] - 2025-02-03
 

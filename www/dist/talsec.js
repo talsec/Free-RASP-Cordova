@@ -175,7 +175,8 @@ var Threat = class _Threat {
       this.DeviceID,
       this.UnofficialStore,
       this.Screenshot,
-      this.ScreenRecording
+      this.ScreenRecording,
+      this.TimeSpoofing
     ];
   }
 };
