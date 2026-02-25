@@ -9,7 +9,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.aheaditec.talsec.security:TalsecSecurity-Community-Cordova:18.0.2"
+    implementation "com.aheaditec.talsec.security:TalsecSecurity-Community-Cordova:18.0.4"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1"
 }
 
