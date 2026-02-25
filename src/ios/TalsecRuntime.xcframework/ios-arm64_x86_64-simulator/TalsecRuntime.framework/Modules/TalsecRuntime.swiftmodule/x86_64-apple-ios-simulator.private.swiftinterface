@@ -5,6 +5,7 @@
 import CryptoKit
 import Foundation
 import LocalAuthentication
+import Network
 import TalsecRuntime.Private
 import Security
 import Swift
@@ -52,6 +53,7 @@ public enum SecurityThreat : Swift.String, Swift.Codable, Swift.CaseIterable, Sw
   case unofficialStore
   case screenshot
   case screenRecording
+  case timeSpoofing
   public init?(rawValue: Swift.String)
   public typealias AllCases = [TalsecRuntime.SecurityThreat]
   public typealias RawValue = Swift.String
