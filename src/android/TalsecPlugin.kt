@@ -64,9 +64,6 @@ class TalsecPlugin : CordovaPlugin() {
         // Trigger lazy initialization of the events
         initializeEventKeys()
         TalsecThreatHandler.initializeDispatchers(PluginListener(this.cordova.context))
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            ScreenProtector.register(this.cordova.activity)
-        }
     }
 
     override fun onPause(multitasking: Boolean) {
