@@ -6,7 +6,9 @@ const DEBUG_DIR = path.join(BUILD_DIR, 'Debug-iphonesimulator');
 const EMULATOR_DIR = path.join(BUILD_DIR, 'emulator');
 
 if (fs.existsSync(DEBUG_DIR) && !fs.existsSync(EMULATOR_DIR)) {
-  console.log('Creating symlink from Debug-iphonesimulator to emulator for native-run compatibility...');
+  console.log(
+    'Creating symlink from Debug-iphonesimulator to emulator for native-run compatibility...',
+  );
   try {
     // Create a symbolic link
     fs.symlinkSync('Debug-iphonesimulator', EMULATOR_DIR, 'dir');
