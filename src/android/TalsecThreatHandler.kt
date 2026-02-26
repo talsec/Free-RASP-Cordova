@@ -1,154 +1,124 @@
 package com.aheaditec.talsec.cordova
 
+import android.content.Context
+import com.aheaditec.talsec.cordova.dispatchers.ExecutionStateDispatcher
+import com.aheaditec.talsec.cordova.dispatchers.ThreatDispatcher
 import com.aheaditec.talsec.cordova.events.RaspExecutionStateEvent
 import com.aheaditec.talsec.cordova.events.ThreatEvent
-import com.aheaditec.talsec_security.security.api.ThreatListener
 import com.aheaditec.talsec_security.security.api.SuspiciousAppInfo
+import com.aheaditec.talsec_security.security.api.ThreatListener
 
-internal object TalsecThreatHandler : ThreatListener.ThreatDetected, ThreatListener.DeviceState,
-  ThreatListener.RaspExecutionState() {
-  internal var detectedThreats = mutableSetOf<ThreatEvent>()
-  internal var detectedRaspStateEvents = mutableSetOf<RaspExecutionStateEvent>()
-  internal var detectedMalware = mutableSetOf<SuspiciousAppInfo>()
-  private var listener: TalsecCordova? = null
+internal object TalsecThreatHandler {
 
-  internal fun setNewListener(newListener: TalsecCordova?) {
-    listener = newListener
-  }
+    internal lateinit var threatDispatcher: ThreatDispatcher
+    internal lateinit var executionStateDispatcher: ExecutionStateDispatcher
 
-  internal fun hasListener(): Boolean {
-    return listener != null
-  }
-
-  override fun onRootDetected() {
-    ThreatEvent.PrivilegedAccess.let {
-      listener?.threatDetected(it) ?: detectedThreats.add(it)
+    fun initializeDispatchers(listener: TalsecPlugin.PluginListener) {
+        threatDispatcher = ThreatDispatcher(listener)
+        executionStateDispatcher = ExecutionStateDispatcher(listener)
     }
-  }
 
-  override fun onDebuggerDetected() {
-    ThreatEvent.Debug.let {
-      listener?.threatDetected(it) ?: detectedThreats.add(it)
+    private val threatDetected = object : ThreatListener.ThreatDetected() {
+        override fun onRootDetected() {
+            threatDispatcher.dispatchThreat(ThreatEvent.PrivilegedAccess)
+        }
+
+        override fun onDebuggerDetected() {
+            threatDispatcher.dispatchThreat(ThreatEvent.Debug)
+        }
+
+        override fun onEmulatorDetected() {
+            threatDispatcher.dispatchThreat(ThreatEvent.Simulator)
+        }
+
+        override fun onTamperDetected() {
+            threatDispatcher.dispatchThreat(ThreatEvent.AppIntegrity)
+        }
+
+        override fun onUntrustedInstallationSourceDetected() {
+            threatDispatcher.dispatchThreat(ThreatEvent.UnofficialStore)
+        }
+
+        override fun onHookDetected() {
+            threatDispatcher.dispatchThreat(ThreatEvent.Hooks)
+        }
+
+        override fun onDeviceBindingDetected() {
+            threatDispatcher.dispatchThreat(ThreatEvent.DeviceBinding)
+        }
+
+        override fun onObfuscationIssuesDetected() {
+            threatDispatcher.dispatchThreat(ThreatEvent.ObfuscationIssues)
+        }
+
+        override fun onMalwareDetected(suspiciousAppInfos: MutableList<SuspiciousAppInfo>) {
+            threatDispatcher.dispatchMalware(suspiciousAppInfos)
+        }
+
+        override fun onScreenshotDetected() {
+            threatDispatcher.dispatchThreat(ThreatEvent.Screenshot)
+        }
+
+        override fun onScreenRecordingDetected() {
+            threatDispatcher.dispatchThreat(ThreatEvent.ScreenRecording)
+        }
+
+        override fun onMultiInstanceDetected() {
+            threatDispatcher.dispatchThreat(ThreatEvent.MultiInstance)
+        }
+
+        override fun onUnsecureWifiDetected() {
+            threatDispatcher.dispatchThreat(ThreatEvent.UnsecureWifi)
+        }
+
+        override fun onTimeSpoofingDetected() {
+            threatDispatcher.dispatchThreat(ThreatEvent.TimeSpoofing)
+        }
+
+        override fun onLocationSpoofingDetected() {
+            threatDispatcher.dispatchThreat(ThreatEvent.LocationSpoofing)
+        }
+
+        override fun onAutomationDetected() {
+            threatDispatcher.dispatchThreat(ThreatEvent.Automation)
+        }
     }
-  }
 
-  override fun onEmulatorDetected() {
-    ThreatEvent.Simulator.let {
-      listener?.threatDetected(it) ?: detectedThreats.add(it)
+    private val deviceState = object : ThreatListener.DeviceState() {
+        override fun onUnlockedDeviceDetected() {
+            threatDispatcher.dispatchThreat(ThreatEvent.Passcode)
+        }
+
+        override fun onHardwareBackedKeystoreNotAvailableDetected() {
+            threatDispatcher.dispatchThreat(ThreatEvent.SecureHardwareNotAvailable)
+        }
+
+        override fun onDeveloperModeDetected() {
+            threatDispatcher.dispatchThreat(ThreatEvent.DevMode)
+        }
+
+        override fun onADBEnabledDetected() {
+            threatDispatcher.dispatchThreat(ThreatEvent.ADBEnabled)
+        }
+
+        override fun onSystemVPNDetected() {
+            threatDispatcher.dispatchThreat(ThreatEvent.SystemVPN)
+        }
     }
-  }
 
-  override fun onTamperDetected() {
-    ThreatEvent.AppIntegrity.let {
-      listener?.threatDetected(it) ?: detectedThreats.add(it)
+    private val raspExecutionState = object : ThreatListener.RaspExecutionState() {
+        override fun onAllChecksFinished() {
+            executionStateDispatcher.dispatch(RaspExecutionStateEvent.AllChecksFinished)
+        }
     }
-  }
 
-  override fun onUntrustedInstallationSourceDetected() {
-    ThreatEvent.UnofficialStore.let {
-      listener?.threatDetected(it) ?: detectedThreats.add(it)
+    private val internalListener = ThreatListener(threatDetected, deviceState, raspExecutionState)
+
+    internal fun registerSDKListener(context: Context) {
+        internalListener.registerListener(context)
     }
-  }
 
-  override fun onHookDetected() {
-    ThreatEvent.Hooks.let {
-      listener?.threatDetected(it) ?: detectedThreats.add(it)
+    internal fun unregisterSDKListener(context: Context) {
+        internalListener.unregisterListener(context)
     }
-  }
-
-  override fun onDeviceBindingDetected() {
-    ThreatEvent.DeviceBinding.let {
-      listener?.threatDetected(it) ?: detectedThreats.add(it)
-    }
-  }
-
-  override fun onUnlockedDeviceDetected() {
-    ThreatEvent.Passcode.let {
-      listener?.threatDetected(it) ?: detectedThreats.add(it)
-    }
-  }
-
-  override fun onHardwareBackedKeystoreNotAvailableDetected() {
-    ThreatEvent.SecureHardwareNotAvailable.let {
-      listener?.threatDetected(it) ?: detectedThreats.add(it)
-    }
-  }
-
-  override fun onObfuscationIssuesDetected() {
-    ThreatEvent.ObfuscationIssues.let {
-      listener?.threatDetected(it) ?: detectedThreats.add(it)
-    }
-  }
-
-  override fun onDeveloperModeDetected() {
-    ThreatEvent.DevMode.let {
-      listener?.threatDetected(it) ?: detectedThreats.add(it)
-    }
-  }
-
-  override fun onADBEnabledDetected() {
-    ThreatEvent.ADBEnabled.let {
-      listener?.threatDetected(it) ?: detectedThreats.add(it)
-    }
-  }
-
-  override fun onSystemVPNDetected() {
-    ThreatEvent.SystemVPN.let {
-      listener?.threatDetected(it) ?: detectedThreats.add(it)
-    }
-  }
-
-  override fun onMalwareDetected(suspiciousAppInfos: MutableList<SuspiciousAppInfo>) {
-    suspiciousAppInfos.let {
-      listener?.malwareDetected(it) ?: detectedMalware.addAll(it)
-    }
-  }
-
-  override fun onScreenshotDetected() {
-    ThreatEvent.Screenshot.let {
-      listener?.threatDetected(it) ?: detectedThreats.add(it)
-    }
-  }
-
-  override fun onScreenRecordingDetected() {
-    ThreatEvent.ScreenRecording.let {
-      listener?.threatDetected(it) ?: detectedThreats.add(it)
-    }
-  }
-
-  override fun onMultiInstanceDetected() {
-    ThreatEvent.MultiInstance.let {
-      listener?.threatDetected(it) ?: detectedThreats.add(it)
-    }
-  }
-
-  override fun onUnsecureWifiDetected() {
-    ThreatEvent.UnsecureWifi.let {
-      listener?.threatDetected(it) ?: detectedThreats.add(it)
-    }
-  }
-
-  override fun onTimeSpoofingDetected() {
-    ThreatEvent.TimeSpoofing.let {
-      listener?.threatDetected(it) ?: detectedThreats.add(it)
-    }
-  }
-
-  override fun onLocationSpoofingDetected() {
-    ThreatEvent.LocationSpoofing.let {
-      listener?.threatDetected(it) ?: detectedThreats.add(it)
-    }
-  }
-
-  override fun onAllChecksFinished() {
-    RaspExecutionStateEvent.AllChecksFinished.let {
-      listener?.raspExecutionStateChanged(it) ?: detectedRaspStateEvents.add(it)
-    }
-  }
-
-  internal interface TalsecCordova {
-    fun threatDetected(threatEventType: ThreatEvent)
-    fun raspExecutionStateChanged(event: RaspExecutionStateEvent)
-    fun malwareDetected(suspiciousApps: MutableList<SuspiciousAppInfo>)
-  }
 }

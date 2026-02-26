@@ -9,24 +9,6 @@ import TalsecRuntime
         TalsecPlugin.shared = self
     }
     
-    private static func flushThreatCache() {
-        TalsecContext.threatCache.forEach { threat in
-            if let callbackId = TalsecContext.context.threatCallbackCordova {
-                TalsecContext.sendMessage(msg: [EventIdentifiers.threatChannelKey : threat.callbackIdentifier], callbackId: callbackId)
-            }
-        }
-        TalsecContext.threatCache.removeAll()
-    }
-
-    private static func flushExecutionStateCache() {
-        TalsecContext.executionStateCache.forEach { threat in
-            if let callbackId = TalsecContext.context.raspExecutionStateCallbackCordova {
-                TalsecContext.sendMessage(msg: [EventIdentifiers.raspExecutionStateChannelKey : threat.callbackIdentifier], callbackId: callbackId)
-            }
-        }
-        TalsecContext.executionStateCache.removeAll()
-    }
-    
     @objc(getThreatChannelData:)
     private func getThreatChannelData(command: CDVInvokedUrlCommand) -> Void {
         TalsecContext.sendMessage(msg: [EventIdentifiers.threatChannelKey], callbackId: command.callbackId, keepCallback: false)
@@ -74,13 +56,17 @@ import TalsecRuntime
     @objc(registerListener:)
     private func registerListener(command: CDVInvokedUrlCommand) {
         TalsecContext.context.threatCallbackCordova = command.callbackId
-        TalsecPlugin.flushThreatCache()
+        ThreatDispatcher.shared.listener = { threat in
+            TalsecContext.sendMessage(msg: [EventIdentifiers.threatChannelKey : threat.callbackIdentifier], callbackId: command.callbackId)
+        }
     }
 
     @objc(registerRaspExecutionStateListener:)
     private func registerRaspExecutionStateListener(command: CDVInvokedUrlCommand) {
         TalsecContext.context.raspExecutionStateCallbackCordova = command.callbackId
-        TalsecPlugin.flushExecutionStateCache()
+        ExecutionStateDispatcher.shared.listener = { event in
+             TalsecContext.sendMessage(msg: [EventIdentifiers.raspExecutionStateChannelKey : event.callbackIdentifier], callbackId: command.callbackId)
+        }
     }
     
     @objc(onInvalidCallback:)
@@ -135,13 +121,17 @@ import TalsecRuntime
 
     @objc(storeExternalId:)
     private func storeExternalId(command: CDVInvokedUrlCommand) {
-        
         guard let data = command.arguments[0] as? String else {
             TalsecContext.sendError(msg: "External id must be String", callbackId: command.callbackId)
             return
         }
-        
         UserDefaults.standard.set(data, forKey: "app.talsec.externalid")
+        TalsecContext.sendMessage(msg: "OK", callbackId: command.callbackId, keepCallback: false)
+    }
+    
+    @objc(removeExternalId:)
+    private func removeExternalId(command: CDVInvokedUrlCommand) {
+        UserDefaults.standard.removeObject(forKey: "app.talsec.externalid")
         TalsecContext.sendMessage(msg: "OK", callbackId: command.callbackId, keepCallback: false)
     }
     
@@ -170,30 +160,19 @@ import TalsecRuntime
 extension SecurityThreatCenter: @retroactive SecurityThreatHandler, @retroactive RaspExecutionState {
     
     public func threatDetected(_ securityThreat: TalsecRuntime.SecurityThreat) {
-        // It is better to implement security reactions (e.g. killing the app) here.
         if (securityThreat.rawValue == "passcodeChange") {
             return
         }
-        if let listenerCallbackId = TalsecContext.context.threatCallbackCordova {
-            TalsecContext.sendMessage(msg: [EventIdentifiers.threatChannelKey : securityThreat.callbackIdentifier], callbackId: listenerCallbackId)
-        } else {
-            TalsecContext.threatCache.insert(securityThreat)
-        }
+        ThreatDispatcher.shared.dispatch(threat: securityThreat)
     }
     
     public func onAllChecksFinished() {
-        if let listenerCallbackId = TalsecContext.context.raspExecutionStateCallbackCordova {
-            TalsecContext.sendMessage(msg: [EventIdentifiers.raspExecutionStateChannelKey : RaspExecutionStates.allChecksFinished.callbackIdentifier], callbackId: listenerCallbackId)
-        } else {
-            TalsecContext.executionStateCache.insert(RaspExecutionStates.allChecksFinished)
-        }
+        ExecutionStateDispatcher.shared.dispatch(event: RaspExecutionStates.allChecksFinished)
     }
 }
 
 class TalsecContext : CDVPlugin {
     static let context = TalsecContext()
-    static var threatCache = Set<SecurityThreat>()
-    static var executionStateCache = Set<RaspExecutionStates>()
     var threatCallbackCordova: String?
     var raspExecutionStateCallbackCordova: String?
 

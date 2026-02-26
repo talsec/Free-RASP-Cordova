@@ -1,6 +1,6 @@
 ext {
-  cdvCompileSdkVersion = 35
-  cdvTargetSdkVersion = 35
+    cdvCompileSdkVersion = 36
+    cdvTargetSdkVersion = 36
 }
 
 repositories {
@@ -9,7 +9,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.aheaditec.talsec.security:TalsecSecurity-Community-Cordova:17.0.1"
+    implementation "com.aheaditec.talsec.security:TalsecSecurity-Community-Cordova:18.0.4"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1"
 }
 
