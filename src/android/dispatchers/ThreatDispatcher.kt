@@ -9,33 +9,35 @@ internal class ThreatDispatcher(private val listener: PluginThreatListener) {
     private val threatCache = mutableSetOf<ThreatEvent>()
     private val malwareCache = mutableSetOf<SuspiciousAppInfo>()
 
-    private var isAppListening = false
+    private var isAppInForeground = false
+    private var isListenerRegistered = false
 
     fun registerListener(callbackContext: CallbackContext?) {
         listener.threatCallbackContext = callbackContext
-        isAppListening = true
+        isListenerRegistered = true
+        isAppInForeground = true
         flushCache()
     }
 
     fun unregisterListener() {
-        isAppListening = false
+        isListenerRegistered = false
+        isAppInForeground = false
         listener.threatCallbackContext = null
     }
 
     fun onResume() {
-        if (listener.threatCallbackContext == null) {
-            return
+        isAppInForeground = true
+        if (isListenerRegistered) {
+            flushCache()
         }
-        isAppListening = true
-        flushCache()
     }
 
     fun onPause() {
-        isAppListening = false
+        isAppInForeground = false
     }
 
     fun dispatchThreat(event: ThreatEvent) {
-        if (isAppListening) {
+        if (isAppInForeground && isListenerRegistered) {
             listener.threatDetected(event)
         } else {
             synchronized(threatCache) {
@@ -45,7 +47,7 @@ internal class ThreatDispatcher(private val listener: PluginThreatListener) {
     }
 
     fun dispatchMalware(apps: MutableList<SuspiciousAppInfo>) {
-        if (isAppListening) {
+        if (isAppInForeground && isListenerRegistered) {
             listener.malwareDetected(apps)
         } else {
             synchronized(malwareCache) {

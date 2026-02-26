@@ -7,33 +7,35 @@ import org.apache.cordova.CallbackContext
 internal class ExecutionStateDispatcher(private val listener: PluginExecutionStateListener) {
     private val cache = mutableSetOf<RaspExecutionStateEvent>()
 
-    private var isAppListening = false
+    private var isAppInForeground = false
+    private var isListenerRegistered = false
 
     fun registerListener(callbackContext: CallbackContext?) {
         listener.executionStateCallbackContext = callbackContext
-        isAppListening = true
+        isListenerRegistered = true
+        isAppInForeground = true
         flushCache()
     }
 
     fun unregisterListener() {
-        isAppListening = false
+        isListenerRegistered = false
+        isAppInForeground = false
         listener.executionStateCallbackContext = null
     }
 
     fun onResume() {
-        if (listener.executionStateCallbackContext == null) {
-            return
+        isAppInForeground = true
+        if (isListenerRegistered) {
+            flushCache()
         }
-        isAppListening = true
-        flushCache()
     }
 
     fun onPause() {
-        isAppListening = false
+        isAppInForeground = false
     }
 
     fun dispatch(event: RaspExecutionStateEvent) {
-        if (isAppListening) {
+        if (isAppInForeground && isListenerRegistered) {
             listener.raspExecutionStateChanged(event)
         } else {
             synchronized(cache) {
