@@ -76,6 +76,7 @@ class TalsecPlugin : CordovaPlugin() {
         if (this.cordova.activity.isFinishing) {
             TalsecThreatHandler.threatDispatcher.unregisterListener()
             TalsecThreatHandler.executionStateDispatcher.unregisterListener()
+            TalsecThreatHandler.unregisterSDKListener(this.cordova.context)
         }
     }
 
