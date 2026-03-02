@@ -5,7 +5,75 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [8.2.0] - 2026-02-03
+## [8.3.0] - 2026-02-23
+
+- Android SDK version: 18.0.4
+- iOS SDK version: 6.14.1
+
+### Cordova
+
+#### Added
+
+- Added cache for freeRASP callbacks when listener is not registered with the app
+- Added API for `automation` callback into `ThreatEventActions` (Android only)
+
+#### Fixed
+
+- Prevent multiple registration of the freeRASP listeners on the native side
+
+#### Changed
+
+- Updated compile and target SDK versions to 36 on Android
+- Higher compileSdk from [rootProject, plugin] is now used in build.gradle on Android
+
+### Android
+
+#### Added
+
+- Added new detection check for KernelSU
+- Added support for `KernelSU` to the existing root detection capabilities
+- Added support for `HMA` to the existing root detection capabilities
+- Added new malware detection capabilities
+- Added `onAutomationDetected()` callback to `ThreatDetected` interface
+  - We are introducing a new capability, detecting whether the device is being automated using tools like Appium
+- Added value restrictions to `externalId`
+  - Method `storeExternalId()` now returns `ExternalIdResult`, which indicates `Success` or `Error` when `externalId` violates restrictions
+
+#### Fixed
+
+- Fixed memory management issues in the native code
+- Patched possibility of `getInstalledPackages` throwing `DeadSystemException`
+- Patched possibility of `getNetworkCapabilities` throwing `SecurityException`
+- Fixed well-known issue of `Cipher.init` throwing `KeyStoreConnectException`
+- Fixed exception handling for the KeyStore `getEntry` operation
+- Fixed issue in `ScreenProtector` concerning the `onScreenRecordingDetected` invocations
+- Merged internal shared libraries into a single one, reducing the final APK size
+- Fixed bug related to key storing in keystore type detection (hw-backed keystore check)
+- Fixed manifest queries merge
+
+#### Changed
+
+- Removed unused library `tmlib`
+- Refactoring of signature verification code
+- Updated compile and target API to 36
+- Improved root detection capabilities
+- Detection of wireless ADB added to ADB detections
+
+#### Removed
+
+- Removed deprecated `monitoring` feature
+
+### iOS
+
+#### Added
+
+- Added time spoofing detection, detecting an inaccurate device clock. It is a new threat `timeSpoofing`.
+
+#### Changed
+
+- Improved jailbreak detection methods
+
+## [8.2.0] - 2025-02-03
 
 - Android SDK version: 17.0.1
 - iOS SDK version: 6.13.0

@@ -79,6 +79,21 @@ export class AppComponent implements OnInit {
     this.closeModal();
   }
 
+  async handleRemoveExternalId() {
+    try {
+      await talsec.removeExternalId();
+      this.toastColor = 'success';
+      this.toastMessage = 'External ID removed';
+    } catch (error: any) {
+      this.toastColor = 'warning';
+      this.toastMessage = `Error while removing external ID ${error.message}`;
+    }
+
+    this.showToast = true;
+
+    this.closeModal();
+  }
+
   constructor(
     private zone: NgZone,
     private suspiciousAppsService: SuspiciousAppsService,
@@ -158,6 +173,7 @@ export class AppComponent implements OnInit {
     timeSpoofing: () => this.updateAppChecks('Time Spoofing'),
     locationSpoofing: () => this.updateAppChecks('Location Spoofing'),
     unsecureWifi: () => this.updateAppChecks('Unsecure Wi-Fi'),
+    automation: () => this.updateAppChecks('Automation'),
   };
 
   raspExecutionStateActions = {

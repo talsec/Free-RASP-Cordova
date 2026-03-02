@@ -14,6 +14,20 @@ export const storeExternalId = (externalId: string): Promise<boolean> => {
   });
 };
 
+export const removeExternalId = (): Promise<boolean> => {
+  return new Promise((resolve, reject) => {
+    cordova.exec(
+      () => {
+        resolve(true);
+      },
+      reject,
+      'TalsecPlugin',
+      'removeExternalId',
+      [],
+    );
+  });
+};
+
 export const addToWhitelist = (packageName: string): Promise<string> => {
   if (cordova.platformId === 'ios') {
     return Promise.reject('Malware detection not available on iOS');
