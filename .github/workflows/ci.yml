@@ -57,12 +57,13 @@ jobs:
         run: npm install -g @ionic/cli cordova
 
       - name: Add Android platform
+        working-directory: ./example
         run: |
           cd example/
-          ionic cordova plugin add ../ --link    
-          ionic cordova platform add android
+          ionic cordova platform add android --confirm
 
       - name: Build Android
+        working-directory: ./example
         run: |
           cd example/
           ionic cordova build android --confirm
