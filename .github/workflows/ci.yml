@@ -58,12 +58,8 @@ jobs:
 
       - name: Add Android platform
         working-directory: ./example
-        run: |
-          cd example/
-          ionic cordova platform add android --confirm
+        run: ionic cordova platform add android --confirm
 
       - name: Build Android
         working-directory: ./example
-        run: |
-          cd example/
-          ionic cordova build android --confirm
+        run: ionic cordova build android --confirm
