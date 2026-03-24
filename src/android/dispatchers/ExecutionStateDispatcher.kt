@@ -4,13 +4,15 @@ import com.aheaditec.talsec.cordova.events.RaspExecutionStateEvent
 import com.aheaditec.talsec.cordova.interfaces.PluginExecutionStateListener
 import org.apache.cordova.CallbackContext
 
-internal class ExecutionStateDispatcher(private val listener: PluginExecutionStateListener) {
+internal object ExecutionStateDispatcher {
+    private lateinit var listener: PluginExecutionStateListener
     private val cache = mutableSetOf<RaspExecutionStateEvent>()
 
     private var isAppInForeground = false
     private var isListenerRegistered = false
 
-    fun registerListener(callbackContext: CallbackContext?) {
+    fun registerListener(newListener: PluginExecutionStateListener, callbackContext: CallbackContext?) {
+        listener = newListener
         listener.executionStateCallbackContext = callbackContext
         isListenerRegistered = true
         isAppInForeground = true
@@ -45,6 +47,9 @@ internal class ExecutionStateDispatcher(private val listener: PluginExecutionSta
     }
 
     private fun flushCache() {
+        if (!isListenerRegistered || !isAppInForeground) {
+            return
+        }
         val events = synchronized(cache) {
             val snapshot = cache.toSet()
             cache.clear()

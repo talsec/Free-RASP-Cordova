@@ -6,6 +6,8 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.os.Looper
 import android.util.Log
+import com.aheaditec.talsec.cordova.dispatchers.ExecutionStateDispatcher
+import com.aheaditec.talsec.cordova.dispatchers.ThreatDispatcher
 import com.aheaditec.talsec.cordova.events.BaseRaspEvent
 import com.aheaditec.talsec.cordova.events.RaspExecutionStateEvent
 import com.aheaditec.talsec.cordova.events.ThreatEvent
@@ -63,27 +65,26 @@ class TalsecPlugin : CordovaPlugin() {
         super.pluginInitialize()
         // Trigger lazy initialization of the events
         initializeEventKeys()
-        TalsecThreatHandler.initializeDispatchers(PluginListener(this.cordova.context))
     }
 
     override fun onPause(multitasking: Boolean) {
         super.onPause(multitasking)
-        TalsecThreatHandler.threatDispatcher.onPause()
-        TalsecThreatHandler.executionStateDispatcher.onPause()
+        ThreatDispatcher.onPause()
+        ExecutionStateDispatcher.onPause()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             ScreenProtector.unregister(cordova.activity)
         }
         if (this.cordova.activity.isFinishing) {
-            TalsecThreatHandler.threatDispatcher.unregisterListener()
-            TalsecThreatHandler.executionStateDispatcher.unregisterListener()
+            ThreatDispatcher.unregisterListener()
+            ExecutionStateDispatcher.unregisterListener()
             TalsecThreatHandler.unregisterSDKListener(this.cordova.context)
         }
     }
 
     override fun onResume(multitasking: Boolean) {
         super.onResume(multitasking)
-        TalsecThreatHandler.threatDispatcher.onResume()
-        TalsecThreatHandler.executionStateDispatcher.onResume()
+        ThreatDispatcher.onResume()
+        ExecutionStateDispatcher.onResume()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             ScreenProtector.register(this.cordova.activity)
         }
@@ -270,12 +271,12 @@ class TalsecPlugin : CordovaPlugin() {
     }
 
     private fun registerListener(callbackContext: CallbackContext?): Boolean {
-        TalsecThreatHandler.threatDispatcher.registerListener(callbackContext)
+        ThreatDispatcher.registerListener(PluginListener(this.cordova.context), callbackContext)
         return true
     }
 
     private fun registerRaspExecutionStateListener(callbackContext: CallbackContext?): Boolean {
-        TalsecThreatHandler.executionStateDispatcher.registerListener(callbackContext)
+        ExecutionStateDispatcher.registerListener(PluginListener(this.cordova.context), callbackContext)
         return true
     }
 
