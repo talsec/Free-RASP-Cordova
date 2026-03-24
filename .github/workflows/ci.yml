@@ -4,14 +4,14 @@ on:
     branches:
       - master
     paths-ignore:
-      - '**/*.md'
-      - '.github/**'
+      - "**/*.md"
+      - ".github/**"
   pull_request:
     branches:
       - master
     paths-ignore:
-      - '**/*.md'
-      - '.github/**'
+      - "**/*.md"
+      - ".github/**"
 
 jobs:
   static-analysis:
@@ -29,7 +29,7 @@ jobs:
 
       - name: Typecheck files
         run: npm run typecheck
-      
+
       - name: Format check
         run: npm run prettier -- --check
 
@@ -57,9 +57,11 @@ jobs:
         run: npm install -g @ionic/cli cordova
 
       - name: Add Android platform
-        working-directory: ./example
-        run: ionic cordova platform add android --confirm
+        run: |
+          cd example/
+          ionic cordova platform add android --confirm
 
       - name: Build Android
-        working-directory: ./example
-        run: ionic cordova build android --confirm
+        run: |
+          cd example/
+          ionic cordova build android --confirm
