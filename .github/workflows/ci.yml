@@ -81,3 +81,42 @@ jobs:
       - name: Build Android
         working-directory: ./example
         run: ionic cordova build android --confirm
+
+  build-ios:
+    timeout-minutes: 45
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Install Ionic and Cordova
+        run: npm install -g @ionic/cli cordova
+
+      - name: Build plugin
+        run: npm run build
+
+      - name: Prepare clean plugin source
+        run: |
+          mkdir -p ../plugin-source
+          rsync -av --exclude 'example' --exclude '.git' --exclude 'node_modules' ./ ../plugin-source/
+
+      - name: Prepare example app
+        working-directory: ./example
+        run: |
+          npm pkg delete dependencies.cordova-talsec-plugin-freerasp
+          mkdir -p www
+
+      - name: Add plugin from clean source
+        working-directory: ./example
+        run: cordova plugin add ../../plugin-source
+
+      - name: Add iOS platform
+        working-directory: ./example
+        run: ionic cordova platform add ios --confirm
+
+      - name: Build iOS
+        working-directory: ./example
+        run: ionic cordova build ios --confirm
