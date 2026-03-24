@@ -56,6 +56,14 @@ jobs:
       - name: Install Ionic and Cordova
         run: npm install -g @ionic/cli cordova
 
+      - name: Remove local plugin reference from package.json
+        working-directory: ./example
+        run: npm pkg delete dependencies.cordova-talsec-plugin-freerasp
+
+      - name: Add plugin with --link
+        working-directory: ./example
+        run: ionic cordova plugin add ../ --link
+
       - name: Add Android platform
         working-directory: ./example
         run: ionic cordova platform add android --confirm
