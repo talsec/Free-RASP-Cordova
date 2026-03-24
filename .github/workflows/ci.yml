@@ -59,6 +59,7 @@ jobs:
       - name: Add Android platform
         run: |
           cd example/
+          ionic cordova plugin add ../ --link    
           ionic cordova platform add android
 
       - name: Build Android
