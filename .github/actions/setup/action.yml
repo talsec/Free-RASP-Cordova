@@ -5,9 +5,9 @@ runs:
   using: composite
   steps:
     - name: Setup Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
-        node-version: '20'
+        node-version: '24'
         node-version-file: .nvmrc
 
     - name: Upgrade npm for trusted publishing
