@@ -42,3 +42,24 @@ jobs:
 
       - name: Setup
         uses: ./.github/actions/setup
+
+      - name: Install JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: "zulu"
+          java-version: "17"
+
+      - name: Finalize Android SDK
+        run: |
+          /bin/bash -c "yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null"
+
+      - name: Install Ionic and Cordova
+        run: npm install -g @ionic/cli cordova
+
+      - name: Add Android platform
+        working-directory: ./example
+        run: ionic cordova platform add android --confirm
+
+      - name: Build Android
+        working-directory: ./example
+        run: ionic cordova build android --confirm
