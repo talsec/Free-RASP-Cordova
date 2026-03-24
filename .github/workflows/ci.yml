@@ -62,7 +62,7 @@ jobs:
 
       - name: Add plugin with --link
         working-directory: ./example
-        run: ionic cordova plugin add ../ --link
+        run: cordova plugin add ../ --link
 
       - name: Add Android platform
         working-directory: ./example
