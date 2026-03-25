@@ -69,3 +69,4 @@ deploy.sh
 ejs-config*
 www/talsec.ts
 tsconfig.json
+example/
