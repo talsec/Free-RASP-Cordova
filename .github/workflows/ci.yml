@@ -33,7 +33,7 @@ jobs:
       - name: Format check
         run: npm run prettier -- --check
 
-  build:
+  build-android:
     timeout-minutes: 30
     runs-on: ubuntu-latest
     steps:
