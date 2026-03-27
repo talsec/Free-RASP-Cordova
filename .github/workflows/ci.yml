@@ -33,6 +33,33 @@ jobs:
       - name: Format check
         run: npm run prettier -- --check
 
+  verify-dist-build:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run npm run tsc
+        run: npm run tsc
+
+      - name: Run npm run build
+        run: npm run build
+
+      - name: Verify dist folder is up-to-date
+        run: |
+          git status --porcelain www/dist/
+          if [[ $(git status --porcelain www/dist/) ]]; then
+            echo "::error::www/dist/ folder is not up-to-date. Run 'npm run tsc' and 'npm run build' and commit the changes."
+            exit 1
+          fi
+
   build-android:
     timeout-minutes: 30
     runs-on: ubuntu-latest
