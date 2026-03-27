@@ -5,14 +5,16 @@ import com.aheaditec.talsec.cordova.interfaces.PluginThreatListener
 import com.aheaditec.talsec_security.security.api.SuspiciousAppInfo
 import org.apache.cordova.CallbackContext
 
-internal class ThreatDispatcher(private val listener: PluginThreatListener) {
+internal object ThreatDispatcher {
+    private lateinit var listener: PluginThreatListener
     private val threatCache = mutableSetOf<ThreatEvent>()
     private val malwareCache = mutableSetOf<SuspiciousAppInfo>()
 
     private var isAppInForeground = false
     private var isListenerRegistered = false
 
-    fun registerListener(callbackContext: CallbackContext?) {
+    fun registerListener(newListener: PluginThreatListener, callbackContext: CallbackContext?) {
+        listener = newListener
         listener.threatCallbackContext = callbackContext
         isListenerRegistered = true
         isAppInForeground = true
@@ -57,6 +59,9 @@ internal class ThreatDispatcher(private val listener: PluginThreatListener) {
     }
 
     private fun flushCache() {
+        if (!isListenerRegistered || !isAppInForeground) {
+            return
+        }
         val threats = synchronized(threatCache) {
             val snapshot = threatCache.toSet()
             threatCache.clear()
