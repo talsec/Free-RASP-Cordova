@@ -107,7 +107,7 @@ jobs:
 
       - name: Build Android
         working-directory: ./example
-        run: ionic cordova build android --confirm
+        run: ionic cordova build android --release --confirm
 
   build-ios:
     timeout-minutes: 45
