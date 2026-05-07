@@ -20,6 +20,7 @@ import com.aheaditec.talsec.cordova.utils.getArraySafe
 import com.aheaditec.talsec.cordova.utils.getBooleanSafe
 import com.aheaditec.talsec.cordova.utils.getNestedArraySafe
 import com.aheaditec.talsec.cordova.utils.getStringSafe
+import com.aheaditec.talsec.cordova.utils.toSuspiciousAppDetectionConfig
 import com.aheaditec.talsec_security.security.api.SuspiciousAppInfo
 import com.aheaditec.talsec_security.security.api.Talsec
 import com.aheaditec.talsec_security.security.api.TalsecConfig
@@ -302,6 +303,11 @@ class TalsecPlugin : CordovaPlugin() {
             talsecBuilder.blacklistedHashes(malwareConfig.getArraySafe("blacklistedHashes"))
             talsecBuilder.blacklistedPackageNames(malwareConfig.getArraySafe("blacklistedPackageNames"))
             talsecBuilder.suspiciousPermissions(malwareConfig.getNestedArraySafe("suspiciousPermissions"))
+        }
+        if (androidConfig.has("suspiciousAppDetectionConfig")) {
+            val suspiciousAppDetectionConfig = androidConfig.getJSONObject("suspiciousAppDetectionConfig")
+                .toSuspiciousAppDetectionConfig()
+            talsecBuilder.suspiciousAppDetection(suspiciousAppDetectionConfig)
         }
         return talsecBuilder.build()
     }

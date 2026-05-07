@@ -29,10 +29,10 @@ export class AppComponent implements OnInit {
     androidConfig: {
       packageName: 'io.ionic.starter',
       certificateHashes: ['AKoRuyLMM91E7lX/Zqp3u4jMmd0A7hH/Iqozu0TMVd0='],
-      malwareConfig: {
-        blacklistedHashes: ['FgvSehLMM91E7lX/Zqp3u4jMmd0A7hH/Iqozu0TMVd0u'],
-        blacklistedPackageNames: ['io.ionic.starter'],
-        suspiciousPermissions: [
+      suspiciousAppDetectionConfig: {
+        hashes: ['FgvSehLMM91E7lX/Zqp3u4jMmd0A7hH/Iqozu0TMVd0u'],
+        packageNames: ['io.ionic.starter'],
+        requestedPermissions: [
           [
             'android.permission.INTERNET',
             'android.permission.ACCESS_COARSE_LOCATION',
@@ -40,7 +40,11 @@ export class AppComponent implements OnInit {
           ['android.permission.BLUETOOTH'],
           ['android.permission.BATTERY_STATS'],
         ],
-        whitelistedInstallationSources: ['com.apkpure.aegon'],
+        malwareScanScope: {
+          scanScope: 'SIDELOADED_ONLY',
+          trustedInstallSources: ['com.apkpure.aegon'],
+        },
+        reasonMode: 'HIGHEST_CONFIDENCE',
       },
     },
     iosConfig: {
