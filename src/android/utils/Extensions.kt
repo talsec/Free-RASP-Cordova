@@ -7,6 +7,10 @@ import android.util.Log
 import com.aheaditec.talsec.cordova.models.CordovaPackageInfo
 import com.aheaditec.talsec.cordova.models.CordovaSuspiciousAppInfo
 import com.aheaditec.talsec_security.security.api.SuspiciousAppInfo
+import com.aheaditec.talsec_security.security.api.SuspiciousAppDetectionConfig
+import com.aheaditec.talsec_security.security.api.MalwareScanScope
+import com.aheaditec.talsec_security.security.api.ScopeType
+import com.aheaditec.talsec_security.security.api.ReasonMode
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.json.JSONArray
@@ -69,7 +73,7 @@ internal fun JSONObject.getStringSafe(key: String): String? {
 internal fun SuspiciousAppInfo.toCordovaSuspiciousAppInfo(context: Context): CordovaSuspiciousAppInfo {
     return CordovaSuspiciousAppInfo(
         packageInfo = this.packageInfo.toCordovaPackageInfo(context),
-        reason = this.reason,
+        reasons = this.reasons,
         permissions = this.permissions
     )
 }
@@ -84,6 +88,38 @@ internal fun PackageInfo.toCordovaPackageInfo(context: Context): CordovaPackageI
         version = this.versionName,
         appIcon = null, // this requires heavier computations, so appIcon has to be retrieved separately
         installerStore = Utils.getInstallationSource(context, this.packageName)
+    )
+}
+
+internal fun JSONObject.toMalwareScanScope(): MalwareScanScope {
+    val scopeStr = this.getStringSafe("scanScope") ?: ""
+    val scanScope = ScopeType.entries.firstOrNull { it.name == scopeStr } ?: ScopeType.SIDELOADED_ONLY
+    val trustedInstallSources = this.getArraySafe("trustedInstallSources").toSet()
+    return MalwareScanScope(
+        scanScope = scanScope,
+        trustedInstallSources = trustedInstallSources.ifEmpty { null }
+    )
+}
+
+internal fun JSONObject.toSuspiciousAppDetectionConfig(): SuspiciousAppDetectionConfig {
+    val packageNames = this.getArraySafe("packageNames").toSet().ifEmpty { null }
+    val hashes = this.getArraySafe("hashes").toSet().ifEmpty { null }
+    val requestedPermissions = this.getNestedArraySafe("requestedPermissions")
+        .map { it.toSet() }.toSet().ifEmpty { null }
+    val grantedPermissions = this.getNestedArraySafe("grantedPermissions")
+        .map { it.toSet() }.toSet().ifEmpty { null }
+    val malwareScanScope = if (this.has("malwareScanScope"))
+        this.getJSONObject("malwareScanScope").toMalwareScanScope() else null
+    val reasonModeStr = this.getStringSafe("reasonMode") ?: ""
+    val reasonMode = ReasonMode.entries.firstOrNull { it.name == reasonModeStr }
+        ?: ReasonMode.HIGHEST_CONFIDENCE
+    return SuspiciousAppDetectionConfig(
+        packageNames = packageNames,
+        hashes = hashes,
+        requestedPermissions = requestedPermissions,
+        grantedPermissions = grantedPermissions,
+        malwareScanScope = malwareScanScope,
+        reasonMode = reasonMode
     )
 }
 
