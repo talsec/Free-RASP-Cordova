@@ -1,7 +1,11 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { commonChecks, iosChecks, androidChecks } from './utils/checks';
 import { SuspiciousAppsService } from './services/suspicious-apps.service';
-import { SuspiciousAppInfo, Talsec } from 'cordova-talsec-plugin-freerasp';
+import {
+  SuspiciousAppInfo,
+  Talsec,
+  TalsecConfig,
+} from 'cordova-talsec-plugin-freerasp';
 
 declare var cordova: any;
 declare var talsec: Talsec;
@@ -25,7 +29,7 @@ export class AppComponent implements OnInit {
   toastColor: 'success' | 'warning' = 'success';
   checksFinished = false;
 
-  config = {
+  config: TalsecConfig = {
     androidConfig: {
       packageName: 'io.ionic.starter',
       certificateHashes: ['AKoRuyLMM91E7lX/Zqp3u4jMmd0A7hH/Iqozu0TMVd0='],
