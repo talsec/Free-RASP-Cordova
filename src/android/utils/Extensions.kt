@@ -91,14 +91,14 @@ internal fun PackageInfo.toCordovaPackageInfo(context: Context): CordovaPackageI
     )
 }
 
+private inline fun <reified T : Enum<T>> String?.toEnumOrDefault(default: T): T =
+    if (this == null) default
+    else try { enumValueOf(this) } catch (_: IllegalArgumentException) { default }
+
 internal fun JSONObject.toMalwareScanScope(): MalwareScanScope {
-    val scopeStr = this.getStringSafe("scanScope") ?: ""
-    val scanScope = ScopeType.entries.firstOrNull { it.name == scopeStr } ?: ScopeType.SIDELOADED_ONLY
-    val trustedInstallSources = this.getArraySafe("trustedInstallSources").toSet()
-    return MalwareScanScope(
-        scanScope = scanScope,
-        trustedInstallSources = trustedInstallSources.ifEmpty { null }
-    )
+    val scanScope = optString("scanScope").toEnumOrDefault(ScopeType.SIDELOADED_ONLY)
+    val trustedInstallSources = this.getArraySafe("trustedInstallSources").toList()
+    return MalwareScanScope(scanScope, trustedInstallSources.ifEmpty { null })
 }
 
 internal fun JSONObject.toSuspiciousAppDetectionConfig(): SuspiciousAppDetectionConfig {
@@ -108,18 +108,16 @@ internal fun JSONObject.toSuspiciousAppDetectionConfig(): SuspiciousAppDetection
         .map { it.toSet() }.toSet().ifEmpty { null }
     val grantedPermissions = this.getNestedArraySafe("grantedPermissions")
         .map { it.toSet() }.toSet().ifEmpty { null }
-    val malwareScanScope = if (this.has("malwareScanScope"))
-        this.getJSONObject("malwareScanScope").toMalwareScanScope() else null
-    val reasonModeStr = this.getStringSafe("reasonMode") ?: ""
-    val reasonMode = ReasonMode.entries.firstOrNull { it.name == reasonModeStr }
-        ?: ReasonMode.HIGHEST_CONFIDENCE
+    val malwareScanScope = optJSONObject("malwareScanScope")?.toMalwareScanScope()
+        ?: MalwareScanScope(ScopeType.SIDELOADED_ONLY, emptyList())
+    val reasonMode = optString("reasonMode").toEnumOrDefault(ReasonMode.HIGHEST_CONFIDENCE)
     return SuspiciousAppDetectionConfig(
-        packageNames = packageNames,
-        hashes = hashes,
-        requestedPermissions = requestedPermissions,
-        grantedPermissions = grantedPermissions,
-        malwareScanScope = malwareScanScope,
-        reasonMode = reasonMode
+        packageNames,
+        hashes,
+        requestedPermissions,
+        grantedPermissions,
+        malwareScanScope,
+        reasonMode
     )
 }
 
