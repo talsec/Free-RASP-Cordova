@@ -1,4 +1,44 @@
 import { ScreenCaptureStatus } from '../../models/screenCaptureStatus';
+import {
+  MalwareScanScope,
+  ReasonMode,
+  SuspiciousAppDetectionConfig,
+  TalsecAndroidConfig,
+  TalsecConfig,
+} from '../../types/types';
+
+const DEFAULT_MALWARE_SCAN_SCOPE: MalwareScanScope = {
+  scanScope: 'SIDELOADED_ONLY',
+};
+const DEFAULT_REASON_MODE: ReasonMode = 'HIGHEST_CONFIDENCE';
+
+const withSuspiciousAppDetectionDefaults = (
+  config: SuspiciousAppDetectionConfig,
+): SuspiciousAppDetectionConfig => ({
+  ...config,
+  malwareScanScope: config.malwareScanScope ?? DEFAULT_MALWARE_SCAN_SCOPE,
+  reasonMode: config.reasonMode ?? DEFAULT_REASON_MODE,
+});
+
+const normalizeAndroidConfig = (
+  androidConfig: TalsecAndroidConfig,
+): TalsecAndroidConfig => {
+  if (!androidConfig.suspiciousAppDetectionConfig) return androidConfig;
+  return {
+    ...androidConfig,
+    suspiciousAppDetectionConfig: withSuspiciousAppDetectionDefaults(
+      androidConfig.suspiciousAppDetectionConfig,
+    ),
+  };
+};
+
+export const normalizeConfig = (config: TalsecConfig): TalsecConfig => {
+  if (!config.androidConfig) return config;
+  return {
+    ...config,
+    androidConfig: normalizeAndroidConfig(config.androidConfig),
+  };
+};
 
 export const storeExternalId = (externalId: string): Promise<boolean> => {
   return new Promise((resolve, reject) => {

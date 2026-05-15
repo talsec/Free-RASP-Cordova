@@ -91,14 +91,11 @@ internal fun PackageInfo.toCordovaPackageInfo(context: Context): CordovaPackageI
     )
 }
 
-private inline fun <reified T : Enum<T>> String?.toEnumOrDefault(default: T): T =
-    if (this == null) default
-    else try { enumValueOf(this) } catch (_: IllegalArgumentException) { default }
-
 internal fun JSONObject.toMalwareScanScope(): MalwareScanScope {
-    val scanScope = optString("scanScope").toEnumOrDefault(ScopeType.SIDELOADED_ONLY)
-    val trustedInstallSources = this.getArraySafe("trustedInstallSources").toList()
-    return MalwareScanScope(scanScope, trustedInstallSources.ifEmpty { null })
+    val scanScope = ScopeType.valueOf(getString("scanScope"))
+    val trustedInstallSources = optJSONArray("trustedInstallSources")
+        ?.toPrimitiveArray<String>()?.toList()
+    return MalwareScanScope(scanScope, trustedInstallSources)
 }
 
 internal fun JSONObject.toSuspiciousAppDetectionConfig(): SuspiciousAppDetectionConfig {
@@ -108,9 +105,8 @@ internal fun JSONObject.toSuspiciousAppDetectionConfig(): SuspiciousAppDetection
         .map { it.toSet() }.toSet().ifEmpty { null }
     val grantedPermissions = this.getNestedArraySafe("grantedPermissions")
         .map { it.toSet() }.toSet().ifEmpty { null }
-    val malwareScanScope = optJSONObject("malwareScanScope")?.toMalwareScanScope()
-        ?: MalwareScanScope(ScopeType.SIDELOADED_ONLY, emptyList())
-    val reasonMode = optString("reasonMode").toEnumOrDefault(ReasonMode.HIGHEST_CONFIDENCE)
+    val malwareScanScope = getJSONObject("malwareScanScope").toMalwareScanScope()
+    val reasonMode = ReasonMode.valueOf(getString("reasonMode"))
     return SuspiciousAppDetectionConfig(
         packageNames,
         hashes,
