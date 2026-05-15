@@ -18,7 +18,6 @@ import com.aheaditec.talsec.cordova.utils.ScreenCaptureStatus
 import com.aheaditec.talsec.cordova.utils.toEncodedJsonArray
 import com.aheaditec.talsec.cordova.utils.getArraySafe
 import com.aheaditec.talsec.cordova.utils.getBooleanSafe
-import com.aheaditec.talsec.cordova.utils.getNestedArraySafe
 import com.aheaditec.talsec.cordova.utils.getStringSafe
 import com.aheaditec.talsec.cordova.utils.toSuspiciousAppDetectionConfig
 import com.aheaditec.talsec_security.security.api.SuspiciousAppInfo
@@ -297,13 +296,6 @@ class TalsecPlugin : CordovaPlugin() {
             .prod(json.getBooleanSafe("isProd"))
             .killOnBypass(json.getBooleanSafe("killOnBypass", false))
 
-        if (androidConfig.has("malwareConfig")) {
-            val malwareConfig = androidConfig.getJSONObject("malwareConfig")
-            talsecBuilder.whitelistedInstallationSources(malwareConfig.getArraySafe("whitelistedInstallationSources"))
-            talsecBuilder.blacklistedHashes(malwareConfig.getArraySafe("blacklistedHashes"))
-            talsecBuilder.blacklistedPackageNames(malwareConfig.getArraySafe("blacklistedPackageNames"))
-            talsecBuilder.suspiciousPermissions(malwareConfig.getNestedArraySafe("suspiciousPermissions"))
-        }
         if (androidConfig.has("suspiciousAppDetectionConfig")) {
             val suspiciousAppDetectionConfig = androidConfig.getJSONObject("suspiciousAppDetectionConfig")
                 .toSuspiciousAppDetectionConfig()

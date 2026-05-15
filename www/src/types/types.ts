@@ -10,7 +10,6 @@ export type TalsecAndroidConfig = {
   packageName: string;
   certificateHashes: string[];
   supportedAlternativeStores?: string[];
-  malwareConfig?: TalsecMalwareConfig;
   suspiciousAppDetectionConfig?: SuspiciousAppDetectionConfig;
 };
 
@@ -40,17 +39,6 @@ export type SuspiciousAppDetectionConfig = {
 export type TalsecIosConfig = {
   appBundleIds: string;
   appTeamId: string;
-};
-
-export type TalsecMalwareConfig = {
-  /** @deprecated Use SuspiciousAppDetectionConfig instead */
-  blacklistedHashes?: string[];
-  /** @deprecated Use SuspiciousAppDetectionConfig instead */
-  blacklistedPackageNames?: string[];
-  /** @deprecated Use SuspiciousAppDetectionConfig instead */
-  suspiciousPermissions?: string[][];
-  /** @deprecated Use SuspiciousAppDetectionConfig instead */
-  whitelistedInstallationSources?: string[];
 };
 
 export type SuspiciousAppInfo = {
