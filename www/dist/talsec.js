@@ -24,6 +24,7 @@ __export(talsec_exports, {
   blockScreenCapture: () => blockScreenCapture,
   getAppIcon: () => getAppIcon,
   isScreenCaptureBlocked: () => isScreenCaptureBlocked,
+  normalizeConfig: () => normalizeConfig,
   onInvalidCallback: () => onInvalidCallback,
   removeExternalId: () => removeExternalId,
   start: () => start,
@@ -38,6 +39,31 @@ var ScreenCaptureStatus = {
 };
 
 // www/src/api/methods/native.ts
+var DEFAULT_MALWARE_SCAN_SCOPE = {
+  scanScope: "SIDELOADED_ONLY"
+};
+var DEFAULT_REASON_MODE = "HIGHEST_CONFIDENCE";
+var withSuspiciousAppDetectionDefaults = (config) => ({
+  ...config,
+  malwareScanScope: config.malwareScanScope ?? DEFAULT_MALWARE_SCAN_SCOPE,
+  reasonMode: config.reasonMode ?? DEFAULT_REASON_MODE
+});
+var normalizeAndroidConfig = (androidConfig) => {
+  if (!androidConfig.suspiciousAppDetectionConfig) return androidConfig;
+  return {
+    ...androidConfig,
+    suspiciousAppDetectionConfig: withSuspiciousAppDetectionDefaults(
+      androidConfig.suspiciousAppDetectionConfig
+    )
+  };
+};
+var normalizeConfig = (config) => {
+  if (!config.androidConfig) return config;
+  return {
+    ...config,
+    androidConfig: normalizeAndroidConfig(config.androidConfig)
+  };
+};
 var storeExternalId = (externalId) => {
   return new Promise((resolve, reject) => {
     cordova.exec(
@@ -247,7 +273,7 @@ var toSuspiciousAppInfo = (base64Value) => {
   const packageInfo = data.packageInfo;
   return {
     packageInfo,
-    reason: data.reason,
+    reasons: data.reasons,
     permissions: data.permissions
   };
 };
@@ -426,7 +452,7 @@ var start = async (config, eventListenerConfig, raspExecutionStateActions) => {
       },
       "TalsecPlugin",
       "start",
-      [config]
+      [normalizeConfig(config)]
     );
   });
 };
@@ -436,6 +462,7 @@ var start = async (config, eventListenerConfig, raspExecutionStateActions) => {
   blockScreenCapture,
   getAppIcon,
   isScreenCaptureBlocked,
+  normalizeConfig,
   onInvalidCallback,
   removeExternalId,
   start,

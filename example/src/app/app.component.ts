@@ -1,7 +1,13 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { commonChecks, iosChecks, androidChecks } from './utils/checks';
 import { SuspiciousAppsService } from './services/suspicious-apps.service';
-import { SuspiciousAppInfo, Talsec } from 'cordova-talsec-plugin-freerasp';
+import {
+  SuspiciousAppInfo,
+  Talsec,
+  TalsecConfig,
+  ScopeType,
+  ReasonMode,
+} from 'cordova-talsec-plugin-freerasp';
 
 declare var cordova: any;
 declare var talsec: Talsec;
@@ -25,14 +31,14 @@ export class AppComponent implements OnInit {
   toastColor: 'success' | 'warning' = 'success';
   checksFinished = false;
 
-  config = {
+  config: TalsecConfig = {
     androidConfig: {
       packageName: 'io.ionic.starter',
       certificateHashes: ['AKoRuyLMM91E7lX/Zqp3u4jMmd0A7hH/Iqozu0TMVd0='],
-      malwareConfig: {
-        blacklistedHashes: ['FgvSehLMM91E7lX/Zqp3u4jMmd0A7hH/Iqozu0TMVd0u'],
-        blacklistedPackageNames: ['io.ionic.starter'],
-        suspiciousPermissions: [
+      suspiciousAppDetectionConfig: {
+        hashes: ['FgvSehLMM91E7lX/Zqp3u4jMmd0A7hH/Iqozu0TMVd0u'],
+        packageNames: ['io.ionic.starter'],
+        requestedPermissions: [
           [
             'android.permission.INTERNET',
             'android.permission.ACCESS_COARSE_LOCATION',
@@ -40,7 +46,11 @@ export class AppComponent implements OnInit {
           ['android.permission.BLUETOOTH'],
           ['android.permission.BATTERY_STATS'],
         ],
-        whitelistedInstallationSources: ['com.apkpure.aegon'],
+        malwareScanScope: {
+          scanScope: 'SIDELOADED_ONLY' as ScopeType,
+          trustedInstallSources: ['com.apkpure.aegon'],
+        },
+        reasonMode: 'HIGHEST_CONFIDENCE' as ReasonMode,
       },
     },
     iosConfig: {
