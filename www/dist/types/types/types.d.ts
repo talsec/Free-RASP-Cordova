@@ -13,7 +13,7 @@ export type TalsecAndroidConfig = {
 };
 export type ScopeType = 'SIDELOADED_ONLY' | 'SIDELOADED_AND_SYSTEM_EXCLUDE_OEM' | 'SIDELOADED_AND_OEM' | 'SIDELOADED_AND_SYSTEM_AND_OEM' | 'ALL';
 export type ReasonMode = 'ALL' | 'HIGHEST_CONFIDENCE';
-export type MalwareScanScope = {
+export type ScanScope = {
     scanScope: ScopeType;
     trustedInstallSources?: string[];
 };
@@ -22,7 +22,7 @@ export type SuspiciousAppDetectionConfig = {
     hashes?: string[];
     requestedPermissions?: string[][];
     grantedPermissions?: string[][];
-    malwareScanScope: MalwareScanScope;
+    scanScope: ScanScope;
     reasonMode: ReasonMode;
 };
 export type TalsecIosConfig = {

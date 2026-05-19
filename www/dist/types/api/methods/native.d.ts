@@ -1,5 +1,4 @@
-import { TalsecConfig } from '../../types/types';
-export declare const normalizeConfig: (config: TalsecConfig) => TalsecConfig;
+export { normalizeConfig } from '../../utils/config';
 export declare const storeExternalId: (externalId: string) => Promise<boolean>;
 export declare const removeExternalId: () => Promise<boolean>;
 export declare const addToWhitelist: (packageName: string) => Promise<string>;
