@@ -38,21 +38,21 @@ var ScreenCaptureStatus = {
   BLOCKED: 1
 };
 
-// www/src/api/methods/native.ts
-var DEFAULT_MALWARE_SCAN_SCOPE = {
+// www/src/utils/config.ts
+var DEFAULT_SCAN_SCOPE = {
   scanScope: "SIDELOADED_ONLY"
 };
 var DEFAULT_REASON_MODE = "HIGHEST_CONFIDENCE";
-var withSuspiciousAppDetectionDefaults = (config) => ({
+var withDefaults = (config) => ({
   ...config,
-  malwareScanScope: config.malwareScanScope ?? DEFAULT_MALWARE_SCAN_SCOPE,
+  scanScope: config.scanScope ?? DEFAULT_SCAN_SCOPE,
   reasonMode: config.reasonMode ?? DEFAULT_REASON_MODE
 });
 var normalizeAndroidConfig = (androidConfig) => {
   if (!androidConfig.suspiciousAppDetectionConfig) return androidConfig;
   return {
     ...androidConfig,
-    suspiciousAppDetectionConfig: withSuspiciousAppDetectionDefaults(
+    suspiciousAppDetectionConfig: withDefaults(
       androidConfig.suspiciousAppDetectionConfig
     )
   };
@@ -64,6 +64,8 @@ var normalizeConfig = (config) => {
     androidConfig: normalizeAndroidConfig(config.androidConfig)
   };
 };
+
+// www/src/api/methods/native.ts
 var storeExternalId = (externalId) => {
   return new Promise((resolve, reject) => {
     cordova.exec(

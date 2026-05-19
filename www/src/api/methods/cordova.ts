@@ -5,7 +5,8 @@ import {
 } from '../../types/types';
 import { registerThreatListener } from '../listeners/threat';
 import { registerRaspExecutionStateListener } from '../listeners/raspExecutionState';
-import { normalizeConfig, onInvalidCallback } from './native';
+import { onInvalidCallback } from './native';
+import { normalizeConfig } from '../../utils/config';
 
 export const start = async (
   config: TalsecConfig,
