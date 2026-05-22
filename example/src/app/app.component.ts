@@ -46,7 +46,7 @@ export class AppComponent implements OnInit {
           ['android.permission.BLUETOOTH'],
           ['android.permission.BATTERY_STATS'],
         ],
-        malwareScanScope: {
+        scanScope: {
           scanScope: 'SIDELOADED_ONLY' as ScopeType,
           trustedInstallSources: ['com.apkpure.aegon'],
         },
