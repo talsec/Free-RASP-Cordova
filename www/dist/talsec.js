@@ -24,11 +24,11 @@ __export(talsec_exports, {
   blockScreenCapture: () => blockScreenCapture,
   getAppIcon: () => getAppIcon,
   isScreenCaptureBlocked: () => isScreenCaptureBlocked,
-  normalizeConfig: () => normalizeConfig,
   onInvalidCallback: () => onInvalidCallback,
   removeExternalId: () => removeExternalId,
   start: () => start,
-  storeExternalId: () => storeExternalId
+  storeExternalId: () => storeExternalId,
+  withDefaults: () => withDefaults
 });
 module.exports = __toCommonJS(talsec_exports);
 
@@ -43,7 +43,7 @@ var DEFAULT_SCAN_SCOPE = {
   scanScope: "SIDELOADED_ONLY"
 };
 var DEFAULT_REASON_MODE = "HIGHEST_CONFIDENCE";
-var withDefaults = (config) => ({
+var withDetectionDefaults = (config) => ({
   ...config,
   scanScope: config.scanScope ?? DEFAULT_SCAN_SCOPE,
   reasonMode: config.reasonMode ?? DEFAULT_REASON_MODE
@@ -52,12 +52,12 @@ var normalizeAndroidConfig = (androidConfig) => {
   if (!androidConfig.suspiciousAppDetectionConfig) return androidConfig;
   return {
     ...androidConfig,
-    suspiciousAppDetectionConfig: withDefaults(
+    suspiciousAppDetectionConfig: withDetectionDefaults(
       androidConfig.suspiciousAppDetectionConfig
     )
   };
 };
-var normalizeConfig = (config) => {
+var withDefaults = (config) => {
   if (!config.androidConfig) return config;
   return {
     ...config,
@@ -454,7 +454,7 @@ var start = async (config, eventListenerConfig, raspExecutionStateActions) => {
       },
       "TalsecPlugin",
       "start",
-      [normalizeConfig(config)]
+      [withDefaults(config)]
     );
   });
 };
@@ -464,9 +464,9 @@ var start = async (config, eventListenerConfig, raspExecutionStateActions) => {
   blockScreenCapture,
   getAppIcon,
   isScreenCaptureBlocked,
-  normalizeConfig,
   onInvalidCallback,
   removeExternalId,
   start,
-  storeExternalId
+  storeExternalId,
+  withDefaults
 });

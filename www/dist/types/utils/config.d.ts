@@ -1,2 +1,2 @@
 import { TalsecConfig } from '../types/types';
-export declare const normalizeConfig: (config: TalsecConfig) => TalsecConfig;
+export declare const withDefaults: (config: TalsecConfig) => TalsecConfig;
