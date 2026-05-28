@@ -5,8 +5,6 @@ import {
   SuspiciousAppInfo,
   Talsec,
   TalsecConfig,
-  ScopeType,
-  ReasonMode,
 } from 'cordova-talsec-plugin-freerasp';
 
 declare var cordova: any;
@@ -47,10 +45,10 @@ export class AppComponent implements OnInit {
           ['android.permission.BATTERY_STATS'],
         ],
         scanScope: {
-          scanScope: 'SIDELOADED_ONLY' as ScopeType,
+          scanScope: 'SIDELOADED_ONLY',
           trustedInstallSources: ['com.apkpure.aegon'],
         },
-        reasonMode: 'HIGHEST_CONFIDENCE' as ReasonMode,
+        reasonMode: 'HIGHEST_CONFIDENCE',
       },
     },
     iosConfig: {
