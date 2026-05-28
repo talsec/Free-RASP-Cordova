@@ -1,5 +1,4 @@
 import { ScreenCaptureStatus } from '../../models/screenCaptureStatus';
-export { withDefaults } from '../../utils/config';
 
 export const storeExternalId = (externalId: string): Promise<boolean> => {
   return new Promise((resolve, reject) => {

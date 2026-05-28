@@ -27,8 +27,7 @@ __export(talsec_exports, {
   onInvalidCallback: () => onInvalidCallback,
   removeExternalId: () => removeExternalId,
   start: () => start,
-  storeExternalId: () => storeExternalId,
-  withDefaults: () => withDefaults
+  storeExternalId: () => storeExternalId
 });
 module.exports = __toCommonJS(talsec_exports);
 
@@ -36,33 +35,6 @@ module.exports = __toCommonJS(talsec_exports);
 var ScreenCaptureStatus = {
   ALLOWED: 0,
   BLOCKED: 1
-};
-
-// www/src/utils/config.ts
-var DEFAULT_SCAN_SCOPE = {
-  scanScope: "SIDELOADED_ONLY"
-};
-var DEFAULT_REASON_MODE = "HIGHEST_CONFIDENCE";
-var withDetectionDefaults = (config) => ({
-  ...config,
-  scanScope: config.scanScope ?? DEFAULT_SCAN_SCOPE,
-  reasonMode: config.reasonMode ?? DEFAULT_REASON_MODE
-});
-var normalizeAndroidConfig = (androidConfig) => {
-  if (!androidConfig.suspiciousAppDetectionConfig) return androidConfig;
-  return {
-    ...androidConfig,
-    suspiciousAppDetectionConfig: withDetectionDefaults(
-      androidConfig.suspiciousAppDetectionConfig
-    )
-  };
-};
-var withDefaults = (config) => {
-  if (!config.androidConfig) return config;
-  return {
-    ...config,
-    androidConfig: normalizeAndroidConfig(config.androidConfig)
-  };
 };
 
 // www/src/api/methods/native.ts
@@ -433,6 +405,33 @@ var registerRaspExecutionStateListener = async (config) => {
   );
 };
 
+// www/src/utils/config.ts
+var DEFAULT_SCAN_SCOPE = {
+  scanScope: "SIDELOADED_ONLY"
+};
+var DEFAULT_REASON_MODE = "HIGHEST_CONFIDENCE";
+var withDetectionDefaults = (config) => ({
+  ...config,
+  scanScope: config.scanScope ?? DEFAULT_SCAN_SCOPE,
+  reasonMode: config.reasonMode ?? DEFAULT_REASON_MODE
+});
+var normalizeAndroidConfig = (androidConfig) => {
+  if (!androidConfig.suspiciousAppDetectionConfig) return androidConfig;
+  return {
+    ...androidConfig,
+    suspiciousAppDetectionConfig: withDetectionDefaults(
+      androidConfig.suspiciousAppDetectionConfig
+    )
+  };
+};
+var withDefaults = (config) => {
+  if (!config.androidConfig) return config;
+  return {
+    ...config,
+    androidConfig: normalizeAndroidConfig(config.androidConfig)
+  };
+};
+
 // www/src/api/methods/cordova.ts
 var start = async (config, eventListenerConfig, raspExecutionStateActions) => {
   await registerThreatListener(eventListenerConfig);
@@ -467,6 +466,5 @@ var start = async (config, eventListenerConfig, raspExecutionStateActions) => {
   onInvalidCallback,
   removeExternalId,
   start,
-  storeExternalId,
-  withDefaults
+  storeExternalId
 });

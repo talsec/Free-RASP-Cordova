@@ -1,4 +1,3 @@
-export { withDefaults } from '../../utils/config';
 export declare const storeExternalId: (externalId: string) => Promise<boolean>;
 export declare const removeExternalId: () => Promise<boolean>;
 export declare const addToWhitelist: (packageName: string) => Promise<string>;
