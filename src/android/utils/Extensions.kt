@@ -92,10 +92,10 @@ internal fun PackageInfo.toCordovaPackageInfo(context: Context): CordovaPackageI
 }
 
 internal fun JSONObject.toScanScope(): MalwareScanScope {
-    val scanScope = ScopeType.valueOf(getString("scanScope"))
+    val scopeType = ScopeType.valueOf(getString("scopeType"))
     val trustedInstallSources = optJSONArray("trustedInstallSources")
         ?.toPrimitiveArray<String>()?.toList()
-    return MalwareScanScope(scanScope, trustedInstallSources)
+    return MalwareScanScope(scopeType, trustedInstallSources)
 }
 
 internal fun JSONObject.toSuspiciousAppDetectionConfig(): SuspiciousAppDetectionConfig {

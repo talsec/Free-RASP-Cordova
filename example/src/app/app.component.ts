@@ -45,7 +45,7 @@ export class AppComponent implements OnInit {
           ['android.permission.BATTERY_STATS'],
         ],
         scanScope: {
-          scanScope: 'SIDELOADED_ONLY',
+          scopeType: 'SIDELOADED_ONLY',
           trustedInstallSources: ['com.apkpure.aegon'],
         },
         reasonMode: 'HIGHEST_CONFIDENCE',

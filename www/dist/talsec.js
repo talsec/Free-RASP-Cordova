@@ -407,7 +407,7 @@ var registerRaspExecutionStateListener = async (config) => {
 
 // www/src/utils/config.ts
 var DEFAULT_SCAN_SCOPE = {
-  scanScope: "SIDELOADED_ONLY"
+  scopeType: "SIDELOADED_ONLY"
 };
 var DEFAULT_REASON_MODE = "HIGHEST_CONFIDENCE";
 var withDetectionDefaults = (config) => ({

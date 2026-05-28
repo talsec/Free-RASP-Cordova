@@ -14,7 +14,7 @@ export type TalsecAndroidConfig = {
 export type ScopeType = 'SIDELOADED_ONLY' | 'SIDELOADED_AND_SYSTEM_EXCLUDE_OEM' | 'SIDELOADED_AND_OEM' | 'SIDELOADED_AND_SYSTEM_AND_OEM' | 'ALL';
 export type ReasonMode = 'ALL' | 'HIGHEST_CONFIDENCE';
 export type ScanScope = {
-    scanScope: ScopeType;
+    scopeType: ScopeType;
     trustedInstallSources?: string[];
 };
 export type SuspiciousAppDetectionConfig = {
