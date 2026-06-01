@@ -6,6 +6,7 @@ import {
 import { registerThreatListener } from '../listeners/threat';
 import { registerRaspExecutionStateListener } from '../listeners/raspExecutionState';
 import { onInvalidCallback } from './native';
+import { withDefaults } from '../../utils/config';
 
 export const start = async (
   config: TalsecConfig,
@@ -32,7 +33,7 @@ export const start = async (
       },
       'TalsecPlugin',
       'start',
-      [config],
+      [withDefaults(config)],
     );
   });
 };

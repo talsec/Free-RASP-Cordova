@@ -247,7 +247,7 @@ var toSuspiciousAppInfo = (base64Value) => {
   const packageInfo = data.packageInfo;
   return {
     packageInfo,
-    reason: data.reason,
+    reasons: data.reasons,
     permissions: data.permissions
   };
 };
@@ -405,6 +405,33 @@ var registerRaspExecutionStateListener = async (config) => {
   );
 };
 
+// www/src/utils/config.ts
+var DEFAULT_SCAN_SCOPE = {
+  scopeType: "SIDELOADED_ONLY"
+};
+var DEFAULT_REASON_MODE = "HIGHEST_CONFIDENCE";
+var withDetectionDefaults = (config) => ({
+  ...config,
+  scanScope: config.scanScope ?? DEFAULT_SCAN_SCOPE,
+  reasonMode: config.reasonMode ?? DEFAULT_REASON_MODE
+});
+var normalizeAndroidConfig = (androidConfig) => {
+  if (!androidConfig.suspiciousAppDetectionConfig) return androidConfig;
+  return {
+    ...androidConfig,
+    suspiciousAppDetectionConfig: withDetectionDefaults(
+      androidConfig.suspiciousAppDetectionConfig
+    )
+  };
+};
+var withDefaults = (config) => {
+  if (!config.androidConfig) return config;
+  return {
+    ...config,
+    androidConfig: normalizeAndroidConfig(config.androidConfig)
+  };
+};
+
 // www/src/api/methods/cordova.ts
 var start = async (config, eventListenerConfig, raspExecutionStateActions) => {
   await registerThreatListener(eventListenerConfig);
@@ -426,7 +453,7 @@ var start = async (config, eventListenerConfig, raspExecutionStateActions) => {
       },
       "TalsecPlugin",
       "start",
-      [config]
+      [withDefaults(config)]
     );
   });
 };
