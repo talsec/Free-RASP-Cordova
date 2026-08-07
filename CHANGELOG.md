@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [9.1.0] - 2026-08-07
 
 - Android SDK version: 19.2.1
-- iOS SDK version: 6.14.4
+- iOS SDK version: 7.1.2
 
 ### Cordova
 
@@ -36,6 +36,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved hook detection
 - Improved Frida detection
 - Improved root detection capabilities
+
+### iOS
+
+#### Added
+
+- Improved jailbreak detection
+- Added support for postponed checks, therefore, due to slower execution, some subchecks are run after initial startup checks.
+- Improved hook detection.
+
+#### Fixed
+
+- Fixed issue with app's color scheme initialization.
+- Fixed bad memory access in jaibreak check.
 
 ## [9.0.0] - 2026-05-15
 
