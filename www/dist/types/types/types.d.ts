@@ -64,6 +64,7 @@ export type ThreatEventActions = {
     locationSpoofing?: () => any;
     unsecureWifi?: () => any;
     automation?: () => any;
+    bootloader?: () => any;
 };
 export type RaspExecutionStateEventActions = {
     allChecksFinished?: () => any;

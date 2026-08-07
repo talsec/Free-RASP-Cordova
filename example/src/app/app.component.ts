@@ -182,6 +182,7 @@ export class AppComponent implements OnInit {
     locationSpoofing: () => this.updateAppChecks('Location Spoofing'),
     unsecureWifi: () => this.updateAppChecks('Unsecure Wi-Fi'),
     automation: () => this.updateAppChecks('Automation'),
+    bootloader: () => this.updateAppChecks('Bootloader'),
   };
 
   raspExecutionStateActions = {
