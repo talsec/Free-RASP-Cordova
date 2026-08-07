@@ -136,6 +136,7 @@ var Threat = class _Threat {
   static LocationSpoofing = new _Threat(0);
   static UnsecureWifi = new _Threat(0);
   static Automation = new _Threat(0);
+  static Bootloader = new _Threat(0);
   constructor(value) {
     this.value = value;
   }
@@ -161,7 +162,8 @@ var Threat = class _Threat {
       this.TimeSpoofing,
       this.LocationSpoofing,
       this.UnsecureWifi,
-      this.Automation
+      this.Automation,
+      this.Bootloader
     ] : [
       this.AppIntegrity,
       this.PrivilegedAccess,
@@ -323,6 +325,9 @@ var registerThreatListener = async (config) => {
         break;
       case Threat.Automation.value:
         config.automation?.();
+        break;
+      case Threat.Bootloader.value:
+        config.bootloader?.();
         break;
       default:
         onInvalidCallback();

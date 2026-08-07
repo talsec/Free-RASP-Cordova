@@ -6,6 +6,9 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.os.Looper
 import android.util.Log
+import app.talsec.rasp.security.api.SuspiciousAppInfo
+import app.talsec.rasp.security.api.Talsec
+import app.talsec.rasp.security.api.TalsecConfig
 import com.aheaditec.talsec.cordova.dispatchers.ExecutionStateDispatcher
 import com.aheaditec.talsec.cordova.dispatchers.ThreatDispatcher
 import com.aheaditec.talsec.cordova.events.BaseRaspEvent
@@ -20,9 +23,6 @@ import com.aheaditec.talsec.cordova.utils.getArraySafe
 import com.aheaditec.talsec.cordova.utils.getBooleanSafe
 import com.aheaditec.talsec.cordova.utils.getStringSafe
 import com.aheaditec.talsec.cordova.utils.toSuspiciousAppDetectionConfig
-import com.aheaditec.talsec_security.security.api.SuspiciousAppInfo
-import com.aheaditec.talsec_security.security.api.Talsec
-import com.aheaditec.talsec_security.security.api.TalsecConfig
 
 import org.apache.cordova.CallbackContext
 import org.apache.cordova.CordovaPlugin

@@ -79,6 +79,9 @@ export const registerThreatListener = async (
       case Threat.Automation.value:
         config.automation?.();
         break;
+      case Threat.Bootloader.value:
+        config.bootloader?.();
+        break;
       default:
         onInvalidCallback();
         break;

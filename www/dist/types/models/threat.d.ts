@@ -22,6 +22,7 @@ export declare class Threat {
     static LocationSpoofing: Threat;
     static UnsecureWifi: Threat;
     static Automation: Threat;
+    static Bootloader: Threat;
     constructor(value: number);
     static getValues(): Threat[];
 }

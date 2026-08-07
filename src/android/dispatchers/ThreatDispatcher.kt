@@ -1,8 +1,8 @@
 package com.aheaditec.talsec.cordova.dispatchers
 
+import app.talsec.rasp.security.api.SuspiciousAppInfo
 import com.aheaditec.talsec.cordova.events.ThreatEvent
 import com.aheaditec.talsec.cordova.interfaces.PluginThreatListener
-import com.aheaditec.talsec_security.security.api.SuspiciousAppInfo
 import org.apache.cordova.CallbackContext
 
 internal object ThreatDispatcher {

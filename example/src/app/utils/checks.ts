@@ -25,4 +25,5 @@ export const androidChecks = [
   { name: 'Location Spoofing', isSecure: true },
   { name: 'Unsecure Wi-Fi', isSecure: true },
   { name: 'Automation', isSecure: true },
+  { name: 'Bootloader', isSecure: true },
 ];
