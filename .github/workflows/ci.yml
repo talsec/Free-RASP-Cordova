@@ -146,4 +146,7 @@ jobs:
 
       - name: Build iOS
         working-directory: ./example
-        run: ionic cordova build ios --confirm
+        # cordova-ios picks a simulator by name but omits the OS, so xcodebuild
+        # resolves OS:latest and fails when that device only exists on an older
+        # runtime. A generic destination is enough since this job only builds.
+        run: ionic cordova build ios --emulator --confirm -- --buildFlag="-destination generic/platform=iOS Simulator"
