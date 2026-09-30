@@ -109,6 +109,12 @@ jobs:
         working-directory: ./example
         run: ionic cordova build android --release --confirm
 
+      - name: License backend hint
+        if: failure()
+        run: |
+          echo "::warning::The plugin applies app.talsec.plugin, which requests a license token from portal-backend.talsec.app during the build."
+          echo "::warning::If the log shows 'Cannot resolve license', check that the backend is up and reachable from the runner before investigating this PR."
+
   build-ios:
     timeout-minutes: 45
     runs-on: macos-latest

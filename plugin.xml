@@ -2,7 +2,7 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         id="cordova-talsec-plugin-freerasp"
-        version="9.1.2">
+        version="10.0.0">
 
   <name>freerasp</name>
   <author>Talsec (info@talsec.app)</author>
@@ -24,6 +24,7 @@
   </js-module>
 
   <platform name="android">
+    <hook type="after_prepare" src="src/android/hooks/addTalsecGradlePlugin.js" />
     <config-file target="res/xml/config.xml" parent="/*">
       <preference name="GradlePluginKotlinEnabled" value="true" />
       <preference name="GradlePluginKotlinCodeStyle" value="official" />

@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [10.0.0] - 2026-09-30
+
+- Android SDK version: 19.3.1
+- iOS SDK version: 7.1.4
+
+### Cordova
+
+#### Breaking
+
+- Android builds now apply the `app.talsec.plugin` Gradle plugin automatically and require network access to the Talsec license backend
+
+### Android
+
+#### Breaking
+
+- Changed Talsec integration from Maven dependency to the `app.talsec.plugin` Gradle plugin with `talsec { }` configuration block
+
+#### Fixed
+
+- Root detection related bugs causing false positives
+
 ## [9.1.2] - 2026-09-29
 
 - Android SDK version: 19.2.3
