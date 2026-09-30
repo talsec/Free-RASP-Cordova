@@ -24,6 +24,7 @@
   </js-module>
 
   <platform name="android">
+    <hook type="after_prepare" src="src/android/hooks/addTalsecGradlePlugin.js" />
     <config-file target="res/xml/config.xml" parent="/*">
       <preference name="GradlePluginKotlinEnabled" value="true" />
       <preference name="GradlePluginKotlinCodeStyle" value="official" />
