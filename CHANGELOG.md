@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### Breaking
 
-- Android builds now apply the `app.talsec.plugin` Gradle plugin automatically
+- Android builds now apply the `app.talsec.plugin` Gradle plugin automatically and require network access to the Talsec license backend
 
 ### Android
 
