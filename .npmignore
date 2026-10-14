@@ -64,6 +64,7 @@ android/keystores/debug.keystore
 # Ignore development files
 
 **/.*
+!src/ios/TalsecRuntime.xcframework/**
 ci-template.ejs
 deploy.sh
 ejs-config*

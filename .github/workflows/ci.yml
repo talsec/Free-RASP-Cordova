@@ -60,6 +60,31 @@ jobs:
             exit 1
           fi
 
+  verify-npm-package:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+
+      # Every file sealed in the XCFramework's _CodeSignature must ship,
+      # otherwise Xcode fails signature collection when archiving.
+      - name: Verify XCFramework is complete in npm package
+        run: |
+          git ls-files src/ios/TalsecRuntime.xcframework | sort > expected.txt
+          npm pack --dry-run --json \
+            | node -e 'const [p] = JSON.parse(require("fs").readFileSync(0)); p.files.forEach(f => console.log(f.path))' \
+            | grep '^src/ios/TalsecRuntime.xcframework/' | sort > packed.txt
+          if ! diff expected.txt packed.txt; then
+            echo "::error::npm package does not contain the complete TalsecRuntime.xcframework. Check .npmignore."
+            exit 1
+          fi
+
   build-android:
     timeout-minutes: 30
     runs-on: ubuntu-latest
