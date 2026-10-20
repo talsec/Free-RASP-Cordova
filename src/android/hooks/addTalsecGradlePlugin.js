@@ -4,7 +4,10 @@ const fs = require('fs');
 const path = require('path');
 
 // TODO: set the real version once app.talsec.plugin with wrapper support is released
-const PLUGIN_CLASSPATH = 'app.talsec.plugin:talsec-security-plugin:1.1.0';
+const PLUGIN_ARTIFACT = 'app.talsec.plugin:talsec-security-plugin';
+const PLUGIN_CLASSPATH = `${PLUGIN_ARTIFACT}:1.1.0`;
+const PLUGIN_CLASSPATH_PATTERN =
+  /app\.talsec\.plugin:talsec-security-plugin:[^"'\s]+/;
 const PLUGIN_REPOSITORY =
   'https://europe-west3-maven.pkg.dev/talsec-artifact-repository/plugin';
 
@@ -20,7 +23,15 @@ module.exports = function (context) {
 
   const gradleFile = fs.readFileSync(gradleFilePath, 'utf8');
 
-  if (gradleFile.includes('app.talsec.plugin:talsec-security-plugin')) {
+  // An earlier freeRASP version may have added another plugin version, so keep it in step with this one
+  if (gradleFile.includes(PLUGIN_ARTIFACT)) {
+    const updated = gradleFile.replace(
+      PLUGIN_CLASSPATH_PATTERN,
+      PLUGIN_CLASSPATH,
+    );
+    if (updated !== gradleFile) {
+      fs.writeFileSync(gradleFilePath, updated, 'utf8');
+    }
     return;
   }
 
