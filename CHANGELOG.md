@@ -5,20 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [10.0.0] - 2026-09-30
+## [9.2.0] - 2026-09-30
 
 - Android SDK version: 19.3.1
 - iOS SDK version: 7.1.4
+- Talsec Gradle plugin version: 1.1.0
 
 ### Cordova
 
-#### Breaking
+#### Changed
 
-- Android builds now apply the `app.talsec.plugin` Gradle plugin automatically and require network access to the Talsec license backend
+- Android builds now apply the `app.talsec.plugin` Gradle plugin automatically. It requests a license token from the Talsec backend during the build and only warns when the backend is unreachable; builds without network access can pass a token with `-Ptalsec.offlineToken=…`
 
 ### Android
 
-#### Breaking
+#### Changed
 
 - Changed Talsec integration from Maven dependency to the `app.talsec.plugin` Gradle plugin with `talsec { }` configuration block
 
