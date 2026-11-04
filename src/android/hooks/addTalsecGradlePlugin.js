@@ -3,7 +3,6 @@
 const fs = require('fs');
 const path = require('path');
 
-// TODO: set the real version once app.talsec.plugin with wrapper support is released
 const PLUGIN_ARTIFACT = 'app.talsec.plugin:talsec-security-plugin';
 const PLUGIN_CLASSPATH = `${PLUGIN_ARTIFACT}:1.1.0`;
 const PLUGIN_CLASSPATH_PATTERN =
