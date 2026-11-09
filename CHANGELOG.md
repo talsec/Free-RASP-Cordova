@@ -12,13 +12,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Cordova
 
-#### Breaking
+#### Changed
 
 - Android builds now apply the `app.talsec.plugin` Gradle plugin automatically. It requests a license token from the Talsec backend during the build and only warns when the backend is unreachable; builds without network access can pass a token with `-Ptalsec.offlineToken=…`
 
 ### Android
 
-#### Breaking
+#### Changed
 
 - Changed Talsec integration from Maven dependency to the `app.talsec.plugin` Gradle plugin with `talsec { }` configuration block
 - The Talsec Gradle plugin requires cordova-android 13 or newer (Android Gradle Plugin 8.3)
