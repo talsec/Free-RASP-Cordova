@@ -23,6 +23,7 @@ export declare class Threat {
     static UnsecureWifi: Threat;
     static Automation: Threat;
     static Bootloader: Threat;
+    static OngoingCall: Threat;
     constructor(value: number);
     static getValues(): Threat[];
 }

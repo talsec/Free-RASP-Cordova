@@ -36,12 +36,14 @@ internal sealed class ThreatEvent(override val value: Int) : BaseRaspEvent {
     data object UnsecureWifi : ThreatEvent(RandomGenerator.next())
     data object Automation : ThreatEvent(RandomGenerator.next())
     data object Bootloader : ThreatEvent(RandomGenerator.next())
+    data object OngoingCall : ThreatEvent(RandomGenerator.next())
 
     companion object {
 
         internal val CHANNEL_NAME = RandomGenerator.next().toString()
         internal val CHANNEL_KEY = RandomGenerator.next().toString()
         internal val MALWARE_CHANNEL_KEY = RandomGenerator.next().toString()
+        internal val CALL_STATE_CHANNEL_KEY = RandomGenerator.next().toString()
 
         internal val ALL_EVENTS = JSONArray(
             listOf(
@@ -66,7 +68,8 @@ internal sealed class ThreatEvent(override val value: Int) : BaseRaspEvent {
                 LocationSpoofing,
                 UnsecureWifi,
                 Automation,
-                Bootloader
+                Bootloader,
+                OngoingCall
             ).map { it.value }
         )
     }

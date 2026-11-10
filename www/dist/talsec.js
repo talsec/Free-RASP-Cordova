@@ -21,12 +21,18 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 var talsec_exports = {};
 __export(talsec_exports, {
   addToWhitelist: () => addToWhitelist,
+  blockOverlayWindows: () => blockOverlayWindows,
   blockScreenCapture: () => blockScreenCapture,
+  blockScreenControl: () => blockScreenControl,
   getAppIcon: () => getAppIcon,
+  isOverlayWindowsBlocked: () => isOverlayWindowsBlocked,
   isScreenCaptureBlocked: () => isScreenCaptureBlocked,
+  isScreenControlBlocked: () => isScreenControlBlocked,
   onInvalidCallback: () => onInvalidCallback,
   removeExternalId: () => removeExternalId,
   start: () => start,
+  startOngoingCallDetection: () => startOngoingCallDetection,
+  stopOngoingCallDetection: () => stopOngoingCallDetection,
   storeExternalId: () => storeExternalId
 });
 module.exports = __toCommonJS(talsec_exports);
@@ -100,6 +106,77 @@ var isScreenCaptureBlocked = () => {
     );
   });
 };
+var androidOnly = (feature) => Promise.reject(`${feature} not available on iOS`);
+var blockScreenControl = (enable) => {
+  if (cordova.platformId === "ios") {
+    return androidOnly("Screen control blocking");
+  }
+  return new Promise((resolve, reject) => {
+    cordova.exec(resolve, reject, "TalsecPlugin", "blockScreenControl", [
+      enable
+    ]);
+  });
+};
+var isScreenControlBlocked = () => {
+  if (cordova.platformId === "ios") {
+    return androidOnly("Screen control blocking");
+  }
+  return new Promise((resolve, reject) => {
+    cordova.exec(resolve, reject, "TalsecPlugin", "isScreenControlBlocked", []);
+  });
+};
+var blockOverlayWindows = (enable) => {
+  if (cordova.platformId === "ios") {
+    return androidOnly("Overlay windows blocking");
+  }
+  return new Promise((resolve, reject) => {
+    cordova.exec(resolve, reject, "TalsecPlugin", "blockOverlayWindows", [
+      enable
+    ]);
+  });
+};
+var isOverlayWindowsBlocked = () => {
+  if (cordova.platformId === "ios") {
+    return androidOnly("Overlay windows blocking");
+  }
+  return new Promise((resolve, reject) => {
+    cordova.exec(
+      resolve,
+      reject,
+      "TalsecPlugin",
+      "isOverlayWindowsBlocked",
+      []
+    );
+  });
+};
+var startOngoingCallDetection = () => {
+  if (cordova.platformId === "ios") {
+    return androidOnly("Ongoing call detection");
+  }
+  return new Promise((resolve, reject) => {
+    cordova.exec(
+      resolve,
+      reject,
+      "TalsecPlugin",
+      "startOngoingCallDetection",
+      []
+    );
+  });
+};
+var stopOngoingCallDetection = () => {
+  if (cordova.platformId === "ios") {
+    return androidOnly("Ongoing call detection");
+  }
+  return new Promise((resolve, reject) => {
+    cordova.exec(
+      resolve,
+      reject,
+      "TalsecPlugin",
+      "stopOngoingCallDetection",
+      []
+    );
+  });
+};
 var onInvalidCallback = () => {
   cordova.exec(
     () => {
@@ -137,6 +214,7 @@ var Threat = class _Threat {
   static UnsecureWifi = new _Threat(0);
   static Automation = new _Threat(0);
   static Bootloader = new _Threat(0);
+  static OngoingCall = new _Threat(0);
   constructor(value) {
     this.value = value;
   }
@@ -163,7 +241,8 @@ var Threat = class _Threat {
       this.LocationSpoofing,
       this.UnsecureWifi,
       this.Automation,
-      this.Bootloader
+      this.Bootloader,
+      this.OngoingCall
     ] : [
       this.AppIntegrity,
       this.PrivilegedAccess,
@@ -187,11 +266,17 @@ var Threat = class _Threat {
 var RaspExecutionState = class _RaspExecutionState {
   value;
   static AllChecksFinished = new _RaspExecutionState(0);
+  static CriticalChecksFinished = new _RaspExecutionState(0);
+  static PostponedChecksFinished = new _RaspExecutionState(0);
   constructor(value) {
     this.value = value;
   }
   static getValues() {
-    return [this.AllChecksFinished];
+    return cordova.platformId === "android" ? [
+      this.AllChecksFinished,
+      this.CriticalChecksFinished,
+      this.PostponedChecksFinished
+    ] : [this.AllChecksFinished];
   }
 };
 
@@ -208,10 +293,12 @@ var itemsHaveType = (data, desiredType) => {
 
 // www/src/channels/threat.ts
 var getThreatChannelData = async () => {
-  const dataLength = cordova.platformId === "ios" ? 1 : 2;
-  const identifiers = await new Promise((resolve, reject) => {
-    cordova.exec(resolve, reject, "TalsecPlugin", "getThreatChannelData");
-  });
+  const dataLength = cordova.platformId === "ios" ? 1 : 3;
+  const identifiers = await new Promise(
+    (resolve, reject) => {
+      cordova.exec(resolve, reject, "TalsecPlugin", "getThreatChannelData");
+    }
+  );
   if (identifiers.length !== dataLength || !itemsHaveType(identifiers, "string")) {
     onInvalidCallback();
   }
@@ -257,7 +344,9 @@ var toSuspiciousAppInfo = (base64Value) => {
 // www/src/api/listeners/threat.ts
 var registerThreatListener = async (config) => {
   await prepareMapping();
-  const [key, malwareKey] = await getThreatChannelData();
+  const [key, malwareKey, callStateKey] = await getThreatChannelData();
+  const callStates = ["STARTED", "ONGOING", "STOPPED"];
+  const isCallState = (value) => typeof value === "string" && callStates.includes(value);
   const eventListener = async (event) => {
     switch (event[key]) {
       case Threat.PrivilegedAccess.value:
@@ -329,6 +418,15 @@ var registerThreatListener = async (config) => {
       case Threat.Bootloader.value:
         config.bootloader?.();
         break;
+      case Threat.OngoingCall.value: {
+        const callState = callStateKey ? event[callStateKey] : void 0;
+        if (!isCallState(callState)) {
+          onInvalidCallback();
+          break;
+        }
+        config.ongoingCall?.(callState);
+        break;
+      }
       default:
         onInvalidCallback();
         break;
@@ -391,6 +489,12 @@ var registerRaspExecutionStateListener = async (config) => {
     switch (event[key]) {
       case RaspExecutionState.AllChecksFinished.value:
         config.allChecksFinished?.();
+        break;
+      case RaspExecutionState.CriticalChecksFinished.value:
+        config.criticalChecksFinished?.();
+        break;
+      case RaspExecutionState.PostponedChecksFinished.value:
+        config.postponedChecksFinished?.();
         break;
       default:
         onInvalidCallback();
@@ -465,11 +569,17 @@ var start = async (config, eventListenerConfig, raspExecutionStateActions) => {
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   addToWhitelist,
+  blockOverlayWindows,
   blockScreenCapture,
+  blockScreenControl,
   getAppIcon,
+  isOverlayWindowsBlocked,
   isScreenCaptureBlocked,
+  isScreenControlBlocked,
   onInvalidCallback,
   removeExternalId,
   start,
+  startOngoingCallDetection,
+  stopOngoingCallDetection,
   storeExternalId
 });

@@ -17,6 +17,12 @@ export const registerRaspExecutionStateListener = async (
       case RaspExecutionState.AllChecksFinished.value:
         config.allChecksFinished?.();
         break;
+      case RaspExecutionState.CriticalChecksFinished.value:
+        config.criticalChecksFinished?.();
+        break;
+      case RaspExecutionState.PostponedChecksFinished.value:
+        config.postponedChecksFinished?.();
+        break;
       default:
         onInvalidCallback();
         break;

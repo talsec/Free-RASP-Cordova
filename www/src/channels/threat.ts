@@ -3,11 +3,16 @@ import { Threat } from '../models/threat';
 
 import { itemsHaveType, getThreatCount } from '../utils/utils';
 
-export const getThreatChannelData = async (): Promise<[string, string]> => {
-  const dataLength = cordova.platformId === 'ios' ? 1 : 2;
-  const identifiers: [string, string] = await new Promise((resolve, reject) => {
-    cordova.exec(resolve, reject, 'TalsecPlugin', 'getThreatChannelData');
-  });
+export const getThreatChannelData = async (): Promise<
+  [string, string, string?]
+> => {
+  // Android also sends the key of the ongoing call state
+  const dataLength = cordova.platformId === 'ios' ? 1 : 3;
+  const identifiers: [string, string, string?] = await new Promise(
+    (resolve, reject) => {
+      cordova.exec(resolve, reject, 'TalsecPlugin', 'getThreatChannelData');
+    },
+  );
   if (
     identifiers.length !== dataLength ||
     !itemsHaveType(identifiers, 'string')

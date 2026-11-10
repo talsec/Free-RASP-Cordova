@@ -41,6 +41,14 @@ export type PackageInfo = {
     appIcon?: string;
     installerStore?: string;
 };
+/**
+ * State of an ongoing call reported by the ongoing call detection.
+ *
+ * - `STARTED` - a call started while the detection was running
+ * - `ONGOING` - a call was already in progress when the detection started
+ * - `STOPPED` - a previously reported call has ended
+ */
+export type CallState = 'STARTED' | 'ONGOING' | 'STOPPED';
 export type ThreatEventActions = {
     privilegedAccess?: () => any;
     debug?: () => any;
@@ -65,7 +73,25 @@ export type ThreatEventActions = {
     unsecureWifi?: () => any;
     automation?: () => any;
     bootloader?: () => any;
+    /**
+     * Android only. Requires `startOngoingCallDetection()`.
+     */
+    ongoingCall?: (state: CallState) => any;
 };
 export type RaspExecutionStateEventActions = {
+    /**
+     * All standard checks have been completed. On Android, triggered after the
+     * fast checks are completed, while the postponed checks still run.
+     */
     allChecksFinished?: () => any;
+    /**
+     * Android only. The critical checks have been completed, before the
+     * non-critical checks.
+     */
+    criticalChecksFinished?: () => any;
+    /**
+     * Android only. The postponed checks have been completed, which ends the
+     * initial evaluation.
+     */
+    postponedChecksFinished?: () => any;
 };

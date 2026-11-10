@@ -25,6 +25,7 @@
         <config-file parent="/*" target="AndroidManifest.xml">
             <uses-permission android:name="android.permission.DETECT_SCREEN_CAPTURE" />
             <uses-permission android:name="android.permission.DETECT_SCREEN_RECORDING" />
+            <uses-permission android:name="android.permission.HIDE_OVERLAY_WINDOWS" />
             <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
             <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
             <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />

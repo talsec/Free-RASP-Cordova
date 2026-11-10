@@ -5,6 +5,12 @@ export interface Talsec {
     getAppIcon: (packageName: string) => Promise<string>;
     blockScreenCapture: (enable: boolean) => Promise<string>;
     isScreenCaptureBlocked: () => Promise<boolean>;
+    blockScreenControl: (enable: boolean) => Promise<string>;
+    isScreenControlBlocked: () => Promise<boolean>;
+    blockOverlayWindows: (enable: boolean) => Promise<boolean>;
+    isOverlayWindowsBlocked: () => Promise<boolean>;
+    startOngoingCallDetection: () => Promise<string>;
+    stopOngoingCallDetection: () => Promise<string>;
     storeExternalId: (value: string) => Promise<boolean>;
     removeExternalId: () => Promise<boolean>;
 }
