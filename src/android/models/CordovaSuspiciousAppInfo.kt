@@ -1,4 +1,4 @@
-package com.aheaditec.talsec.cordova.models
+package app.talsec.rasp.cordova.models
 
 import kotlinx.serialization.Serializable
 

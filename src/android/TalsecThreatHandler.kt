@@ -1,13 +1,13 @@
-package com.aheaditec.talsec.cordova
+package app.talsec.rasp.cordova
 
 import android.content.Context
 import app.talsec.rasp.security.api.SuspiciousAppInfo
 import app.talsec.rasp.security.api.ThreatListener
 import app.talsec.rasp.security.api.ThreatListener.CallState
-import com.aheaditec.talsec.cordova.dispatchers.ExecutionStateDispatcher
-import com.aheaditec.talsec.cordova.dispatchers.ThreatDispatcher
-import com.aheaditec.talsec.cordova.events.RaspExecutionStateEvent
-import com.aheaditec.talsec.cordova.events.ThreatEvent
+import app.talsec.rasp.cordova.dispatchers.ExecutionStateDispatcher
+import app.talsec.rasp.cordova.dispatchers.ThreatDispatcher
+import app.talsec.rasp.cordova.events.RaspExecutionStateEvent
+import app.talsec.rasp.cordova.events.ThreatEvent
 
 internal object TalsecThreatHandler {
 

@@ -30,24 +30,24 @@
       <preference name="GradlePluginKotlinCodeStyle" value="official" />
       <preference name="GradlePluginKotlinVersion" value="2.1.0" />
       <feature name="TalsecPlugin">
-        <param name="android-package" value="com.aheaditec.talsec.cordova.TalsecPlugin"/>
+        <param name="android-package" value="app.talsec.rasp.cordova.TalsecPlugin"/>
       </feature>
     </config-file>
-    <source-file src="src/android/TalsecPlugin.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/"/>
-    <source-file src="src/android/ScreenProtector.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/"/>
-    <source-file src="src/android/TalsecThreatHandler.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/"/>
-    <source-file src="src/android/models/CordovaSuspiciousAppInfo.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/models/"/>
-    <source-file src="src/android/utils/Extensions.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/utils/"/>
-    <source-file src="src/android/utils/Utils.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/utils/"/>
-    <source-file src="src/android/utils/ScreenCaptureStatus.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/utils/"/>
-    <source-file src="src/android/utils/RandomGenerator.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/utils/"/>
-    <source-file src="src/android/events/BaseRaspEvent.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/events/"/>
-    <source-file src="src/android/events/RaspExecutionStateEvent.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/events/"/>
-    <source-file src="src/android/events/ThreatEvent.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/events/"/>
-    <source-file src="src/android/dispatchers/ThreatDispatcher.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/dispatchers/"/>
-    <source-file src="src/android/dispatchers/ExecutionStateDispatcher.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/dispatchers/"/>
-    <source-file src="src/android/interfaces/PluginThreatListener.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/interfaces/"/>
-    <source-file src="src/android/interfaces/PluginExecutionStateListener.kt" target-dir="app/src/main/kotlin/com/aheaditec/talsec/cordova/interfaces/"/>
+    <source-file src="src/android/TalsecPlugin.kt" target-dir="app/src/main/kotlin/app/talsec/rasp/cordova/"/>
+    <source-file src="src/android/ScreenProtector.kt" target-dir="app/src/main/kotlin/app/talsec/rasp/cordova/"/>
+    <source-file src="src/android/TalsecThreatHandler.kt" target-dir="app/src/main/kotlin/app/talsec/rasp/cordova/"/>
+    <source-file src="src/android/models/CordovaSuspiciousAppInfo.kt" target-dir="app/src/main/kotlin/app/talsec/rasp/cordova/models/"/>
+    <source-file src="src/android/utils/Extensions.kt" target-dir="app/src/main/kotlin/app/talsec/rasp/cordova/utils/"/>
+    <source-file src="src/android/utils/Utils.kt" target-dir="app/src/main/kotlin/app/talsec/rasp/cordova/utils/"/>
+    <source-file src="src/android/utils/ScreenCaptureStatus.kt" target-dir="app/src/main/kotlin/app/talsec/rasp/cordova/utils/"/>
+    <source-file src="src/android/utils/RandomGenerator.kt" target-dir="app/src/main/kotlin/app/talsec/rasp/cordova/utils/"/>
+    <source-file src="src/android/events/BaseRaspEvent.kt" target-dir="app/src/main/kotlin/app/talsec/rasp/cordova/events/"/>
+    <source-file src="src/android/events/RaspExecutionStateEvent.kt" target-dir="app/src/main/kotlin/app/talsec/rasp/cordova/events/"/>
+    <source-file src="src/android/events/ThreatEvent.kt" target-dir="app/src/main/kotlin/app/talsec/rasp/cordova/events/"/>
+    <source-file src="src/android/dispatchers/ThreatDispatcher.kt" target-dir="app/src/main/kotlin/app/talsec/rasp/cordova/dispatchers/"/>
+    <source-file src="src/android/dispatchers/ExecutionStateDispatcher.kt" target-dir="app/src/main/kotlin/app/talsec/rasp/cordova/dispatchers/"/>
+    <source-file src="src/android/interfaces/PluginThreatListener.kt" target-dir="app/src/main/kotlin/app/talsec/rasp/cordova/interfaces/"/>
+    <source-file src="src/android/interfaces/PluginExecutionStateListener.kt" target-dir="app/src/main/kotlin/app/talsec/rasp/cordova/interfaces/"/>
     <framework src="src/android/talsec.gradle" custom="true" type="gradleReference" />
   </platform>
   

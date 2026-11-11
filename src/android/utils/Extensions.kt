@@ -1,4 +1,4 @@
-package com.aheaditec.talsec.cordova.utils
+package app.talsec.rasp.cordova.utils
 
 import android.content.Context
 import android.content.pm.PackageInfo
@@ -9,8 +9,8 @@ import app.talsec.rasp.security.api.SuspiciousAppDetectionConfig
 import app.talsec.rasp.security.api.MalwareScanScope
 import app.talsec.rasp.security.api.ScopeType
 import app.talsec.rasp.security.api.ReasonMode
-import com.aheaditec.talsec.cordova.models.CordovaPackageInfo
-import com.aheaditec.talsec.cordova.models.CordovaSuspiciousAppInfo
+import app.talsec.rasp.cordova.models.CordovaPackageInfo
+import app.talsec.rasp.cordova.models.CordovaSuspiciousAppInfo
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.json.JSONArray
