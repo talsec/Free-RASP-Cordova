@@ -1,6 +1,6 @@
-package com.aheaditec.talsec.cordova.events
+package app.talsec.rasp.cordova.events
 
-import com.aheaditec.talsec.cordova.utils.RandomGenerator
+import app.talsec.rasp.cordova.utils.RandomGenerator
 import org.json.JSONArray
 
 internal sealed class RaspExecutionStateEvent(override val value: Int) : BaseRaspEvent {

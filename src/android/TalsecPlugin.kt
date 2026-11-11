@@ -1,4 +1,4 @@
-package com.aheaditec.talsec.cordova
+package app.talsec.rasp.cordova
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -13,20 +13,20 @@ import app.talsec.rasp.security.api.Talsec
 import app.talsec.rasp.security.api.TalsecConfig
 import app.talsec.rasp.security.api.TalsecMode
 import app.talsec.rasp.security.api.ThreatListener.CallState
-import com.aheaditec.talsec.cordova.dispatchers.ExecutionStateDispatcher
-import com.aheaditec.talsec.cordova.dispatchers.ThreatDispatcher
-import com.aheaditec.talsec.cordova.events.BaseRaspEvent
-import com.aheaditec.talsec.cordova.events.RaspExecutionStateEvent
-import com.aheaditec.talsec.cordova.events.ThreatEvent
-import com.aheaditec.talsec.cordova.interfaces.PluginExecutionStateListener
-import com.aheaditec.talsec.cordova.interfaces.PluginThreatListener
-import com.aheaditec.talsec.cordova.utils.Utils
-import com.aheaditec.talsec.cordova.utils.ScreenCaptureStatus
-import com.aheaditec.talsec.cordova.utils.toEncodedJsonArray
-import com.aheaditec.talsec.cordova.utils.getArraySafe
-import com.aheaditec.talsec.cordova.utils.getBooleanSafe
-import com.aheaditec.talsec.cordova.utils.getStringSafe
-import com.aheaditec.talsec.cordova.utils.toSuspiciousAppDetectionConfig
+import app.talsec.rasp.cordova.dispatchers.ExecutionStateDispatcher
+import app.talsec.rasp.cordova.dispatchers.ThreatDispatcher
+import app.talsec.rasp.cordova.events.BaseRaspEvent
+import app.talsec.rasp.cordova.events.RaspExecutionStateEvent
+import app.talsec.rasp.cordova.events.ThreatEvent
+import app.talsec.rasp.cordova.interfaces.PluginExecutionStateListener
+import app.talsec.rasp.cordova.interfaces.PluginThreatListener
+import app.talsec.rasp.cordova.utils.Utils
+import app.talsec.rasp.cordova.utils.ScreenCaptureStatus
+import app.talsec.rasp.cordova.utils.toEncodedJsonArray
+import app.talsec.rasp.cordova.utils.getArraySafe
+import app.talsec.rasp.cordova.utils.getBooleanSafe
+import app.talsec.rasp.cordova.utils.getStringSafe
+import app.talsec.rasp.cordova.utils.toSuspiciousAppDetectionConfig
 
 import org.apache.cordova.CallbackContext
 import org.apache.cordova.CordovaPlugin

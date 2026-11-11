@@ -1,4 +1,4 @@
-package com.aheaditec.talsec.cordova
+package app.talsec.rasp.cordova
 
 import android.annotation.SuppressLint
 import android.app.Activity

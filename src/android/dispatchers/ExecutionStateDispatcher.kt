@@ -1,7 +1,7 @@
-package com.aheaditec.talsec.cordova.dispatchers
+package app.talsec.rasp.cordova.dispatchers
 
-import com.aheaditec.talsec.cordova.events.RaspExecutionStateEvent
-import com.aheaditec.talsec.cordova.interfaces.PluginExecutionStateListener
+import app.talsec.rasp.cordova.events.RaspExecutionStateEvent
+import app.talsec.rasp.cordova.interfaces.PluginExecutionStateListener
 import org.apache.cordova.CallbackContext
 
 internal object ExecutionStateDispatcher {
