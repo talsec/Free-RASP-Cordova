@@ -26,5 +26,5 @@ export const androidChecks = [
   { name: 'Unsecure Wi-Fi', isSecure: true },
   { name: 'Automation', isSecure: true },
   { name: 'Bootloader', isSecure: true },
-  { name: 'Ongoing Call', isSecure: true },
+  { name: 'Ongoing Call', isSecure: true, detail: 'Not detected' },
 ];

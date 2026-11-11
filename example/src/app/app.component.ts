@@ -191,7 +191,14 @@ export class AppComponent implements OnInit {
     bootloader: () => this.updateAppChecks('Bootloader'),
     ongoingCall: (state: CallState) => {
       console.info('Ongoing call:', state);
-      this.setAppCheck('Ongoing Call', state === 'STOPPED');
+      const detail = state.charAt(0) + state.slice(1).toLowerCase();
+      this.zone.run(() => {
+        this.appChecks = this.appChecks.map((threat) =>
+          threat.name === 'Ongoing Call'
+            ? { ...threat, isSecure: state === 'STOPPED', detail }
+            : threat,
+        );
+      });
     },
   };
 

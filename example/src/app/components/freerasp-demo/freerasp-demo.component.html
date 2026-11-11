@@ -8,7 +8,7 @@
       <ion-item>
         <ion-label [color]="check.isSecure ? 'success' : 'danger'">
           {{ check.name }}
-          <p>{{ check.isSecure ? 'secure' : 'danger' }}</p>
+          <p>{{ check.detail ?? (check.isSecure ? 'secure' : 'danger') }}</p>
         </ion-label>
 
         @if (check.name === 'Malware' && !check.isSecure) {
