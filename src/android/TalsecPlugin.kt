@@ -11,6 +11,7 @@ import android.util.Log
 import app.talsec.rasp.security.api.SuspiciousAppInfo
 import app.talsec.rasp.security.api.Talsec
 import app.talsec.rasp.security.api.TalsecConfig
+import app.talsec.rasp.security.api.TalsecMode
 import app.talsec.rasp.security.api.ThreatListener.CallState
 import com.aheaditec.talsec.cordova.dispatchers.ExecutionStateDispatcher
 import com.aheaditec.talsec.cordova.dispatchers.ThreatDispatcher
@@ -121,7 +122,7 @@ class TalsecPlugin : CordovaPlugin() {
             val config = buildTalsecConfigThrowing(configJson)
             TalsecThreatHandler.registerSDKListener(this.cordova.context)
             this.cordova.activity.runOnUiThread {
-                Talsec.start(this.cordova.context, config)
+                Talsec.start(this.cordova.context, config, TalsecMode.BACKGROUND)
                 mainHandler.post {
                     talsecStarted = true
                     // This code must be called only AFTER Talsec.start
