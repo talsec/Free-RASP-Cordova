@@ -26,7 +26,7 @@ export type SuspiciousAppDetectionConfig = {
     reasonMode: ReasonMode;
 };
 export type TalsecIosConfig = {
-    appBundleIds: string;
+    appBundleIds: string[];
     appTeamId: string;
 };
 export type SuspiciousAppInfo = {

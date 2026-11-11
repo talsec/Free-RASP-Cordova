@@ -37,7 +37,7 @@ export type SuspiciousAppDetectionConfig = {
 };
 
 export type TalsecIosConfig = {
-  appBundleIds: string;
+  appBundleIds: string[];
   appTeamId: string;
 };
 
