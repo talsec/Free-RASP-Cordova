@@ -14,8 +14,8 @@ export const registerRaspExecutionStateListener = async (
 
   const eventListener = async (event: any) => {
     switch (event[key]) {
-      case RaspExecutionState.AllChecksFinished.value:
-        config.allChecksFinished?.();
+      case RaspExecutionState.FastChecksFinished.value:
+        config.fastChecksFinished?.();
         break;
       case RaspExecutionState.CriticalChecksFinished.value:
         config.criticalChecksFinished?.();

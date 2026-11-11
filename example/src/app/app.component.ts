@@ -196,11 +196,11 @@ export class AppComponent implements OnInit {
   };
 
   raspExecutionStateActions = {
-    allChecksFinished: () => {
+    fastChecksFinished: () => {
       this.zone.run(() => {
         this.checksFinished = true;
       });
-      console.log('All checks finished');
+      console.log('Fast checks finished');
     },
     postponedChecksFinished: () => {
       this.zone.run(() => {

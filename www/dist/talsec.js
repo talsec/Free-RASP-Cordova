@@ -265,7 +265,7 @@ var Threat = class _Threat {
 // www/src/models/raspExecutionState.ts
 var RaspExecutionState = class _RaspExecutionState {
   value;
-  static AllChecksFinished = new _RaspExecutionState(0);
+  static FastChecksFinished = new _RaspExecutionState(0);
   static CriticalChecksFinished = new _RaspExecutionState(0);
   static PostponedChecksFinished = new _RaspExecutionState(0);
   constructor(value) {
@@ -273,10 +273,10 @@ var RaspExecutionState = class _RaspExecutionState {
   }
   static getValues() {
     return cordova.platformId === "android" ? [
-      this.AllChecksFinished,
+      this.FastChecksFinished,
       this.CriticalChecksFinished,
       this.PostponedChecksFinished
-    ] : [this.AllChecksFinished];
+    ] : [this.FastChecksFinished];
   }
 };
 
@@ -487,8 +487,8 @@ var registerRaspExecutionStateListener = async (config) => {
   await prepareRaspExecutionStateMapping();
   const eventListener = async (event) => {
     switch (event[key]) {
-      case RaspExecutionState.AllChecksFinished.value:
-        config.allChecksFinished?.();
+      case RaspExecutionState.FastChecksFinished.value:
+        config.fastChecksFinished?.();
         break;
       case RaspExecutionState.CriticalChecksFinished.value:
         config.criticalChecksFinished?.();
