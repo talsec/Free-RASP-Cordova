@@ -11,7 +11,8 @@ import TalsecRuntime
     
     @objc(getThreatChannelData:)
     private func getThreatChannelData(command: CDVInvokedUrlCommand) -> Void {
-        TalsecContext.sendMessage(msg: [EventIdentifiers.threatChannelKey], callbackId: command.callbackId, keepCallback: false)
+        // Malware and ongoing call are Android only, so iOS sends placeholders for their keys
+        TalsecContext.sendMessage(msg: [EventIdentifiers.threatChannelKey, "0", "0"], callbackId: command.callbackId, keepCallback: false)
     }
     
     /**

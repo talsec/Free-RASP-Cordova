@@ -293,13 +293,12 @@ var itemsHaveType = (data, desiredType) => {
 
 // www/src/channels/threat.ts
 var getThreatChannelData = async () => {
-  const dataLength = cordova.platformId === "ios" ? 1 : 3;
   const identifiers = await new Promise(
     (resolve, reject) => {
       cordova.exec(resolve, reject, "TalsecPlugin", "getThreatChannelData");
     }
   );
-  if (identifiers.length !== dataLength || !itemsHaveType(identifiers, "string")) {
+  if (identifiers.length !== 3 || !itemsHaveType(identifiers, "string")) {
     onInvalidCallback();
   }
   return identifiers;
