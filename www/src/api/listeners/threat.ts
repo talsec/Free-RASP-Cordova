@@ -1,5 +1,5 @@
 import { getThreatChannelData, prepareMapping } from '../../channels/threat';
-import { onInvalidCallback } from '../methods/native';
+import { onInvalidCallback } from '../methods/internal';
 import { Threat } from '../../models/threat';
 import { CallState, ThreatEventActions } from '../../types/types';
 import { parseMalwareData } from '../../utils/malware';

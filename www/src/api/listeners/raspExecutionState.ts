@@ -4,7 +4,7 @@ import {
 } from '../../channels/raspExecutionState';
 import { RaspExecutionState } from '../../models/raspExecutionState';
 import type { RaspExecutionStateEventActions } from '../../types/types';
-import { onInvalidCallback } from '../methods/native';
+import { onInvalidCallback } from '../methods/internal';
 
 export const registerRaspExecutionStateListener = async (
   config: RaspExecutionStateEventActions,

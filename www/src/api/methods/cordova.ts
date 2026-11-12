@@ -5,7 +5,8 @@ import {
 } from '../../types/types';
 import { registerThreatListener } from '../listeners/threat';
 import { registerRaspExecutionStateListener } from '../listeners/raspExecutionState';
-import { onInvalidCallback } from './native';
+import { onInvalidCallback } from './internal';
+import { TalsecError } from '../../types/errors';
 import { withDefaults } from '../../utils/config';
 
 export const start = async (
@@ -28,8 +29,9 @@ export const start = async (
         }
       },
       (error: any) => {
-        console.error(`${error.code}: ${error.message}`);
-        reject(error);
+        reject(
+          new TalsecError('talsec-failure', error?.message ?? String(error)),
+        );
       },
       'TalsecPlugin',
       'start',

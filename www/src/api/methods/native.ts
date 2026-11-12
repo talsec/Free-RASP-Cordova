@@ -1,101 +1,62 @@
 import { ScreenCaptureStatus } from '../../models/screenCaptureStatus';
+import { execNative, onInvalidCallback, rejectOnIos } from './internal';
 
-export const storeExternalId = (externalId: string): Promise<boolean> => {
-  return new Promise((resolve, reject) => {
-    cordova.exec(
-      () => {
-        resolve(true);
-      },
-      reject,
-      'TalsecPlugin',
-      'storeExternalId',
-      [externalId],
-    );
-  });
+export const storeExternalId = async (externalId: string): Promise<void> => {
+  await execNative('external-id-failure', 'storeExternalId', [externalId]);
 };
 
-export const removeExternalId = (): Promise<boolean> => {
-  return new Promise((resolve, reject) => {
-    cordova.exec(
-      () => {
-        resolve(true);
-      },
-      reject,
-      'TalsecPlugin',
-      'removeExternalId',
-      [],
-    );
-  });
+export const removeExternalId = async (): Promise<void> => {
+  await execNative('external-id-failure', 'removeExternalId');
 };
 
-export const addToWhitelist = (packageName: string): Promise<string> => {
-  if (cordova.platformId === 'ios') {
-    return Promise.reject('Malware detection not available on iOS');
-  }
-  return new Promise((resolve, reject) => {
-    cordova.exec(resolve, reject, 'TalsecPlugin', 'addToWhitelist', [
-      packageName,
-    ]);
-  });
+/**
+ * Android only. Adds the app with the given package name to the malware
+ * whitelist.
+ */
+export const addToWhitelist = async (packageName: string): Promise<void> => {
+  await (rejectOnIos('Malware detection') ??
+    execNative('malware-failure', 'addToWhitelist', [packageName]));
 };
 
+/**
+ * Android only. Returns the icon of the given app as a base64 encoded PNG.
+ */
 export const getAppIcon = (packageName: string): Promise<string> => {
-  if (cordova.platformId === 'ios') {
-    return Promise.reject('Malware detection not available on iOS');
-  }
-  return new Promise((resolve, reject) => {
-    cordova.exec(resolve, reject, 'TalsecPlugin', 'getAppIcon', [packageName]);
-  });
+  return (
+    rejectOnIos('Malware detection') ??
+    execNative<string>('malware-failure', 'getAppIcon', [packageName])
+  );
 };
 
-export const blockScreenCapture = (enable: boolean): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    cordova.exec(resolve, reject, 'TalsecPlugin', 'blockScreenCapture', [
-      enable,
-    ]);
-  });
+export const blockScreenCapture = async (enable: boolean): Promise<void> => {
+  await execNative('talsec-failure', 'blockScreenCapture', [enable]);
 };
 
-export const isScreenCaptureBlocked = (): Promise<boolean> => {
-  return new Promise((resolve, reject) => {
-    cordova.exec(
-      (result: number) => resolve(result === ScreenCaptureStatus.BLOCKED),
-      reject,
-      'TalsecPlugin',
-      'isScreenCaptureBlocked',
-      [],
-    );
-  });
+export const isScreenCaptureBlocked = async (): Promise<boolean> => {
+  const result = await execNative<number>(
+    'talsec-failure',
+    'isScreenCaptureBlocked',
+  );
+  return result === ScreenCaptureStatus.BLOCKED;
 };
-
-const androidOnly = (feature: string): Promise<never> =>
-  Promise.reject(`${feature} not available on iOS`);
 
 /**
  * Android only. Prevents accessibility services from reading or controlling
  * the app screen.
  */
-export const blockScreenControl = (enable: boolean): Promise<string> => {
-  if (cordova.platformId === 'ios') {
-    return androidOnly('Screen control blocking');
-  }
-  return new Promise((resolve, reject) => {
-    cordova.exec(resolve, reject, 'TalsecPlugin', 'blockScreenControl', [
-      enable,
-    ]);
-  });
+export const blockScreenControl = async (enable: boolean): Promise<void> => {
+  await (rejectOnIos('Screen control blocking') ??
+    execNative('talsec-failure', 'blockScreenControl', [enable]));
 };
 
 /**
  * Android only. Returns whether screen control is blocked.
  */
 export const isScreenControlBlocked = (): Promise<boolean> => {
-  if (cordova.platformId === 'ios') {
-    return androidOnly('Screen control blocking');
-  }
-  return new Promise((resolve, reject) => {
-    cordova.exec(resolve, reject, 'TalsecPlugin', 'isScreenControlBlocked', []);
-  });
+  return (
+    rejectOnIos('Screen control blocking') ??
+    execNative<boolean>('talsec-failure', 'isScreenControlBlocked')
+  );
 };
 
 /**
@@ -105,76 +66,42 @@ export const isScreenControlBlocked = (): Promise<boolean> => {
  * @returns whether the request was applied
  */
 export const blockOverlayWindows = (enable: boolean): Promise<boolean> => {
-  if (cordova.platformId === 'ios') {
-    return androidOnly('Overlay windows blocking');
-  }
-  return new Promise((resolve, reject) => {
-    cordova.exec(resolve, reject, 'TalsecPlugin', 'blockOverlayWindows', [
-      enable,
-    ]);
-  });
+  return (
+    rejectOnIos('Overlay windows blocking') ??
+    execNative<boolean>('talsec-failure', 'blockOverlayWindows', [enable])
+  );
 };
 
 /**
  * Android only. Returns whether overlay windows of other apps are hidden.
  */
 export const isOverlayWindowsBlocked = (): Promise<boolean> => {
-  if (cordova.platformId === 'ios') {
-    return androidOnly('Overlay windows blocking');
-  }
-  return new Promise((resolve, reject) => {
-    cordova.exec(
-      resolve,
-      reject,
-      'TalsecPlugin',
-      'isOverlayWindowsBlocked',
-      [],
-    );
-  });
+  return (
+    rejectOnIos('Overlay windows blocking') ??
+    execNative<boolean>('talsec-failure', 'isOverlayWindowsBlocked')
+  );
 };
 
 /**
  * Android only. Starts the ongoing call (cellular and VoIP) detection.
  * Call states are reported through the `ongoingCall` threat action.
  */
-export const startOngoingCallDetection = (): Promise<string> => {
-  if (cordova.platformId === 'ios') {
-    return androidOnly('Ongoing call detection');
-  }
-  return new Promise((resolve, reject) => {
-    cordova.exec(
-      resolve,
-      reject,
-      'TalsecPlugin',
-      'startOngoingCallDetection',
-      [],
-    );
-  });
+export const startOngoingCallDetection = async (): Promise<void> => {
+  await (rejectOnIos('Ongoing call detection') ??
+    execNative('talsec-failure', 'startOngoingCallDetection'));
 };
 
 /**
  * Android only. Stops the ongoing call detection.
  */
-export const stopOngoingCallDetection = (): Promise<string> => {
-  if (cordova.platformId === 'ios') {
-    return androidOnly('Ongoing call detection');
-  }
-  return new Promise((resolve, reject) => {
-    cordova.exec(
-      resolve,
-      reject,
-      'TalsecPlugin',
-      'stopOngoingCallDetection',
-      [],
-    );
-  });
+export const stopOngoingCallDetection = async (): Promise<void> => {
+  await (rejectOnIos('Ongoing call detection') ??
+    execNative('talsec-failure', 'stopOngoingCallDetection'));
 };
 
-export const onInvalidCallback = () => {
-  cordova.exec(
-    () => {},
-    () => {},
-    'TalsecPlugin',
-    'onInvalidCallback',
-  );
+/**
+ * Terminates the app, e.g. as a reaction to a detected threat.
+ */
+export const abortApp = (): void => {
+  onInvalidCallback();
 };

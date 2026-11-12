@@ -140,8 +140,8 @@ import TalsecRuntime
         guard let iosConfig = talsecConfig["iosConfig"] as? NSDictionary else {
             throw NSError(domain: "Missing iosConfig parameter in Talsec Native Plugin", code: 1)
         }
-        guard let appBundleIds = iosConfig["appBundleIds"] as? String else {
-            throw NSError(domain: "Missing appBundleIds parameter in Talsec Native Plugin", code: 2)
+        guard let appBundleIds = iosConfig["appBundleIds"] as? [String] else {
+            throw NSError(domain: "Missing appBundleIds parameter (array of strings) in Talsec Native Plugin", code: 2)
         }
         guard let appTeamId = iosConfig["appTeamId"] as? String else {
             throw NSError(domain: "Missing appTeamId parameter in Talsec Native Plugin", code: 3)
@@ -151,7 +151,7 @@ import TalsecRuntime
         }
         let isProd = talsecConfig["isProd"] as? Bool ?? true
         
-        let config = TalsecConfig(appBundleIds: [appBundleIds], appTeamId: appTeamId, watcherMailAddress: watcherMailAddress, isProd: isProd)
+        let config = TalsecConfig(appBundleIds: appBundleIds, appTeamId: appTeamId, watcherMailAddress: watcherMailAddress, isProd: isProd)
         commandDelegate.run(inBackground: {
             Talsec.start(config: config)
         })

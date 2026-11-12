@@ -56,7 +56,7 @@ export class AppComponent implements OnInit {
       },
     },
     iosConfig: {
-      appBundleIds: 'io.ionic.starter',
+      appBundleIds: ['io.ionic.starter'],
       appTeamId: 'your_team_ID',
     },
     watcherMail: 'your_email_address@example.com',
@@ -223,10 +223,8 @@ export class AppComponent implements OnInit {
     await Promise.all(
       appsToWhitelist.map(async (app) => {
         try {
-          const whitelistResponse = await talsec.addToWhitelist(app);
-          console.info(
-            `${app} stored to Malware Whitelist: ${whitelistResponse}`,
-          );
+          await talsec.addToWhitelist(app);
+          console.info(`${app} stored to Malware Whitelist`);
         } catch (error) {
           console.info('Malware whitelist failed: ', error);
         }
