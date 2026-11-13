@@ -1,4 +1,4 @@
-package com.aheaditec.talsec.cordova.utils
+package app.talsec.rasp.cordova.utils
 
 import java.security.SecureRandom
 

@@ -11,7 +11,8 @@ import TalsecRuntime
     
     @objc(getThreatChannelData:)
     private func getThreatChannelData(command: CDVInvokedUrlCommand) -> Void {
-        TalsecContext.sendMessage(msg: [EventIdentifiers.threatChannelKey], callbackId: command.callbackId, keepCallback: false)
+        // Malware and ongoing call are Android only, so iOS sends placeholders for their keys
+        TalsecContext.sendMessage(msg: [EventIdentifiers.threatChannelKey, "0", "0"], callbackId: command.callbackId, keepCallback: false)
     }
     
     /**
@@ -139,8 +140,8 @@ import TalsecRuntime
         guard let iosConfig = talsecConfig["iosConfig"] as? NSDictionary else {
             throw NSError(domain: "Missing iosConfig parameter in Talsec Native Plugin", code: 1)
         }
-        guard let appBundleIds = iosConfig["appBundleIds"] as? String else {
-            throw NSError(domain: "Missing appBundleIds parameter in Talsec Native Plugin", code: 2)
+        guard let appBundleIds = iosConfig["appBundleIds"] as? [String] else {
+            throw NSError(domain: "Missing appBundleIds parameter (array of strings) in Talsec Native Plugin", code: 2)
         }
         guard let appTeamId = iosConfig["appTeamId"] as? String else {
             throw NSError(domain: "Missing appTeamId parameter in Talsec Native Plugin", code: 3)
@@ -150,7 +151,7 @@ import TalsecRuntime
         }
         let isProd = talsecConfig["isProd"] as? Bool ?? true
         
-        let config = TalsecConfig(appBundleIds: [appBundleIds], appTeamId: appTeamId, watcherMailAddress: watcherMailAddress, isProd: isProd)
+        let config = TalsecConfig(appBundleIds: appBundleIds, appTeamId: appTeamId, watcherMailAddress: watcherMailAddress, isProd: isProd)
         commandDelegate.run(inBackground: {
             Talsec.start(config: config)
         })
@@ -166,8 +167,9 @@ extension SecurityThreatCenter: @retroactive SecurityThreatHandler, @retroactive
         ThreatDispatcher.shared.dispatch(threat: securityThreat)
     }
     
+    // The iOS SDK reports its standard checks as a single "all checks" event, which maps to fastChecksFinished.
     public func onAllChecksFinished() {
-        ExecutionStateDispatcher.shared.dispatch(event: RaspExecutionStates.allChecksFinished)
+        ExecutionStateDispatcher.shared.dispatch(event: RaspExecutionStates.fastChecksFinished)
     }
 }
 

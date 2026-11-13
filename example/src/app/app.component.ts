@@ -2,6 +2,7 @@ import { Component, OnInit, NgZone } from '@angular/core';
 import { commonChecks, iosChecks, androidChecks } from './utils/checks';
 import { SuspiciousAppsService } from './services/suspicious-apps.service';
 import {
+  CallState,
   SuspiciousAppInfo,
   Talsec,
   TalsecConfig,
@@ -21,6 +22,8 @@ export class AppComponent implements OnInit {
     ...(cordova.platformId === 'ios' ? iosChecks : androidChecks),
   ];
   screenCaptureBlocked: boolean = false;
+  screenControlBlocked: boolean = false;
+  overlayWindowsBlocked: boolean = false;
   platformId = cordova.platformId;
   isModalOpen = false;
   inputText = '';
@@ -28,6 +31,7 @@ export class AppComponent implements OnInit {
   toastMessage = '';
   toastColor: 'success' | 'warning' = 'success';
   checksFinished = false;
+  postponedChecksFinished = false;
 
   config: TalsecConfig = {
     androidConfig: {
@@ -52,7 +56,7 @@ export class AppComponent implements OnInit {
       },
     },
     iosConfig: {
-      appBundleIds: 'io.ionic.starter',
+      appBundleIds: ['io.ionic.starter'],
       appTeamId: 'your_team_ID',
     },
     watcherMail: 'your_email_address@example.com',
@@ -111,6 +115,8 @@ export class AppComponent implements OnInit {
     document.addEventListener('deviceready', async () => {
       await this.startFreeRASP();
       if (cordova.platformId === 'android') {
+        // Report cellular and VoIP calls through the ongoingCall action
+        await talsec.startOngoingCallDetection();
         await this.addItemsToMalwareWhitelist();
         await this.checkScreenCaptureStatus();
         this.requestPermissions();
@@ -183,14 +189,31 @@ export class AppComponent implements OnInit {
     unsecureWifi: () => this.updateAppChecks('Unsecure Wi-Fi'),
     automation: () => this.updateAppChecks('Automation'),
     bootloader: () => this.updateAppChecks('Bootloader'),
+    ongoingCall: (state: CallState) => {
+      console.info('Ongoing call:', state);
+      const detail = state.charAt(0) + state.slice(1).toLowerCase();
+      this.zone.run(() => {
+        this.appChecks = this.appChecks.map((threat) =>
+          threat.name === 'Ongoing Call'
+            ? { ...threat, isSecure: state === 'STOPPED', detail }
+            : threat,
+        );
+      });
+    },
   };
 
   raspExecutionStateActions = {
-    allChecksFinished: () => {
+    fastChecksFinished: () => {
       this.zone.run(() => {
         this.checksFinished = true;
       });
-      console.log('All checks finished');
+      console.log('Fast checks finished');
+    },
+    postponedChecksFinished: () => {
+      this.zone.run(() => {
+        this.postponedChecksFinished = true;
+      });
+      console.log('Postponed checks finished');
     },
   };
 
@@ -200,10 +223,8 @@ export class AppComponent implements OnInit {
     await Promise.all(
       appsToWhitelist.map(async (app) => {
         try {
-          const whitelistResponse = await talsec.addToWhitelist(app);
-          console.info(
-            `${app} stored to Malware Whitelist: ${whitelistResponse}`,
-          );
+          await talsec.addToWhitelist(app);
+          console.info(`${app} stored to Malware Whitelist`);
         } catch (error) {
           console.info('Malware whitelist failed: ', error);
         }
@@ -212,9 +233,13 @@ export class AppComponent implements OnInit {
   }
 
   updateAppChecks(threatName: string) {
+    this.setAppCheck(threatName, false);
+  }
+
+  setAppCheck(threatName: string, isSecure: boolean) {
     this.zone.run(() => {
       this.appChecks = this.appChecks.map((threat) =>
-        threat.name === threatName ? { ...threat, isSecure: false } : threat,
+        threat.name === threatName ? { ...threat, isSecure } : threat,
       );
     });
   }
@@ -247,6 +272,31 @@ export class AppComponent implements OnInit {
       });
     } catch (e) {
       console.error('Error checking screen capture blocking status:');
+    }
+  }
+
+  async toggleScreenControl(enable: boolean) {
+    try {
+      await talsec.blockScreenControl(enable);
+      const isBlocked = await talsec.isScreenControlBlocked();
+      this.zone.run(() => {
+        this.screenControlBlocked = isBlocked;
+      });
+    } catch (e) {
+      console.error('Error while changing screen control blocking status:', e);
+    }
+  }
+
+  async toggleOverlayWindows(enable: boolean) {
+    try {
+      const applied = await talsec.blockOverlayWindows(enable);
+      console.info('Changing overlay windows status applied:', applied);
+      const isBlocked = await talsec.isOverlayWindowsBlocked();
+      this.zone.run(() => {
+        this.overlayWindowsBlocked = isBlocked;
+      });
+    } catch (e) {
+      console.error('Error while changing overlay windows status:', e);
     }
   }
 }

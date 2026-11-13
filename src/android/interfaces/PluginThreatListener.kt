@@ -1,7 +1,8 @@
-package com.aheaditec.talsec.cordova.interfaces
+package app.talsec.rasp.cordova.interfaces
 
 import app.talsec.rasp.security.api.SuspiciousAppInfo
-import com.aheaditec.talsec.cordova.events.ThreatEvent
+import app.talsec.rasp.security.api.ThreatListener.CallState
+import app.talsec.rasp.cordova.events.ThreatEvent
 import org.apache.cordova.CallbackContext
 
 internal interface PluginThreatListener {
@@ -9,4 +10,5 @@ internal interface PluginThreatListener {
 
     fun threatDetected(threatEventType: ThreatEvent)
     fun malwareDetected(suspiciousApps: MutableList<SuspiciousAppInfo>)
+    fun ongoingCallDetected(state: CallState)
 }

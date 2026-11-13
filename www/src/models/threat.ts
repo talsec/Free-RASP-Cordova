@@ -23,6 +23,7 @@ export class Threat {
   static UnsecureWifi = new Threat(0);
   static Automation = new Threat(0);
   static Bootloader = new Threat(0);
+  static OngoingCall = new Threat(0);
 
   constructor(value: number) {
     this.value = value;
@@ -53,6 +54,7 @@ export class Threat {
           this.UnsecureWifi,
           this.Automation,
           this.Bootloader,
+          this.OngoingCall,
         ]
       : [
           this.AppIntegrity,

@@ -26,6 +26,22 @@
         Store External ID
       </ion-button>
     </div>
+    <div *ngIf="platformId === 'android'" class="button-container">
+      <ion-button
+        class="control-button"
+        [color]="screenControlBlocked ? 'danger' : 'primary'"
+        (click)="toggleScreenControl(!screenControlBlocked)"
+      >
+        {{ screenControlBlocked ? 'Unblock' : 'Block' }} Screen Control
+      </ion-button>
+      <ion-button
+        class="control-button"
+        [color]="overlayWindowsBlocked ? 'danger' : 'primary'"
+        (click)="toggleOverlayWindows(!overlayWindowsBlocked)"
+      >
+        {{ overlayWindowsBlocked ? 'Show' : 'Hide' }} Overlays
+      </ion-button>
+    </div>
     <ion-modal [isOpen]="isModalOpen" (didDismiss)="closeModal()">
       <ng-template>
         <ion-header>
@@ -74,7 +90,7 @@
       </ion-list-header>
       <ion-item>
         <ion-label [color]="checksFinished ? 'success' : 'primary'">
-          All Checks Finished
+          Fast Checks Finished
           <p>{{ checksFinished ? 'Finished' : 'Pending' }}</p>
         </ion-label>
         <ion-spinner
@@ -84,6 +100,23 @@
         ></ion-spinner>
         <ion-icon
           *ngIf="checksFinished"
+          name="shield-checkmark-outline"
+          color="success"
+          size="large"
+        ></ion-icon>
+      </ion-item>
+      <ion-item *ngIf="platformId === 'android'">
+        <ion-label [color]="postponedChecksFinished ? 'success' : 'primary'">
+          Postponed Checks Finished
+          <p>{{ postponedChecksFinished ? 'Finished' : 'Pending' }}</p>
+        </ion-label>
+        <ion-spinner
+          *ngIf="!postponedChecksFinished"
+          name="crescent"
+          color="primary"
+        ></ion-spinner>
+        <ion-icon
+          *ngIf="postponedChecksFinished"
           name="shield-checkmark-outline"
           color="success"
           size="large"

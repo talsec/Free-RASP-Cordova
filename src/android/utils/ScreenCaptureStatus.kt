@@ -1,4 +1,4 @@
-package com.aheaditec.talsec.cordova.utils
+package app.talsec.rasp.cordova.utils
 
 internal object ScreenCaptureStatus {
     const val ALLOWED: Int = 0

@@ -4,7 +4,7 @@ import {
 } from '../../channels/raspExecutionState';
 import { RaspExecutionState } from '../../models/raspExecutionState';
 import type { RaspExecutionStateEventActions } from '../../types/types';
-import { onInvalidCallback } from '../methods/native';
+import { onInvalidCallback } from '../methods/internal';
 
 export const registerRaspExecutionStateListener = async (
   config: RaspExecutionStateEventActions,
@@ -14,8 +14,14 @@ export const registerRaspExecutionStateListener = async (
 
   const eventListener = async (event: any) => {
     switch (event[key]) {
-      case RaspExecutionState.AllChecksFinished.value:
-        config.allChecksFinished?.();
+      case RaspExecutionState.FastChecksFinished.value:
+        config.fastChecksFinished?.();
+        break;
+      case RaspExecutionState.CriticalChecksFinished.value:
+        config.criticalChecksFinished?.();
+        break;
+      case RaspExecutionState.PostponedChecksFinished.value:
+        config.postponedChecksFinished?.();
         break;
       default:
         onInvalidCallback();

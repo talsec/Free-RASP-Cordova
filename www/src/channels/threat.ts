@@ -1,17 +1,17 @@
-import { onInvalidCallback } from '../api/methods/native';
+import { onInvalidCallback } from '../api/methods/internal';
 import { Threat } from '../models/threat';
 
 import { itemsHaveType, getThreatCount } from '../utils/utils';
 
-export const getThreatChannelData = async (): Promise<[string, string]> => {
-  const dataLength = cordova.platformId === 'ios' ? 1 : 2;
-  const identifiers: [string, string] = await new Promise((resolve, reject) => {
-    cordova.exec(resolve, reject, 'TalsecPlugin', 'getThreatChannelData');
-  });
-  if (
-    identifiers.length !== dataLength ||
-    !itemsHaveType(identifiers, 'string')
-  ) {
+export const getThreatChannelData = async (): Promise<
+  [string, string, string]
+> => {
+  const identifiers: [string, string, string] = await new Promise(
+    (resolve, reject) => {
+      cordova.exec(resolve, reject, 'TalsecPlugin', 'getThreatChannelData');
+    },
+  );
+  if (identifiers.length !== 3 || !itemsHaveType(identifiers, 'string')) {
     onInvalidCallback();
   }
   return identifiers;

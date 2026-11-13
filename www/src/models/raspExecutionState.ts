@@ -1,13 +1,21 @@
 export class RaspExecutionState {
   value: number;
 
-  static AllChecksFinished = new RaspExecutionState(0);
+  static FastChecksFinished = new RaspExecutionState(0);
+  static CriticalChecksFinished = new RaspExecutionState(0);
+  static PostponedChecksFinished = new RaspExecutionState(0);
 
   constructor(value: number) {
     this.value = value;
   }
 
   static getValues(): RaspExecutionState[] {
-    return [this.AllChecksFinished];
+    return cordova.platformId === 'android'
+      ? [
+          this.FastChecksFinished,
+          this.CriticalChecksFinished,
+          this.PostponedChecksFinished,
+        ]
+      : [this.FastChecksFinished];
   }
 }

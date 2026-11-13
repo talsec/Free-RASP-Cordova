@@ -37,7 +37,7 @@ export type SuspiciousAppDetectionConfig = {
 };
 
 export type TalsecIosConfig = {
-  appBundleIds: string;
+  appBundleIds: string[];
   appTeamId: string;
 };
 
@@ -55,33 +55,61 @@ export type PackageInfo = {
   installerStore?: string;
 };
 
+/**
+ * State of an ongoing call reported by the ongoing call detection.
+ *
+ * - `STARTED` - a call started while the detection was running
+ * - `ONGOING` - a call was already in progress when the detection started
+ * - `STOPPED` - a previously reported call has ended
+ */
+export type CallState = 'STARTED' | 'ONGOING' | 'STOPPED';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type ThreatEventActions = {
-  privilegedAccess?: () => any;
-  debug?: () => any;
-  simulator?: () => any;
-  appIntegrity?: () => any;
-  unofficialStore?: () => any;
-  hooks?: () => any;
-  deviceBinding?: () => any;
-  deviceID?: () => any;
-  passcode?: () => any;
-  secureHardwareNotAvailable?: () => any;
-  obfuscationIssues?: () => any;
-  devMode?: () => any;
-  systemVPN?: () => any;
-  malware?: (suspiciousApps: SuspiciousAppInfo[]) => any;
-  adbEnabled?: () => any;
-  screenshot?: () => any;
-  screenRecording?: () => any;
-  multiInstance?: () => any;
-  timeSpoofing?: () => any;
-  locationSpoofing?: () => any;
-  unsecureWifi?: () => any;
-  automation?: () => any;
-  bootloader?: () => any;
+  privilegedAccess?: () => void;
+  debug?: () => void;
+  simulator?: () => void;
+  appIntegrity?: () => void;
+  unofficialStore?: () => void;
+  hooks?: () => void;
+  deviceBinding?: () => void;
+  deviceID?: () => void;
+  passcode?: () => void;
+  secureHardwareNotAvailable?: () => void;
+  obfuscationIssues?: () => void;
+  devMode?: () => void;
+  systemVPN?: () => void;
+  malware?: (suspiciousApps: SuspiciousAppInfo[]) => void;
+  adbEnabled?: () => void;
+  screenshot?: () => void;
+  screenRecording?: () => void;
+  multiInstance?: () => void;
+  timeSpoofing?: () => void;
+  locationSpoofing?: () => void;
+  unsecureWifi?: () => void;
+  automation?: () => void;
+  bootloader?: () => void;
+  /**
+   * Android only. Requires `startOngoingCallDetection()`.
+   */
+  ongoingCall?: (state: CallState) => void;
 };
 
 export type RaspExecutionStateEventActions = {
-  allChecksFinished?: () => any;
+  /**
+   * The fast (standard) checks have been completed. On Android, the postponed
+   * checks may still run afterwards. On iOS, triggered when all checks have
+   * been completed.
+   */
+  fastChecksFinished?: () => void;
+  /**
+   * Android only. The critical checks have been completed, before the
+   * non-critical checks.
+   */
+  criticalChecksFinished?: () => void;
+  /**
+   * Android only. The postponed checks have been completed, which ends the
+   * initial evaluation.
+   */
+  postponedChecksFinished?: () => void;
 };

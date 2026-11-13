@@ -1,4 +1,4 @@
-package com.aheaditec.talsec.cordova.events
+package app.talsec.rasp.cordova.events
 
 internal interface BaseRaspEvent {
     val value: Int

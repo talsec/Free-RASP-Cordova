@@ -1,10 +1,17 @@
 import { RaspExecutionStateEventActions, TalsecConfig, ThreatEventActions } from './types';
 export interface Talsec {
     start: (config: TalsecConfig, eventListenerConfig: ThreatEventActions, raspExecutionStateEventActions: RaspExecutionStateEventActions) => Promise<void>;
-    addToWhitelist: (packageName: string) => Promise<string>;
+    addToWhitelist: (packageName: string) => Promise<void>;
     getAppIcon: (packageName: string) => Promise<string>;
-    blockScreenCapture: (enable: boolean) => Promise<string>;
+    blockScreenCapture: (enable: boolean) => Promise<void>;
     isScreenCaptureBlocked: () => Promise<boolean>;
-    storeExternalId: (value: string) => Promise<boolean>;
-    removeExternalId: () => Promise<boolean>;
+    blockScreenControl: (enable: boolean) => Promise<void>;
+    isScreenControlBlocked: () => Promise<boolean>;
+    blockOverlayWindows: (enable: boolean) => Promise<boolean>;
+    isOverlayWindowsBlocked: () => Promise<boolean>;
+    startOngoingCallDetection: () => Promise<void>;
+    stopOngoingCallDetection: () => Promise<void>;
+    storeExternalId: (value: string) => Promise<void>;
+    removeExternalId: () => Promise<void>;
+    abortApp: () => void;
 }

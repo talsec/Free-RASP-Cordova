@@ -7,7 +7,7 @@ import { shieldCheckmarkOutline, alertCircleOutline } from 'ionicons/icons';
   styleUrls: ['./freerasp-demo.component.css'],
 })
 export class FreeRaspDemoComponent {
-  @Input() checks: { name: string; isSecure: boolean }[] = [];
+  @Input() checks: { name: string; isSecure: boolean; detail?: string }[] = [];
 
   shieldCheckmarkIcon = shieldCheckmarkOutline;
   alertCircleIcon = alertCircleOutline;

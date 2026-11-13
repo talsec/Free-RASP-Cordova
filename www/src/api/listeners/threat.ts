@@ -1,14 +1,17 @@
 import { getThreatChannelData, prepareMapping } from '../../channels/threat';
-import { onInvalidCallback } from '../methods/native';
+import { onInvalidCallback } from '../methods/internal';
 import { Threat } from '../../models/threat';
-import { ThreatEventActions } from '../../types/types';
+import { CallState, ThreatEventActions } from '../../types/types';
 import { parseMalwareData } from '../../utils/malware';
 
 export const registerThreatListener = async (
   config: ThreatEventActions,
 ): Promise<void> => {
   await prepareMapping();
-  const [key, malwareKey] = await getThreatChannelData();
+  const [key, malwareKey, callStateKey] = await getThreatChannelData();
+  const callStates: readonly string[] = ['STARTED', 'ONGOING', 'STOPPED'];
+  const isCallState = (value: unknown): value is CallState =>
+    typeof value === 'string' && callStates.includes(value);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const eventListener = async (event: any) => {
@@ -82,6 +85,15 @@ export const registerThreatListener = async (
       case Threat.Bootloader.value:
         config.bootloader?.();
         break;
+      case Threat.OngoingCall.value: {
+        const callState = callStateKey ? event[callStateKey] : undefined;
+        if (!isCallState(callState)) {
+          onInvalidCallback();
+          break;
+        }
+        config.ongoingCall?.(callState);
+        break;
+      }
       default:
         onInvalidCallback();
         break;

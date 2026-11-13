@@ -1,14 +1,16 @@
-package com.aheaditec.talsec.cordova.dispatchers
+package app.talsec.rasp.cordova.dispatchers
 
 import app.talsec.rasp.security.api.SuspiciousAppInfo
-import com.aheaditec.talsec.cordova.events.ThreatEvent
-import com.aheaditec.talsec.cordova.interfaces.PluginThreatListener
+import app.talsec.rasp.security.api.ThreatListener.CallState
+import app.talsec.rasp.cordova.events.ThreatEvent
+import app.talsec.rasp.cordova.interfaces.PluginThreatListener
 import org.apache.cordova.CallbackContext
 
 internal object ThreatDispatcher {
     private lateinit var listener: PluginThreatListener
     private val threatCache = mutableSetOf<ThreatEvent>()
     private val malwareCache = mutableSetOf<SuspiciousAppInfo>()
+    private val callStateCache = mutableListOf<CallState>()
 
     private var isAppInForeground = false
     private var isListenerRegistered = false
@@ -58,6 +60,17 @@ internal object ThreatDispatcher {
         }
     }
 
+    fun dispatchOngoingCall(state: CallState) {
+        if (isAppInForeground && isListenerRegistered) {
+            listener.ongoingCallDetected(state)
+        } else {
+            // Keep the order: a call that started and stopped in background is reported as both.
+            synchronized(callStateCache) {
+                callStateCache.add(state)
+            }
+        }
+    }
+
     private fun flushCache() {
         if (!isListenerRegistered || !isAppInForeground) {
             return
@@ -77,5 +90,12 @@ internal object ThreatDispatcher {
         if (malware.isNotEmpty()) {
             listener.malwareDetected(malware)
         }
+
+        val callStates = synchronized(callStateCache) {
+            val snapshot = callStateCache.toList()
+            callStateCache.clear()
+            snapshot
+        }
+        callStates.forEach { listener.ongoingCallDetected(it) }
     }
 }

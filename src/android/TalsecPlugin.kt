@@ -1,5 +1,7 @@
-package com.aheaditec.talsec.cordova
+package app.talsec.rasp.cordova
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.os.Handler
@@ -9,20 +11,22 @@ import android.util.Log
 import app.talsec.rasp.security.api.SuspiciousAppInfo
 import app.talsec.rasp.security.api.Talsec
 import app.talsec.rasp.security.api.TalsecConfig
-import com.aheaditec.talsec.cordova.dispatchers.ExecutionStateDispatcher
-import com.aheaditec.talsec.cordova.dispatchers.ThreatDispatcher
-import com.aheaditec.talsec.cordova.events.BaseRaspEvent
-import com.aheaditec.talsec.cordova.events.RaspExecutionStateEvent
-import com.aheaditec.talsec.cordova.events.ThreatEvent
-import com.aheaditec.talsec.cordova.interfaces.PluginExecutionStateListener
-import com.aheaditec.talsec.cordova.interfaces.PluginThreatListener
-import com.aheaditec.talsec.cordova.utils.Utils
-import com.aheaditec.talsec.cordova.utils.ScreenCaptureStatus
-import com.aheaditec.talsec.cordova.utils.toEncodedJsonArray
-import com.aheaditec.talsec.cordova.utils.getArraySafe
-import com.aheaditec.talsec.cordova.utils.getBooleanSafe
-import com.aheaditec.talsec.cordova.utils.getStringSafe
-import com.aheaditec.talsec.cordova.utils.toSuspiciousAppDetectionConfig
+import app.talsec.rasp.security.api.TalsecMode
+import app.talsec.rasp.security.api.ThreatListener.CallState
+import app.talsec.rasp.cordova.dispatchers.ExecutionStateDispatcher
+import app.talsec.rasp.cordova.dispatchers.ThreatDispatcher
+import app.talsec.rasp.cordova.events.BaseRaspEvent
+import app.talsec.rasp.cordova.events.RaspExecutionStateEvent
+import app.talsec.rasp.cordova.events.ThreatEvent
+import app.talsec.rasp.cordova.interfaces.PluginExecutionStateListener
+import app.talsec.rasp.cordova.interfaces.PluginThreatListener
+import app.talsec.rasp.cordova.utils.Utils
+import app.talsec.rasp.cordova.utils.ScreenCaptureStatus
+import app.talsec.rasp.cordova.utils.toEncodedJsonArray
+import app.talsec.rasp.cordova.utils.getArraySafe
+import app.talsec.rasp.cordova.utils.getBooleanSafe
+import app.talsec.rasp.cordova.utils.getStringSafe
+import app.talsec.rasp.cordova.utils.toSuspiciousAppDetectionConfig
 
 import org.apache.cordova.CallbackContext
 import org.apache.cordova.CordovaPlugin
@@ -30,6 +34,7 @@ import org.apache.cordova.PluginResult
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import java.lang.ref.WeakReference
 
 class TalsecPlugin : CordovaPlugin() {
 
@@ -47,6 +52,12 @@ class TalsecPlugin : CordovaPlugin() {
             "getAppIcon" -> getAppIcon(callbackContext, args)
             "blockScreenCapture" -> blockScreenCapture(callbackContext, args)
             "isScreenCaptureBlocked" -> isScreenCaptureBlocked(callbackContext)
+            "blockScreenControl" -> blockScreenControl(callbackContext, args)
+            "isScreenControlBlocked" -> isScreenControlBlocked(callbackContext)
+            "blockOverlayWindows" -> blockOverlayWindows(callbackContext, args)
+            "isOverlayWindowsBlocked" -> isOverlayWindowsBlocked(callbackContext)
+            "startOngoingCallDetection" -> startOngoingCallDetection(callbackContext)
+            "stopOngoingCallDetection" -> stopOngoingCallDetection(callbackContext)
             "storeExternalId" -> storeExternalId(callbackContext, args)
             "removeExternalId" -> removeExternalId(callbackContext)
             "registerListener" -> registerListener(callbackContext)
@@ -75,6 +86,7 @@ class TalsecPlugin : CordovaPlugin() {
             ScreenProtector.unregister(cordova.activity)
         }
         if (this.cordova.activity.isFinishing) {
+            stopOngoingCallDetectionInternal()
             ThreatDispatcher.unregisterListener()
             ExecutionStateDispatcher.unregisterListener()
             TalsecThreatHandler.unregisterSDKListener(this.cordova.context)
@@ -110,7 +122,7 @@ class TalsecPlugin : CordovaPlugin() {
             val config = buildTalsecConfigThrowing(configJson)
             TalsecThreatHandler.registerSDKListener(this.cordova.context)
             this.cordova.activity.runOnUiThread {
-                Talsec.start(this.cordova.context, config)
+                Talsec.start(this.cordova.context, config, TalsecMode.BACKGROUND)
                 mainHandler.post {
                     talsecStarted = true
                     // This code must be called only AFTER Talsec.start
@@ -183,7 +195,7 @@ class TalsecPlugin : CordovaPlugin() {
 
     private fun isScreenCaptureBlocked(callbackContext: CallbackContext?): Boolean {
         try {
-            val isBlocked = Talsec.isScreenCaptureBlocked()
+            val isBlocked = Talsec.isScreenCaptureBlocked(cordova.activity)
             val status = if (isBlocked) ScreenCaptureStatus.BLOCKED else ScreenCaptureStatus.ALLOWED
             callbackContext?.success(status)
             return true
@@ -191,6 +203,114 @@ class TalsecPlugin : CordovaPlugin() {
             callbackContext?.error("Failed to check screen capture status: ${e.message}")
             return false
         }
+    }
+
+    private fun blockScreenControl(callbackContext: CallbackContext?, args: JSONArray?): Boolean {
+        val enable = try {
+            args?.getBoolean(0) ?: run {
+                callbackContext?.error("Missing enable parameter in Talsec Native Plugin")
+                return false
+            }
+        } catch (e: JSONException) {
+            callbackContext?.error("Invalid argument: Expected a boolean value")
+            return false
+        }
+        cordova.activity.runOnUiThread {
+            try {
+                Talsec.blockScreenControl(cordova.activity, enable)
+                callbackContext?.success("Screen control is now ${if (enable) "Blocked" else "Enabled"}.")
+            } catch (e: Exception) {
+                callbackContext?.error("Failed to block screen control: ${e.message}")
+            }
+        }
+        return true
+    }
+
+    private fun isScreenControlBlocked(callbackContext: CallbackContext?): Boolean {
+        return try {
+            sendBoolean(callbackContext, Talsec.isScreenControlBlocked(cordova.activity))
+            true
+        } catch (e: Exception) {
+            callbackContext?.error("Failed to check screen control status: ${e.message}")
+            false
+        }
+    }
+
+    /**
+     * Hides or shows overlay windows of other apps over the activity. Requires Android 12+ and the
+     * HIDE_OVERLAY_WINDOWS permission, otherwise `false` is returned.
+     */
+    // Missing permission is suppressed because the decision to use the overlay API is made
+    // by developer, and not enforced by the library.
+    @SuppressLint("MissingPermission")
+    private fun blockOverlayWindows(callbackContext: CallbackContext?, args: JSONArray?): Boolean {
+        val enable = try {
+            args?.getBoolean(0) ?: run {
+                callbackContext?.error("Missing enable parameter in Talsec Native Plugin")
+                return false
+            }
+        } catch (e: JSONException) {
+            callbackContext?.error("Invalid argument: Expected a boolean value")
+            return false
+        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+            sendBoolean(callbackContext, false)
+            return true
+        }
+        cordova.activity.runOnUiThread {
+            try {
+                sendBoolean(callbackContext, Talsec.blockOverlayWindows(cordova.activity, enable))
+            } catch (e: Exception) {
+                callbackContext?.error("Failed to block overlay windows: ${e.message}")
+            }
+        }
+        return true
+    }
+
+    private fun isOverlayWindowsBlocked(callbackContext: CallbackContext?): Boolean {
+        return try {
+            sendBoolean(callbackContext, Talsec.isOverlayWindowsBlocked(cordova.activity))
+            true
+        } catch (e: Exception) {
+            callbackContext?.error("Failed to check overlay windows status: ${e.message}")
+            false
+        }
+    }
+
+    private fun startOngoingCallDetection(callbackContext: CallbackContext?): Boolean {
+        return try {
+            val activity = cordova.activity
+            if (ongoingCallActivity?.get() !== activity) {
+                stopOngoingCallDetectionInternal()
+                Talsec.startOngoingCallDetection(activity)
+                ongoingCallActivity = WeakReference(activity)
+            }
+            callbackContext?.success("Ongoing call detection started.")
+            true
+        } catch (e: Exception) {
+            callbackContext?.error("Failed to start ongoing call detection: ${e.message}")
+            false
+        }
+    }
+
+    private fun stopOngoingCallDetection(callbackContext: CallbackContext?): Boolean {
+        return try {
+            stopOngoingCallDetectionInternal()
+            callbackContext?.success("Ongoing call detection stopped.")
+            true
+        } catch (e: Exception) {
+            callbackContext?.error("Failed to stop ongoing call detection: ${e.message}")
+            false
+        }
+    }
+
+    private fun stopOngoingCallDetectionInternal() {
+        ongoingCallActivity?.get()?.let { Talsec.stopOngoingCallDetection(it) }
+        ongoingCallActivity = null
+    }
+
+    private fun sendBoolean(callbackContext: CallbackContext?, value: Boolean) {
+        callbackContext?.sendPluginResult(PluginResult(PluginResult.Status.OK, value))
     }
 
     private fun storeExternalId(
@@ -249,12 +369,13 @@ class TalsecPlugin : CordovaPlugin() {
 
     /**
      * Method to setup the message passing between native and Cordova
-     * @return list of [ThreatEvent.CHANNEL_KEY, ThreatEvent.MALWARE_CHANNEL_KEY]
+     * @return list of [ThreatEvent.CHANNEL_KEY, ThreatEvent.MALWARE_CHANNEL_KEY, ThreatEvent.CALL_STATE_CHANNEL_KEY]
      */
     private fun getThreatChannelData(callbackContext: CallbackContext?): Boolean {
         val channelData = JSONArray()
         channelData.put(ThreatEvent.CHANNEL_KEY)
         channelData.put(ThreatEvent.MALWARE_CHANNEL_KEY)
+        channelData.put(ThreatEvent.CALL_STATE_CHANNEL_KEY)
         callbackContext?.success(channelData)
         return true
     }
@@ -310,6 +431,9 @@ class TalsecPlugin : CordovaPlugin() {
         private val mainHandler = Handler(Looper.getMainLooper())
 
         internal var talsecStarted = false
+
+        // Ongoing call detection is registered per activity
+        private var ongoingCallActivity: WeakReference<Activity>? = null
     }
 
     internal class PluginListener(
@@ -335,6 +459,13 @@ class TalsecPlugin : CordovaPlugin() {
                     sendResult(params, threatCallbackContext)
                 }
             }
+        }
+
+        override fun ongoingCallDetected(state: CallState) {
+            val params = JSONObject()
+            params.put(ThreatEvent.CHANNEL_KEY, ThreatEvent.OngoingCall.value)
+            params.put(ThreatEvent.CALL_STATE_CHANNEL_KEY, state.name)
+            sendResult(params, threatCallbackContext)
         }
 
         override fun raspExecutionStateChanged(event: RaspExecutionStateEvent) {

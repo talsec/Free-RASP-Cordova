@@ -17,7 +17,7 @@ apply plugin: 'app.talsec.plugin'
 
 android {
     talsec {
-        sdkVersion = "19.3.1"
+        sdkVersion = "20.0.1"
         platform = "Cordova"
     }
     sourceSets {
@@ -26,6 +26,6 @@ android {
         }
     }
     if (project.android.hasProperty("namespace") && project.android.namespace == null) {
-        namespace("com.aheaditec.talsec.cordova")
+        namespace("app.talsec.rasp.cordova")
     }
 }

@@ -20,13 +20,20 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 // www/src/talsec.ts
 var talsec_exports = {};
 __export(talsec_exports, {
+  TalsecError: () => TalsecError,
+  abortApp: () => abortApp,
   addToWhitelist: () => addToWhitelist,
+  blockOverlayWindows: () => blockOverlayWindows,
   blockScreenCapture: () => blockScreenCapture,
+  blockScreenControl: () => blockScreenControl,
   getAppIcon: () => getAppIcon,
+  isOverlayWindowsBlocked: () => isOverlayWindowsBlocked,
   isScreenCaptureBlocked: () => isScreenCaptureBlocked,
-  onInvalidCallback: () => onInvalidCallback,
+  isScreenControlBlocked: () => isScreenControlBlocked,
   removeExternalId: () => removeExternalId,
   start: () => start,
+  startOngoingCallDetection: () => startOngoingCallDetection,
+  stopOngoingCallDetection: () => stopOngoingCallDetection,
   storeExternalId: () => storeExternalId
 });
 module.exports = __toCommonJS(talsec_exports);
@@ -37,69 +44,18 @@ var ScreenCaptureStatus = {
   BLOCKED: 1
 };
 
-// www/src/api/methods/native.ts
-var storeExternalId = (externalId) => {
-  return new Promise((resolve, reject) => {
-    cordova.exec(
-      () => {
-        resolve(true);
-      },
-      reject,
-      "TalsecPlugin",
-      "storeExternalId",
-      [externalId]
-    );
-  });
-};
-var removeExternalId = () => {
-  return new Promise((resolve, reject) => {
-    cordova.exec(
-      () => {
-        resolve(true);
-      },
-      reject,
-      "TalsecPlugin",
-      "removeExternalId",
-      []
-    );
-  });
-};
-var addToWhitelist = (packageName) => {
-  if (cordova.platformId === "ios") {
-    return Promise.reject("Malware detection not available on iOS");
+// www/src/types/errors.ts
+var TalsecError = class _TalsecError extends Error {
+  code;
+  constructor(code, message) {
+    super(message);
+    this.name = "TalsecError";
+    this.code = code;
+    Object.setPrototypeOf(this, _TalsecError.prototype);
   }
-  return new Promise((resolve, reject) => {
-    cordova.exec(resolve, reject, "TalsecPlugin", "addToWhitelist", [
-      packageName
-    ]);
-  });
 };
-var getAppIcon = (packageName) => {
-  if (cordova.platformId === "ios") {
-    return Promise.reject("Malware detection not available on iOS");
-  }
-  return new Promise((resolve, reject) => {
-    cordova.exec(resolve, reject, "TalsecPlugin", "getAppIcon", [packageName]);
-  });
-};
-var blockScreenCapture = (enable) => {
-  return new Promise((resolve, reject) => {
-    cordova.exec(resolve, reject, "TalsecPlugin", "blockScreenCapture", [
-      enable
-    ]);
-  });
-};
-var isScreenCaptureBlocked = () => {
-  return new Promise((resolve, reject) => {
-    cordova.exec(
-      (result) => resolve(result === ScreenCaptureStatus.BLOCKED),
-      reject,
-      "TalsecPlugin",
-      "isScreenCaptureBlocked",
-      []
-    );
-  });
-};
+
+// www/src/api/methods/internal.ts
 var onInvalidCallback = () => {
   cordova.exec(
     () => {
@@ -109,6 +65,74 @@ var onInvalidCallback = () => {
     "TalsecPlugin",
     "onInvalidCallback"
   );
+};
+var execNative = (code, action, args = []) => {
+  return new Promise((resolve, reject) => {
+    cordova.exec(
+      (result) => resolve(result),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (error) => reject(new TalsecError(code, error?.message ?? String(error))),
+      "TalsecPlugin",
+      action,
+      args
+    );
+  });
+};
+var rejectOnIos = (feature) => {
+  if (cordova.platformId === "ios") {
+    return Promise.reject(
+      new TalsecError(
+        "unsupported-platform",
+        `${feature} is not available on iOS`
+      )
+    );
+  }
+  return void 0;
+};
+
+// www/src/api/methods/native.ts
+var storeExternalId = async (externalId) => {
+  await execNative("external-id-failure", "storeExternalId", [externalId]);
+};
+var removeExternalId = async () => {
+  await execNative("external-id-failure", "removeExternalId");
+};
+var addToWhitelist = async (packageName) => {
+  await (rejectOnIos("Malware detection") ?? execNative("malware-failure", "addToWhitelist", [packageName]));
+};
+var getAppIcon = (packageName) => {
+  return rejectOnIos("Malware detection") ?? execNative("malware-failure", "getAppIcon", [packageName]);
+};
+var blockScreenCapture = async (enable) => {
+  await execNative("talsec-failure", "blockScreenCapture", [enable]);
+};
+var isScreenCaptureBlocked = async () => {
+  const result = await execNative(
+    "talsec-failure",
+    "isScreenCaptureBlocked"
+  );
+  return result === ScreenCaptureStatus.BLOCKED;
+};
+var blockScreenControl = async (enable) => {
+  await (rejectOnIos("Screen control blocking") ?? execNative("talsec-failure", "blockScreenControl", [enable]));
+};
+var isScreenControlBlocked = () => {
+  return rejectOnIos("Screen control blocking") ?? execNative("talsec-failure", "isScreenControlBlocked");
+};
+var blockOverlayWindows = (enable) => {
+  return rejectOnIos("Overlay windows blocking") ?? execNative("talsec-failure", "blockOverlayWindows", [enable]);
+};
+var isOverlayWindowsBlocked = () => {
+  return rejectOnIos("Overlay windows blocking") ?? execNative("talsec-failure", "isOverlayWindowsBlocked");
+};
+var startOngoingCallDetection = async () => {
+  await (rejectOnIos("Ongoing call detection") ?? execNative("talsec-failure", "startOngoingCallDetection"));
+};
+var stopOngoingCallDetection = async () => {
+  await (rejectOnIos("Ongoing call detection") ?? execNative("talsec-failure", "stopOngoingCallDetection"));
+};
+var abortApp = () => {
+  onInvalidCallback();
 };
 
 // www/src/models/threat.ts
@@ -137,6 +161,7 @@ var Threat = class _Threat {
   static UnsecureWifi = new _Threat(0);
   static Automation = new _Threat(0);
   static Bootloader = new _Threat(0);
+  static OngoingCall = new _Threat(0);
   constructor(value) {
     this.value = value;
   }
@@ -163,7 +188,8 @@ var Threat = class _Threat {
       this.LocationSpoofing,
       this.UnsecureWifi,
       this.Automation,
-      this.Bootloader
+      this.Bootloader,
+      this.OngoingCall
     ] : [
       this.AppIntegrity,
       this.PrivilegedAccess,
@@ -186,12 +212,18 @@ var Threat = class _Threat {
 // www/src/models/raspExecutionState.ts
 var RaspExecutionState = class _RaspExecutionState {
   value;
-  static AllChecksFinished = new _RaspExecutionState(0);
+  static FastChecksFinished = new _RaspExecutionState(0);
+  static CriticalChecksFinished = new _RaspExecutionState(0);
+  static PostponedChecksFinished = new _RaspExecutionState(0);
   constructor(value) {
     this.value = value;
   }
   static getValues() {
-    return [this.AllChecksFinished];
+    return cordova.platformId === "android" ? [
+      this.FastChecksFinished,
+      this.CriticalChecksFinished,
+      this.PostponedChecksFinished
+    ] : [this.FastChecksFinished];
   }
 };
 
@@ -208,11 +240,12 @@ var itemsHaveType = (data, desiredType) => {
 
 // www/src/channels/threat.ts
 var getThreatChannelData = async () => {
-  const dataLength = cordova.platformId === "ios" ? 1 : 2;
-  const identifiers = await new Promise((resolve, reject) => {
-    cordova.exec(resolve, reject, "TalsecPlugin", "getThreatChannelData");
-  });
-  if (identifiers.length !== dataLength || !itemsHaveType(identifiers, "string")) {
+  const identifiers = await new Promise(
+    (resolve, reject) => {
+      cordova.exec(resolve, reject, "TalsecPlugin", "getThreatChannelData");
+    }
+  );
+  if (identifiers.length !== 3 || !itemsHaveType(identifiers, "string")) {
     onInvalidCallback();
   }
   return identifiers;
@@ -257,7 +290,9 @@ var toSuspiciousAppInfo = (base64Value) => {
 // www/src/api/listeners/threat.ts
 var registerThreatListener = async (config) => {
   await prepareMapping();
-  const [key, malwareKey] = await getThreatChannelData();
+  const [key, malwareKey, callStateKey] = await getThreatChannelData();
+  const callStates = ["STARTED", "ONGOING", "STOPPED"];
+  const isCallState = (value) => typeof value === "string" && callStates.includes(value);
   const eventListener = async (event) => {
     switch (event[key]) {
       case Threat.PrivilegedAccess.value:
@@ -329,6 +364,15 @@ var registerThreatListener = async (config) => {
       case Threat.Bootloader.value:
         config.bootloader?.();
         break;
+      case Threat.OngoingCall.value: {
+        const callState = callStateKey ? event[callStateKey] : void 0;
+        if (!isCallState(callState)) {
+          onInvalidCallback();
+          break;
+        }
+        config.ongoingCall?.(callState);
+        break;
+      }
       default:
         onInvalidCallback();
         break;
@@ -389,8 +433,14 @@ var registerRaspExecutionStateListener = async (config) => {
   await prepareRaspExecutionStateMapping();
   const eventListener = async (event) => {
     switch (event[key]) {
-      case RaspExecutionState.AllChecksFinished.value:
-        config.allChecksFinished?.();
+      case RaspExecutionState.FastChecksFinished.value:
+        config.fastChecksFinished?.();
+        break;
+      case RaspExecutionState.CriticalChecksFinished.value:
+        config.criticalChecksFinished?.();
+        break;
+      case RaspExecutionState.PostponedChecksFinished.value:
+        config.postponedChecksFinished?.();
         break;
       default:
         onInvalidCallback();
@@ -453,8 +503,9 @@ var start = async (config, eventListenerConfig, raspExecutionStateActions) => {
         }
       },
       (error) => {
-        console.error(`${error.code}: ${error.message}`);
-        reject(error);
+        reject(
+          new TalsecError("talsec-failure", error?.message ?? String(error))
+        );
       },
       "TalsecPlugin",
       "start",
@@ -464,12 +515,19 @@ var start = async (config, eventListenerConfig, raspExecutionStateActions) => {
 };
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
+  TalsecError,
+  abortApp,
   addToWhitelist,
+  blockOverlayWindows,
   blockScreenCapture,
+  blockScreenControl,
   getAppIcon,
+  isOverlayWindowsBlocked,
   isScreenCaptureBlocked,
-  onInvalidCallback,
+  isScreenControlBlocked,
   removeExternalId,
   start,
+  startOngoingCallDetection,
+  stopOngoingCallDetection,
   storeExternalId
 });
