@@ -30,6 +30,7 @@ export class AppComponent implements OnInit {
   showToast = false;
   toastMessage = '';
   toastColor: 'success' | 'warning' = 'success';
+  criticalChecksFinished = false;
   checksFinished = false;
   postponedChecksFinished = false;
 
@@ -203,6 +204,12 @@ export class AppComponent implements OnInit {
   };
 
   raspExecutionStateActions = {
+    criticalChecksFinished: () => {
+      this.zone.run(() => {
+        this.criticalChecksFinished = true;
+      });
+      console.log('Critical checks finished');
+    },
     fastChecksFinished: () => {
       this.zone.run(() => {
         this.checksFinished = true;
