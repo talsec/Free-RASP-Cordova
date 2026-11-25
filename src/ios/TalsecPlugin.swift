@@ -126,13 +126,13 @@ import TalsecRuntime
             TalsecContext.sendError(msg: "External id must be String", callbackId: command.callbackId)
             return
         }
-        UserDefaults.standard.set(data, forKey: "app.talsec.externalid")
+        Talsec.storeExternalId(externalId: data)
         TalsecContext.sendMessage(msg: "OK", callbackId: command.callbackId, keepCallback: false)
     }
     
     @objc(removeExternalId:)
     private func removeExternalId(command: CDVInvokedUrlCommand) {
-        UserDefaults.standard.removeObject(forKey: "app.talsec.externalid")
+        Talsec.removeExternalId()
         TalsecContext.sendMessage(msg: "OK", callbackId: command.callbackId, keepCallback: false)
     }
     
@@ -167,9 +167,16 @@ extension SecurityThreatCenter: @retroactive SecurityThreatHandler, @retroactive
         ThreatDispatcher.shared.dispatch(threat: securityThreat)
     }
     
-    // The iOS SDK reports its standard checks as a single "all checks" event, which maps to fastChecksFinished.
-    public func onAllChecksFinished() {
+    public func onCriticalChecksFinished() {
+        ExecutionStateDispatcher.shared.dispatch(event: RaspExecutionStates.criticalChecksFinished)
+    }
+
+    public func onFastChecksFinished() {
         ExecutionStateDispatcher.shared.dispatch(event: RaspExecutionStates.fastChecksFinished)
+    }
+
+    public func onPostponedChecksFinished() {
+        ExecutionStateDispatcher.shared.dispatch(event: RaspExecutionStates.postponedChecksFinished)
     }
 }
 

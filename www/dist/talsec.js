@@ -219,11 +219,11 @@ var RaspExecutionState = class _RaspExecutionState {
     this.value = value;
   }
   static getValues() {
-    return cordova.platformId === "android" ? [
+    return [
       this.FastChecksFinished,
       this.CriticalChecksFinished,
       this.PostponedChecksFinished
-    ] : [this.FastChecksFinished];
+    ];
   }
 };
 

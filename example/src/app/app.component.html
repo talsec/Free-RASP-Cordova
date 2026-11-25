@@ -89,6 +89,23 @@
         <h1>Execution state:</h1>
       </ion-list-header>
       <ion-item>
+        <ion-label [color]="criticalChecksFinished ? 'success' : 'primary'">
+          Critical Checks Finished
+          <p>{{ criticalChecksFinished ? 'Finished' : 'Pending' }}</p>
+        </ion-label>
+        <ion-spinner
+          *ngIf="!criticalChecksFinished"
+          name="crescent"
+          color="primary"
+        ></ion-spinner>
+        <ion-icon
+          *ngIf="criticalChecksFinished"
+          name="shield-checkmark-outline"
+          color="success"
+          size="large"
+        ></ion-icon>
+      </ion-item>
+      <ion-item>
         <ion-label [color]="checksFinished ? 'success' : 'primary'">
           Fast Checks Finished
           <p>{{ checksFinished ? 'Finished' : 'Pending' }}</p>
@@ -105,7 +122,7 @@
           size="large"
         ></ion-icon>
       </ion-item>
-      <ion-item *ngIf="platformId === 'android'">
+      <ion-item>
         <ion-label [color]="postponedChecksFinished ? 'success' : 'primary'">
           Postponed Checks Finished
           <p>{{ postponedChecksFinished ? 'Finished' : 'Pending' }}</p>
